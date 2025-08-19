@@ -177,7 +177,6 @@ class RouteFixtureService {
   Route _createTodayRoute(User user) {
     final today = DateTime.now();
     final startOfDay = DateTime(today.year, today.month, today.day, 9, 0);
-    final currentTime = DateTime.now();
     
     return Route(
       name: 'Текущий маршрут ${_formatDate(today)}',
@@ -193,10 +192,7 @@ class RouteFixtureService {
           type: PointType.warehouse,
           plannedArrivalTime: startOfDay,
           plannedDepartureTime: startOfDay.add(const Duration(minutes: 30)),
-          actualArrivalTime: startOfDay.add(const Duration(minutes: 5)),
-          actualDepartureTime: startOfDay.add(const Duration(minutes: 35)),
-          status: VisitStatus.completed,
-          notes: 'Загружено: 18 коробок, все документы в порядке',
+          status: VisitStatus.planned, // Еще не начали день
           order: 0,
         ),
         TradingPointOfInterest(
@@ -209,10 +205,7 @@ class RouteFixtureService {
           coordinates: const LatLng(43.1332, 131.9118),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 1)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 1, minutes: 45)),
-          actualArrivalTime: startOfDay.add(const Duration(hours: 1, minutes: 10)),
-          actualDepartureTime: startOfDay.add(const Duration(hours: 1, minutes: 50)),
-          status: VisitStatus.completed,
-          notes: 'Доставлено 6 коробок. Клиент заказал еще на следующую неделю.',
+          status: VisitStatus.planned, // Планируется
           order: 1,
         ),
         TradingPointOfInterest(
@@ -225,10 +218,7 @@ class RouteFixtureService {
           coordinates: const LatLng(43.1372, 131.9501),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 2, minutes: 30)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 3, minutes: 15)),
-          actualArrivalTime: startOfDay.add(const Duration(hours: 2, minutes: 35)),
-          actualDepartureTime: startOfDay.add(const Duration(hours: 3, minutes: 20)),
-          status: VisitStatus.completed,
-          notes: 'Доставлено 4 коробки. Оплата по безналу.',
+          status: VisitStatus.planned, // Планируется
           order: 2,
         ),
         TradingPointOfInterest(
@@ -241,13 +231,7 @@ class RouteFixtureService {
           coordinates: const LatLng(43.1081, 131.9399),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 4)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 4, minutes: 45)),
-          actualArrivalTime: currentTime.isAfter(startOfDay.add(const Duration(hours: 4, minutes: 5)))
-              ? startOfDay.add(const Duration(hours: 4, minutes: 5))
-              : null,
-          status: _getCurrentPointStatus(startOfDay.add(const Duration(hours: 4)), currentTime),
-          notes: _getCurrentPointStatus(startOfDay.add(const Duration(hours: 4)), currentTime) == VisitStatus.completed
-              ? 'Доставлено 5 коробок. Обсудили новые позиции.'
-              : null,
+          status: VisitStatus.planned, // Планируется
           order: 3,
         ),
         TradingPointOfInterest(
@@ -291,19 +275,6 @@ class RouteFixtureService {
         ),
       ],
     );
-  }
-  
-  /// Определяет статус текущей точки на основе времени
-  VisitStatus _getCurrentPointStatus(DateTime plannedTime, DateTime currentTime) {
-    if (currentTime.isBefore(plannedTime.subtract(const Duration(minutes: 15)))) {
-      return VisitStatus.planned;
-    } else if (currentTime.isBefore(plannedTime.add(const Duration(minutes: 30)))) {
-      return VisitStatus.enRoute;
-    } else if (currentTime.isBefore(plannedTime.add(const Duration(hours: 1)))) {
-      return VisitStatus.arrived;
-    } else {
-      return VisitStatus.completed;
-    }
   }
   
   /// Создает завтрашний маршрут (запланированный)

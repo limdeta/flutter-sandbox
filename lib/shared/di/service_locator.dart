@@ -11,6 +11,7 @@ import 'package:tauzero/features/authentication/domain/usecases/get_current_sess
 import 'package:tauzero/features/route/data/di/route_di.dart';
 import 'package:tauzero/features/tracking/data/di/tracking_di.dart';
 import 'package:tauzero/features/tracking/domain/services/location_tracking_service.dart';
+import 'package:tauzero/features/path_predictor/osrm_path_prediction_service.dart';
 import 'package:tauzero/shared/config/app_config.dart';
 import 'package:tauzero/shared/infrastructure/database/app_database.dart';
 import 'package:tauzero/shared/services/app_lifecycle_manager.dart';
@@ -39,6 +40,9 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<SessionRepository>(() => SessionRepositoryImpl());
 
   getIt.registerLazySingleton<LocationTrackingService>(() => LocationTrackingService());
+
+  // Path prediction services
+  getIt.registerLazySingleton<OsrmPathPredictionService>(() => OsrmPathPredictionService());
 
   getIt.registerLazySingleton<IUserRepository>(
     () => UserRepository(

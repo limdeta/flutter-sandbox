@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:tauzero/features/map/domain/entities/map_point.dart';
+import 'package:tauzero/features/path_predictor/osrm_path_prediction_service.dart';
 import '../../../route/domain/entities/route.dart' as domain;
 import '../../../route/domain/repositories/iroute_repository.dart';
 import '../../../authentication/domain/entities/user.dart';
@@ -37,6 +40,8 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
   String? _error;
   bool _showRoutePanel = true;
   bool _hasLoadedInitialRoute = false; // Флаг для предотвращения повторной загрузки
+  List<LatLng> _routePolylinePoints = [];
+  bool _isBuildingRoute = false;
 
   @override
   void initState() {
@@ -218,7 +223,7 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
           if (_error != null)
             _buildErrorOverlay(),
         ],
-      ),
+      )
     );
   }
 
@@ -240,6 +245,7 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
             // TODO: Обработка нажатия на карту
             print('Нажатие на карту: ${point.latitude}, ${point.longitude}');
           },
+          routePolylinePoints: _routePolylinePoints,
         );
       },
     );
@@ -392,107 +398,68 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
   }
 
   Widget _buildBottomPanel() {
-    final currentPoint = _currentRoute!.currentPoint;
-    final currentIndex = currentPoint != null 
-        ? _currentRoute!.pointsOfInterest.indexOf(currentPoint)
-        : 0;
-    
     return Positioned(
       bottom: 0,
       left: 0,
       right: 0,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              offset: const Offset(0, -2),
-              blurRadius: 4,
-            ),
-          ],
-        ),
+      child: Padding(
         padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Прогресс бар
-              Row(
-                children: [
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: _currentRoute!.completionPercentage,
-                      backgroundColor: Colors.grey[300],
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        _getRouteStatusColor(_currentRoute!.status),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${(_currentRoute!.completionPercentage * 100).round()}%',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              
-              // Навигация по точкам
-              if (currentPoint != null) ...[
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
-                      onPressed: currentIndex > 0 ? () {
-                        // TODO: Переход к предыдущей точке
-                      } : null,
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Text(
-                            '${currentIndex + 1} из ${_currentRoute!.pointsOfInterest.length}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Text(
-                            currentPoint.name,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.arrow_forward_ios),
-                      onPressed: currentIndex < _currentRoute!.pointsOfInterest.length - 1 ? () {
-                        // TODO: Переход к следующей точке
-                      } : null,
-                    ),
-                  ],
-                ),
-              ] else ...[
-                const Text(
-                  'Все точки маршрута выполнены',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                  ),
-                ),
-              ],
-            ],
+        child: ElevatedButton(
+          onPressed: _isBuildingRoute ? null : _onBuildRoutePressed,
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size.fromHeight(48),
           ),
+          child: _isBuildingRoute
+              ? const CircularProgressIndicator()
+              : const Text('Построить маршрут'),
         ),
+      ),
     );
+  }
+
+  Future<void> _onBuildRoutePressed() async {
+    if (_currentRoute == null) return;
+    setState(() => _isBuildingRoute = true);
+
+    // Получаем не посещённые точки в порядке order
+    final points = _currentRoute!.pointsOfInterest
+        .where((p) => !p.isVisited)
+        .toList()
+      ..sort((a, b) => (a.order ?? 9999).compareTo(b.order ?? 9999));
+
+    print('🛣️ Найдено ${points.length} не посещённых точек');
+
+    if (points.length < 2) {
+      print('❌ Недостаточно точек для построения маршрута (нужно минимум 2)');
+      setState(() => _isBuildingRoute = false);
+      return;
+    }
+
+    final mapPoints = points
+        .map((p) => MapPoint(latitude: p.coordinates.latitude, longitude: p.coordinates.longitude))
+        .toList();
+
+    print('🌍 Отправляем ${mapPoints.length} точек в OSRM сервис');
+
+    try {
+        final service = OsrmPathPredictionService();
+        final result = await service.predictRouteGeometry(mapPoints);
+        print('✅ Получен маршрут с ${result.routePoints.length} точками');
+        setState(() {
+          _routePolylinePoints = result.routePoints
+              .map((p) => LatLng(p.latitude, p.longitude))
+              .toList();
+          _isBuildingRoute = false;
+        });
+        print('🗺️ Маршрут передан на карту: ${_routePolylinePoints.length} точек');
+      } catch (e) {
+        print('❌ Ошибка построения маршрута: $e');
+        setState(() => _isBuildingRoute = false);
+        // Можно показать ошибку через Snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ошибка построения маршрута: $e')),
+        );
+      }
   }
 
   Widget _buildLoadingOverlay() {
@@ -586,5 +553,59 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
     return _currentRoute!.pointsOfInterest
         .where((point) => point.isVisited)
         .length;
+  }
+
+  /// Построение маршрута через OSRM
+  Future<void> _buildRoute() async {
+    if (_currentRoute == null) return;
+    
+    print('🚀 Построение маршрута начато для ${_currentRoute!.pointsOfInterest.length} точек');
+    
+    setState(() {
+      _isBuildingRoute = true;
+    });
+
+    try {
+      final pathPredictionService = GetIt.instance<OsrmPathPredictionService>();
+      
+      // Используем ВСЕ точки маршрута для построения полного пути
+      final allPoints = _currentRoute!.pointsOfInterest.toList();
+      
+      if (allPoints.length < 2) {
+        print('⚠️ Недостаточно точек для построения маршрута');
+        return;
+      }
+
+      print('🎯 Строим полный маршрут для ${allPoints.length} точек');
+
+      // Преобразуем в MapPoint для OSRM сервиса
+      final mapPoints = allPoints.map((poi) => MapPoint(
+        latitude: poi.coordinates.latitude,
+        longitude: poi.coordinates.longitude,
+      )).toList();
+
+      // Вызываем OSRM сервис
+      final result = await pathPredictionService.predictRouteGeometry(mapPoints);
+      
+      if (result.routePoints.isNotEmpty) {
+        final polylinePoints = result.routePoints.map((point) => 
+          LatLng(point.latitude, point.longitude)
+        ).toList();
+        
+        setState(() {
+          _routePolylinePoints = polylinePoints;
+        });
+        
+        print('✅ Маршрут построен успешно: ${polylinePoints.length} точек');
+      } else {
+        print('❌ OSRM вернул пустой результат');
+      }
+    } catch (e) {
+      print('❌ Ошибка построения маршрута: $e');
+    } finally {
+      setState(() {
+        _isBuildingRoute = false;
+      });
+    }
   }
 }

@@ -10,6 +10,7 @@ import '../../../../shared/services/user_initialization_service.dart';
 import '../../../tracking/domain/services/location_tracking_service.dart';
 import '../../../tracking/presentation/widgets/live_track_map_layer.dart';
 import '../../../tracking/domain/entities/user_track.dart';
+import 'route_polyline.dart';
 
 /// Основной виджет карты с поддержкой различных провайдеров
 class MapWidget extends StatefulWidget {
@@ -27,6 +28,8 @@ class MapWidget extends StatefulWidget {
   
   /// Исторические GPS треки для отображения
   final List<UserTrack> historicalTracks;
+  
+  final List<LatLng> routePolylinePoints;
 
   const MapWidget({
     super.key,
@@ -38,6 +41,7 @@ class MapWidget extends StatefulWidget {
     this.trackingService,
     this.showUserTrack = false,
     this.historicalTracks = const [],
+    this.routePolylinePoints = const [],
   });
 
   @override
@@ -342,6 +346,10 @@ class _MapWidgetState extends State<MapWidget> {
             // Слой GPS треков (polylines)
             if (widget.historicalTracks.isNotEmpty)
               PolylineLayer(polylines: _buildTrackPolylines()),
+            
+            // Слой маршрута (построенного через OSRM)
+            if (widget.routePolylinePoints.isNotEmpty)
+              RoutePolyline(points: widget.routePolylinePoints),
             
             // Слой трека пользователя (отображается под маркерами маршрута)
             if (widget.showUserTrack && widget.trackingService != null)
