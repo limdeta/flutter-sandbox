@@ -1,8 +1,14 @@
 import 'package:latlong2/latlong.dart';
+import 'package:tauzero/shared/domain/entities/igeopoint.dart';
 import 'trading_point.dart';
 
 /// Точка интереса на маршруте
-class PointOfInterest {
+class PointOfInterest implements IGeoPoint {
+  final int? order;
+  @override
+  double get latitude => coordinates.latitude;
+  @override
+  double get longitude => coordinates.longitude;
   final String id;
   final String name;
   final String? description;
@@ -31,6 +37,7 @@ class PointOfInterest {
     this.notes,
     this.tradingPoint,
     this.externalId,
+    this.order,
   });
 
   /// Создает копию с измененными параметрами
@@ -48,6 +55,7 @@ class PointOfInterest {
     String? notes,
     TradingPoint? tradingPoint,
     String? externalId,
+    int? order,
   }) {
     return PointOfInterest(
       id: id ?? this.id,
@@ -63,6 +71,7 @@ class PointOfInterest {
       notes: notes ?? this.notes,
       tradingPoint: tradingPoint ?? this.tradingPoint,
       externalId: externalId ?? this.externalId,
+      order: order ?? this.order,
     );
   }
 
@@ -109,7 +118,7 @@ class PointOfInterest {
 
   @override
   String toString() {
-    return 'PointOfInterest(id: $id, name: $name, type: $type, status: $status)';
+    return 'PointOfInterest(id: $id, name: $name, type: $type, status: $status, order: $order)';
   }
 
   @override

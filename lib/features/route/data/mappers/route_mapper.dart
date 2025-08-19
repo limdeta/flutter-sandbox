@@ -63,9 +63,9 @@ class RouteMapper {
   
   /// Domain IPointOfInterest → Database PointsOfInterestTableCompanion
   static PointsOfInterestTableCompanion pointToDatabase(
-    IPointOfInterest point,
-    int routeId,
-    int orderIndex, {
+  IPointOfInterest point,
+  int routeId,
+  int orderIndex, {
     int? tradingPointDatabaseId, // Реальный ID из таблицы trading_points
   }) {
     return PointsOfInterestTableCompanion(
@@ -83,7 +83,7 @@ class RouteMapper {
       status: Value(point.status.name),
       notes: Value(point.notes),
       tradingPointId: Value(tradingPointDatabaseId), // Используем реальный DB ID
-      orderIndex: Value(orderIndex),
+      orderIndex: Value(point.order ?? orderIndex),
       createdAt: Value(point.createdAt),
       updatedAt: Value(point.updatedAt),
     );
@@ -105,7 +105,6 @@ class RouteMapper {
         name: tradingPointData.name,
         inn: tradingPointData.inn,
       );
-      
       return TradingPointOfInterest(
         id: pointData.id,
         name: pointData.name,
@@ -117,9 +116,9 @@ class RouteMapper {
         actualDepartureTime: pointData.actualDepartureTime,
         status: status,
         notes: pointData.notes,
+        order: pointData.orderIndex,
       );
     }
-    
     // Иначе создаем обычную точку
     return RegularPointOfInterest(
       id: pointData.id,
@@ -133,6 +132,7 @@ class RouteMapper {
       actualDepartureTime: pointData.actualDepartureTime,
       status: status,
       notes: pointData.notes,
+      order: pointData.orderIndex,
     );
   }
 

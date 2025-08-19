@@ -9,6 +9,8 @@ class RegularPointOfInterest implements IPointOfInterest {
   final DateTime createdAt;
   @override
   final DateTime? updatedAt;
+    @override
+    final int? order;
   
   @override
   final String name;
@@ -54,6 +56,7 @@ class RegularPointOfInterest implements IPointOfInterest {
     this.notes,
     DateTime? createdAt,
     this.updatedAt,
+    this.order,
   }) : createdAt = createdAt ?? DateTime.now();
 
   @override
@@ -80,6 +83,7 @@ class RegularPointOfInterest implements IPointOfInterest {
     String? notes,
     DateTime? createdAt,
     DateTime? updatedAt,
+      int? order,
   }) {
     return RegularPointOfInterest(
       id: id ?? this.id,
@@ -95,6 +99,7 @@ class RegularPointOfInterest implements IPointOfInterest {
       notes: notes ?? this.notes,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+        order: order ?? this.order,
     );
   }
 
@@ -125,15 +130,16 @@ class RegularPointOfInterest implements IPointOfInterest {
 
   @override
   String toString() {
-    return 'RegularPointOfInterest(id: $id, name: $name, type: $type, status: $status)';
+    return 'RegularPointOfInterest(id: $id, name: $name, type: $type, status: $status, order: $order)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is RegularPointOfInterest && other.id == id;
+    return other is RegularPointOfInterest && other.id == id && other.order == order;
   }
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode => Object.hash(id, order);
 }

@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart';
 /// Интерфейс для любой точки на маршруте
 /// Сервисы работают только с этим контрактом
 abstract interface class IPointOfInterest {
+  int? get order;
   int? get id; // autoincrement primary key
   String get name;
   String? get description;

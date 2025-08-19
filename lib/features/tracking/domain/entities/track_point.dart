@@ -1,5 +1,6 @@
 import 'dart:math';
-
+import 'dart:math';
+import 'package:tauzero/shared/domain/entities/igeopoint.dart';
 /// Точка трека пользователя с GPS координатами и временной меткой
 /// 
 /// Представляет единичную GPS точку в пути пользователя.

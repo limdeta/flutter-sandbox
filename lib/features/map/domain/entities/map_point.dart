@@ -1,8 +1,11 @@
 import 'dart:math' as math;
+import 'package:tauzero/shared/domain/entities/igeopoint.dart';
 
 /// Географическая точка на карте
-class MapPoint {
+class MapPoint implements IGeoPoint {
+  @override
   final double latitude;
+  @override
   final double longitude;
   final double? altitude;
   final DateTime? timestamp;

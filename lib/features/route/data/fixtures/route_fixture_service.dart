@@ -31,17 +31,17 @@ class RouteFixtureService {
     await _clearUserData(user);
     
     // Создаем вчерашний маршрут (завершенный)
-    final yesterdayRoute = createYesterdayRoute(user);
+    final yesterdayRoute = _createYesterdayRoute(user);
     await _repository.createRoute(yesterdayRoute, user);
     print('✅ Вчерашний маршрут создан: ${yesterdayRoute.name}');
     
     // Создаем сегодняшний маршрут (в работе)
-    final todayRoute = createTodayRoute(user);
+    final todayRoute = _createTodayRoute(user);
     await _repository.createRoute(todayRoute, user);
     print('✅ Сегодняшний маршрут создан: ${todayRoute.name}');
     
     // Создаем завтрашний маршрут (запланированный)
-    final tomorrowRoute = createTomorrowRoute(user);
+    final tomorrowRoute = _createTomorrowRoute(user);
     await _repository.createRoute(tomorrowRoute, user);
     print('✅ Завтрашний маршрут создан: ${tomorrowRoute.name}');
     
@@ -49,7 +49,7 @@ class RouteFixtureService {
   }
   
   /// Создает вчерашний маршрут (почти полностью завершен)
-  Route createYesterdayRoute(User user) {
+  Route _createYesterdayRoute(User user) {
     final yesterday = DateTime.now().subtract(const Duration(days: 1));
     final startOfDay = DateTime(yesterday.year, yesterday.month, yesterday.day, 9, 0);
     
@@ -135,7 +135,7 @@ class RouteFixtureService {
           plannedArrivalTime: startOfDay.add(const Duration(hours: 5, minutes: 30)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 6, minutes: 30)),
           status: VisitStatus.skipped, // Пропустил обед
-          notes: '',
+          notes: 'Пропущен - работал без перерыва, чтобы успеть больше клиентов',
         ),
         
         // 6. Четвертый клиент - торговая точка (завершена)
@@ -174,7 +174,7 @@ class RouteFixtureService {
   }
   
   /// Создает сегодняшний маршрут (в процессе выполнения)
-  Route createTodayRoute(User user) {
+  Route _createTodayRoute(User user) {
     final today = DateTime.now();
     final startOfDay = DateTime(today.year, today.month, today.day, 9, 0);
     final currentTime = DateTime.now();
@@ -182,116 +182,112 @@ class RouteFixtureService {
     return Route(
       name: 'Текущий маршрут ${_formatDate(today)}',
       description: 'Сегодняшний рабочий день - в процессе выполнения',
-      createdAt: startOfDay.subtract(const Duration(hours: 12)), // Создан вчера вечером
+      createdAt: startOfDay.subtract(const Duration(hours: 12)),
       startTime: startOfDay,
       status: RouteStatus.active,
       pointsOfInterest: [
-        // 1. Склад - начальная точка (завершена)
         RegularPointOfInterest(
-          name: 'Основной склад',
-          description: 'Загрузка товара на сегодня',
-          coordinates: const LatLng(43.1158, 131.8858),
+          name: 'Старт',
+          description: 'Начальная точка маршрута',
+          coordinates: const LatLng(43.1438, 131.9268),
           type: PointType.warehouse,
           plannedArrivalTime: startOfDay,
           plannedDepartureTime: startOfDay.add(const Duration(minutes: 30)),
-          actualArrivalTime: startOfDay.add(const Duration(minutes: 5)), // Опоздал
+          actualArrivalTime: startOfDay.add(const Duration(minutes: 5)),
           actualDepartureTime: startOfDay.add(const Duration(minutes: 35)),
           status: VisitStatus.completed,
           notes: 'Загружено: 18 коробок, все документы в порядке',
+          order: 0,
         ),
-        
-        // 2. Первый клиент (завершен)
         TradingPointOfInterest(
-          name: 'Визит к клиенту "Утренний"',
+          name: 'Первая точка',
           tradingPoint: TradingPoint(
             externalId: 'CLIENT_101',
-            name: 'ООО "Утренний бриз"',
+            name: 'ООО "Первая точка"',
             inn: '2536789101',
           ),
-          coordinates: const LatLng(43.1289, 131.9045),
+          coordinates: const LatLng(43.1332, 131.9118),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 1)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 1, minutes: 45)),
           actualArrivalTime: startOfDay.add(const Duration(hours: 1, minutes: 10)),
           actualDepartureTime: startOfDay.add(const Duration(hours: 1, minutes: 50)),
           status: VisitStatus.completed,
           notes: 'Доставлено 6 коробок. Клиент заказал еще на следующую неделю.',
+          order: 1,
         ),
-        
-        // 3. Второй клиент (завершен)
         TradingPointOfInterest(
-          name: 'Визит к клиенту "Дневной"',
+          name: 'Вторая точка',
           tradingPoint: TradingPoint(
             externalId: 'CLIENT_102',
-            name: 'ИП Сидоров "Дневной магазин"',
+            name: 'ИП Сидоров "Вторая точка"',
             inn: '253678910234',
           ),
-          coordinates: const LatLng(43.1145, 131.8912),
+          coordinates: const LatLng(43.1372, 131.9501),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 2, minutes: 30)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 3, minutes: 15)),
           actualArrivalTime: startOfDay.add(const Duration(hours: 2, minutes: 35)),
           actualDepartureTime: startOfDay.add(const Duration(hours: 3, minutes: 20)),
           status: VisitStatus.completed,
           notes: 'Доставлено 4 коробки. Оплата по безналу.',
+          order: 2,
         ),
-        
-        // 4. Текущая точка (в процессе или следующая по плану)
         TradingPointOfInterest(
-          name: 'Визит к клиенту "Текущий"',
+          name: 'Третья точка',
           tradingPoint: TradingPoint(
             externalId: 'CLIENT_103',
-            name: 'ООО "Текущие дела"',
+            name: 'ООО "Третья точка"',
             inn: '2536789103',
           ),
-          coordinates: const LatLng(43.0945, 131.8723),
+          coordinates: const LatLng(43.1081, 131.9399),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 4)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 4, minutes: 45)),
-          // Определяем статус в зависимости от текущего времени
-          actualArrivalTime: currentTime.isAfter(startOfDay.add(const Duration(hours: 4, minutes: 5))) 
-              ? startOfDay.add(const Duration(hours: 4, minutes: 5)) 
+          actualArrivalTime: currentTime.isAfter(startOfDay.add(const Duration(hours: 4, minutes: 5)))
+              ? startOfDay.add(const Duration(hours: 4, minutes: 5))
               : null,
           status: _getCurrentPointStatus(startOfDay.add(const Duration(hours: 4)), currentTime),
           notes: _getCurrentPointStatus(startOfDay.add(const Duration(hours: 4)), currentTime) == VisitStatus.completed
               ? 'Доставлено 5 коробок. Обсудили новые позиции.'
               : null,
+          order: 3,
         ),
-        
-        // 5. Обеденный перерыв (планируется)
-        RegularPointOfInterest(
-          name: 'Обеденный перерыв',
-          description: 'Кафе "Центральное"',
-          coordinates: const LatLng(43.1175, 131.8945),
-          type: PointType.break_,
+        TradingPointOfInterest(
+          name: 'Четвертая точка',
+          tradingPoint: TradingPoint(
+            externalId: 'CLIENT_104',
+            name: 'ООО "Четвертая точка"',
+            inn: '2536789104',
+          ),
+          coordinates: const LatLng(43.0882, 131.9366),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 5, minutes: 30)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 6, minutes: 30)),
           status: VisitStatus.planned,
+          order: 4,
         ),
-        
-        // 6. Следующий клиент (планируется)
         TradingPointOfInterest(
-          name: 'Визит к клиенту "Послеобеденный"',
+          name: 'Пятая точка',
           tradingPoint: TradingPoint(
-            externalId: 'CLIENT_104',
-            name: 'ИП Козлов "Послеобеденный"',
-            inn: '2536789104',
+            externalId: 'CLIENT_105',
+            name: 'ООО "Пятая точка"',
+            inn: '2536789105',
           ),
-          coordinates: const LatLng(43.0867, 131.9123),
+          coordinates: const LatLng(43.0882, 131.9366),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 7)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 7, minutes: 45)),
           status: VisitStatus.planned,
+          order: 5,
         ),
-        
-        // 7. Последний клиент дня (планируется)
         TradingPointOfInterest(
-          name: 'Визит к клиенту "Вечерний"',
+          name: 'Шестая точка',
           tradingPoint: TradingPoint(
-            externalId: 'CLIENT_105',
-            name: 'ООО "Вечерний магазин"',
-            inn: '2536789105',
+            externalId: 'CLIENT_106',
+            name: 'ООО "Шестая точка"',
+            inn: '2536789106',
           ),
-          coordinates: const LatLng(43.1234, 131.8634),
+          coordinates: const LatLng(43.0757, 131.9591),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 8, minutes: 15)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 9)),
           status: VisitStatus.planned,
+          order: 6,
         ),
       ],
     );
@@ -311,7 +307,7 @@ class RouteFixtureService {
   }
   
   /// Создает завтрашний маршрут (запланированный)
-  Route createTomorrowRoute(User user) {
+  Route _createTomorrowRoute(User user) {
     final tomorrow = DateTime.now().add(const Duration(days: 1));
     final startOfDay = DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 9, 0);
     

@@ -5,6 +5,8 @@ import 'trading_point.dart';
 /// Торговая точка на маршруте - реализация интерфейса
 class TradingPointOfInterest implements IPointOfInterest {
   @override
+  final int? order;
+  @override
   final int? id;
   @override
   final DateTime createdAt;
@@ -57,8 +59,9 @@ class TradingPointOfInterest implements IPointOfInterest {
     this.type = PointType.client,
     this.status = VisitStatus.planned,
     this.notes,
-    DateTime? createdAt,
-    this.updatedAt,
+  DateTime? createdAt,
+  this.updatedAt,
+  this.order,
   }) : createdAt = createdAt ?? DateTime.now();
 
   @override
@@ -85,7 +88,8 @@ class TradingPointOfInterest implements IPointOfInterest {
     String? notes,
     TradingPoint? tradingPoint,
     DateTime? createdAt,
-    DateTime? updatedAt,
+  DateTime? updatedAt,
+  int? order,
   }) {
     return TradingPointOfInterest(
       id: id ?? this.id,
@@ -102,6 +106,7 @@ class TradingPointOfInterest implements IPointOfInterest {
       notes: notes ?? this.notes,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      order: order ?? this.order,
     );
   }
 
@@ -132,15 +137,15 @@ class TradingPointOfInterest implements IPointOfInterest {
 
   @override
   String toString() {
-    return 'TradingPointOfInterest(id: $id, tradingPoint: ${tradingPoint.name}, status: $status)';
+    return 'TradingPointOfInterest(id: $id, tradingPoint: ${tradingPoint.name}, status: $status, order: $order)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is TradingPointOfInterest && other.id == id;
+    return other is TradingPointOfInterest && other.id == id && other.order == order;
   }
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode => Object.hash(id, order);
 }
