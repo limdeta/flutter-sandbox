@@ -6,15 +6,16 @@ import 'package:tauzero/features/tracking/data/services/gps_tracking_service.dar
 import 'package:tauzero/features/tracking/presentation/providers/tracking_provider.dart';
 import 'package:tauzero/features/tracking/presentation/widgets/tracking_controls.dart';
 import 'package:tauzero/features/tracking/presentation/widgets/tracking_map_layers.dart';
-import 'package:tauzero/shared/infrastructure/database/app_database.dart';
+import 'package:tauzero/features/authentication/domain/entities/user.dart';
+import 'package:tauzero/shared/di/service_locator.dart';
 
 /// Страница карты с интегрированным GPS трекингом
 class TrackingMapPage extends StatefulWidget {
-  final int userId;
+  final User user;
 
   const TrackingMapPage({
     super.key,
-    required this.userId,
+    required this.user,
   });
 
   @override
@@ -28,16 +29,15 @@ class _TrackingMapPageState extends State<TrackingMapPage> {
   void initState() {
     super.initState();
     
-    // Создаем зависимости
-    final database = AppDatabase();
-    final repository = UserTrackRepository(database);
+    // Получаем зависимости из сервис локатора
+    final repository = getIt<UserTrackRepository>();
     final trackingService = GpsTrackingService(repository);
     
     _trackingProvider = TrackingProvider(repository, trackingService);
     
     // Загружаем исторические треки
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _trackingProvider.loadHistoricalTracks(widget.userId);
+      _trackingProvider.loadHistoricalTracks(widget.user.internalId ?? 0);
     });
   }
 
@@ -143,6 +143,6 @@ class _TrackingMapPageState extends State<TrackingMapPage> {
   }
 
   void _startTracking(TrackingProvider provider) {
-    provider.startTracking(widget.userId.toString());
+    provider.startTracking(widget.user);
   }
 }

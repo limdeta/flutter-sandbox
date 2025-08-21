@@ -12,86 +12,133 @@ class $RoutesTableTable extends RoutesTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
   @override
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _startTimeMeta =
-      const VerificationMeta('startTime');
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _startTimeMeta = const VerificationMeta(
+    'startTime',
+  );
   @override
   late final GeneratedColumn<DateTime> startTime = GeneratedColumn<DateTime>(
-      'start_time', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  static const VerificationMeta _endTimeMeta =
-      const VerificationMeta('endTime');
+    'start_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _endTimeMeta = const VerificationMeta(
+    'endTime',
+  );
   @override
   late final GeneratedColumn<DateTime> endTime = GeneratedColumn<DateTime>(
-      'end_time', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+    'end_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<String> status = GeneratedColumn<String>(
-      'status', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _pathJsonMeta =
-      const VerificationMeta('pathJson');
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _pathJsonMeta = const VerificationMeta(
+    'pathJson',
+  );
   @override
   late final GeneratedColumn<String> pathJson = GeneratedColumn<String>(
-      'path_json', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'path_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
-      'user_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        name,
-        description,
-        startTime,
-        endTime,
-        status,
-        pathJson,
-        userId,
-        createdAt,
-        updatedAt
-      ];
+    id,
+    name,
+    description,
+    startTime,
+    endTime,
+    status,
+    pathJson,
+    userId,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'routes';
   @override
-  VerificationContext validateIntegrity(Insertable<RoutesTableData> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<RoutesTableData> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -99,47 +146,66 @@ class $RoutesTableTable extends RoutesTable
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
           _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
+        ),
+      );
     }
     if (data.containsKey('start_time')) {
-      context.handle(_startTimeMeta,
-          startTime.isAcceptableOrUnknown(data['start_time']!, _startTimeMeta));
+      context.handle(
+        _startTimeMeta,
+        startTime.isAcceptableOrUnknown(data['start_time']!, _startTimeMeta),
+      );
     }
     if (data.containsKey('end_time')) {
-      context.handle(_endTimeMeta,
-          endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta));
+      context.handle(
+        _endTimeMeta,
+        endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta),
+      );
     }
     if (data.containsKey('status')) {
-      context.handle(_statusMeta,
-          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
     } else if (isInserting) {
       context.missing(_statusMeta);
     }
     if (data.containsKey('path_json')) {
-      context.handle(_pathJsonMeta,
-          pathJson.isAcceptableOrUnknown(data['path_json']!, _pathJsonMeta));
+      context.handle(
+        _pathJsonMeta,
+        pathJson.isAcceptableOrUnknown(data['path_json']!, _pathJsonMeta),
+      );
     }
     if (data.containsKey('user_id')) {
-      context.handle(_userIdMeta,
-          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+      context.handle(
+        _userIdMeta,
+        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_userIdMeta);
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     }
     return context;
   }
@@ -150,26 +216,46 @@ class $RoutesTableTable extends RoutesTable
   RoutesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return RoutesTableData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description']),
-      startTime: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}start_time']),
-      endTime: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}end_time']),
-      status: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
-      pathJson: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}path_json']),
-      userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      startTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}start_time'],
+      ),
+      endTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}end_time'],
+      ),
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      pathJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}path_json'],
+      ),
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}user_id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
     );
   }
 
@@ -190,17 +276,18 @@ class RoutesTableData extends DataClass implements Insertable<RoutesTableData> {
   final int userId;
   final DateTime createdAt;
   final DateTime? updatedAt;
-  const RoutesTableData(
-      {required this.id,
-      required this.name,
-      this.description,
-      this.startTime,
-      this.endTime,
-      required this.status,
-      this.pathJson,
-      required this.userId,
-      required this.createdAt,
-      this.updatedAt});
+  const RoutesTableData({
+    required this.id,
+    required this.name,
+    this.description,
+    this.startTime,
+    this.endTime,
+    required this.status,
+    this.pathJson,
+    required this.userId,
+    required this.createdAt,
+    this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -252,8 +339,10 @@ class RoutesTableData extends DataClass implements Insertable<RoutesTableData> {
     );
   }
 
-  factory RoutesTableData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory RoutesTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return RoutesTableData(
       id: serializer.fromJson<int>(json['id']),
@@ -285,35 +374,36 @@ class RoutesTableData extends DataClass implements Insertable<RoutesTableData> {
     };
   }
 
-  RoutesTableData copyWith(
-          {int? id,
-          String? name,
-          Value<String?> description = const Value.absent(),
-          Value<DateTime?> startTime = const Value.absent(),
-          Value<DateTime?> endTime = const Value.absent(),
-          String? status,
-          Value<String?> pathJson = const Value.absent(),
-          int? userId,
-          DateTime? createdAt,
-          Value<DateTime?> updatedAt = const Value.absent()}) =>
-      RoutesTableData(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        description: description.present ? description.value : this.description,
-        startTime: startTime.present ? startTime.value : this.startTime,
-        endTime: endTime.present ? endTime.value : this.endTime,
-        status: status ?? this.status,
-        pathJson: pathJson.present ? pathJson.value : this.pathJson,
-        userId: userId ?? this.userId,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
-      );
+  RoutesTableData copyWith({
+    int? id,
+    String? name,
+    Value<String?> description = const Value.absent(),
+    Value<DateTime?> startTime = const Value.absent(),
+    Value<DateTime?> endTime = const Value.absent(),
+    String? status,
+    Value<String?> pathJson = const Value.absent(),
+    int? userId,
+    DateTime? createdAt,
+    Value<DateTime?> updatedAt = const Value.absent(),
+  }) => RoutesTableData(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    description: description.present ? description.value : this.description,
+    startTime: startTime.present ? startTime.value : this.startTime,
+    endTime: endTime.present ? endTime.value : this.endTime,
+    status: status ?? this.status,
+    pathJson: pathJson.present ? pathJson.value : this.pathJson,
+    userId: userId ?? this.userId,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+  );
   RoutesTableData copyWithCompanion(RoutesTableCompanion data) {
     return RoutesTableData(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
-      description:
-          data.description.present ? data.description.value : this.description,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
       startTime: data.startTime.present ? data.startTime.value : this.startTime,
       endTime: data.endTime.present ? data.endTime.value : this.endTime,
       status: data.status.present ? data.status.value : this.status,
@@ -342,8 +432,18 @@ class RoutesTableData extends DataClass implements Insertable<RoutesTableData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, name, description, startTime, endTime,
-      status, pathJson, userId, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    name,
+    description,
+    startTime,
+    endTime,
+    status,
+    pathJson,
+    userId,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -394,9 +494,9 @@ class RoutesTableCompanion extends UpdateCompanion<RoutesTableData> {
     required int userId,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : name = Value(name),
-        status = Value(status),
-        userId = Value(userId);
+  }) : name = Value(name),
+       status = Value(status),
+       userId = Value(userId);
   static Insertable<RoutesTableData> custom({
     Expression<int>? id,
     Expression<String>? name,
@@ -423,17 +523,18 @@ class RoutesTableCompanion extends UpdateCompanion<RoutesTableData> {
     });
   }
 
-  RoutesTableCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? name,
-      Value<String?>? description,
-      Value<DateTime?>? startTime,
-      Value<DateTime?>? endTime,
-      Value<String>? status,
-      Value<String?>? pathJson,
-      Value<int>? userId,
-      Value<DateTime>? createdAt,
-      Value<DateTime?>? updatedAt}) {
+  RoutesTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String?>? description,
+    Value<DateTime?>? startTime,
+    Value<DateTime?>? endTime,
+    Value<String>? status,
+    Value<String?>? pathJson,
+    Value<int>? userId,
+    Value<DateTime>? createdAt,
+    Value<DateTime?>? updatedAt,
+  }) {
     return RoutesTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -511,47 +612,78 @@ class $TradingPointsTableTable extends TradingPointsTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _externalIdMeta =
-      const VerificationMeta('externalId');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _externalIdMeta = const VerificationMeta(
+    'externalId',
+  );
   @override
   late final GeneratedColumn<String> externalId = GeneratedColumn<String>(
-      'external_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+    'external_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _innMeta = const VerificationMeta('inn');
   @override
   late final GeneratedColumn<String> inn = GeneratedColumn<String>(
-      'inn', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'inn',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, externalId, name, inn, createdAt, updatedAt];
+  List<GeneratedColumn> get $columns => [
+    id,
+    externalId,
+    name,
+    inn,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -559,8 +691,9 @@ class $TradingPointsTableTable extends TradingPointsTable
   static const String $name = 'trading_points';
   @override
   VerificationContext validateIntegrity(
-      Insertable<TradingPointsTableData> instance,
-      {bool isInserting = false}) {
+    Insertable<TradingPointsTableData> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -568,29 +701,37 @@ class $TradingPointsTableTable extends TradingPointsTable
     }
     if (data.containsKey('external_id')) {
       context.handle(
-          _externalIdMeta,
-          externalId.isAcceptableOrUnknown(
-              data['external_id']!, _externalIdMeta));
+        _externalIdMeta,
+        externalId.isAcceptableOrUnknown(data['external_id']!, _externalIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_externalIdMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('inn')) {
       context.handle(
-          _innMeta, inn.isAcceptableOrUnknown(data['inn']!, _innMeta));
+        _innMeta,
+        inn.isAcceptableOrUnknown(data['inn']!, _innMeta),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     }
     return context;
   }
@@ -601,18 +742,30 @@ class $TradingPointsTableTable extends TradingPointsTable
   TradingPointsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return TradingPointsTableData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      externalId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}external_id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      inn: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}inn']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      externalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}external_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      inn: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}inn'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
     );
   }
 
@@ -630,13 +783,14 @@ class TradingPointsTableData extends DataClass
   final String? inn;
   final DateTime createdAt;
   final DateTime? updatedAt;
-  const TradingPointsTableData(
-      {required this.id,
-      required this.externalId,
-      required this.name,
-      this.inn,
-      required this.createdAt,
-      this.updatedAt});
+  const TradingPointsTableData({
+    required this.id,
+    required this.externalId,
+    required this.name,
+    this.inn,
+    required this.createdAt,
+    this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -666,8 +820,10 @@ class TradingPointsTableData extends DataClass
     );
   }
 
-  factory TradingPointsTableData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory TradingPointsTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TradingPointsTableData(
       id: serializer.fromJson<int>(json['id']),
@@ -691,26 +847,27 @@ class TradingPointsTableData extends DataClass
     };
   }
 
-  TradingPointsTableData copyWith(
-          {int? id,
-          String? externalId,
-          String? name,
-          Value<String?> inn = const Value.absent(),
-          DateTime? createdAt,
-          Value<DateTime?> updatedAt = const Value.absent()}) =>
-      TradingPointsTableData(
-        id: id ?? this.id,
-        externalId: externalId ?? this.externalId,
-        name: name ?? this.name,
-        inn: inn.present ? inn.value : this.inn,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
-      );
+  TradingPointsTableData copyWith({
+    int? id,
+    String? externalId,
+    String? name,
+    Value<String?> inn = const Value.absent(),
+    DateTime? createdAt,
+    Value<DateTime?> updatedAt = const Value.absent(),
+  }) => TradingPointsTableData(
+    id: id ?? this.id,
+    externalId: externalId ?? this.externalId,
+    name: name ?? this.name,
+    inn: inn.present ? inn.value : this.inn,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+  );
   TradingPointsTableData copyWithCompanion(TradingPointsTableCompanion data) {
     return TradingPointsTableData(
       id: data.id.present ? data.id.value : this.id,
-      externalId:
-          data.externalId.present ? data.externalId.value : this.externalId,
+      externalId: data.externalId.present
+          ? data.externalId.value
+          : this.externalId,
       name: data.name.present ? data.name.value : this.name,
       inn: data.inn.present ? data.inn.value : this.inn,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
@@ -769,8 +926,8 @@ class TradingPointsTableCompanion
     this.inn = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : externalId = Value(externalId),
-        name = Value(name);
+  }) : externalId = Value(externalId),
+       name = Value(name);
   static Insertable<TradingPointsTableData> custom({
     Expression<int>? id,
     Expression<String>? externalId,
@@ -789,13 +946,14 @@ class TradingPointsTableCompanion
     });
   }
 
-  TradingPointsTableCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? externalId,
-      Value<String>? name,
-      Value<String?>? inn,
-      Value<DateTime>? createdAt,
-      Value<DateTime?>? updatedAt}) {
+  TradingPointsTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? externalId,
+    Value<String>? name,
+    Value<String?>? inn,
+    Value<DateTime>? createdAt,
+    Value<DateTime?>? updatedAt,
+  }) {
     return TradingPointsTableCompanion(
       id: id ?? this.id,
       externalId: externalId ?? this.externalId,
@@ -853,126 +1011,206 @@ class $PointsOfInterestTableTable extends PointsOfInterestTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _routeIdMeta =
-      const VerificationMeta('routeId');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _routeIdMeta = const VerificationMeta(
+    'routeId',
+  );
   @override
   late final GeneratedColumn<int> routeId = GeneratedColumn<int>(
-      'route_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'route_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
   @override
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _latitudeMeta =
-      const VerificationMeta('latitude');
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _latitudeMeta = const VerificationMeta(
+    'latitude',
+  );
   @override
   late final GeneratedColumn<double> latitude = GeneratedColumn<double>(
-      'latitude', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _longitudeMeta =
-      const VerificationMeta('longitude');
+    'latitude',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _longitudeMeta = const VerificationMeta(
+    'longitude',
+  );
   @override
   late final GeneratedColumn<double> longitude = GeneratedColumn<double>(
-      'longitude', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+    'longitude',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _plannedArrivalTimeMeta =
       const VerificationMeta('plannedArrivalTime');
   @override
   late final GeneratedColumn<DateTime> plannedArrivalTime =
-      GeneratedColumn<DateTime>('planned_arrival_time', aliasedName, true,
-          type: DriftSqlType.dateTime, requiredDuringInsert: false);
+      GeneratedColumn<DateTime>(
+        'planned_arrival_time',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   static const VerificationMeta _plannedDepartureTimeMeta =
       const VerificationMeta('plannedDepartureTime');
   @override
   late final GeneratedColumn<DateTime> plannedDepartureTime =
-      GeneratedColumn<DateTime>('planned_departure_time', aliasedName, true,
-          type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  static const VerificationMeta _actualArrivalTimeMeta =
-      const VerificationMeta('actualArrivalTime');
+      GeneratedColumn<DateTime>(
+        'planned_departure_time',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _actualArrivalTimeMeta = const VerificationMeta(
+    'actualArrivalTime',
+  );
   @override
   late final GeneratedColumn<DateTime> actualArrivalTime =
-      GeneratedColumn<DateTime>('actual_arrival_time', aliasedName, true,
-          type: DriftSqlType.dateTime, requiredDuringInsert: false);
+      GeneratedColumn<DateTime>(
+        'actual_arrival_time',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   static const VerificationMeta _actualDepartureTimeMeta =
       const VerificationMeta('actualDepartureTime');
   @override
   late final GeneratedColumn<DateTime> actualDepartureTime =
-      GeneratedColumn<DateTime>('actual_departure_time', aliasedName, true,
-          type: DriftSqlType.dateTime, requiredDuringInsert: false);
+      GeneratedColumn<DateTime>(
+        'actual_departure_time',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumn<String> type = GeneratedColumn<String>(
-      'type', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<String> status = GeneratedColumn<String>(
-      'status', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
-      'notes', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _tradingPointIdMeta =
-      const VerificationMeta('tradingPointId');
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _tradingPointIdMeta = const VerificationMeta(
+    'tradingPointId',
+  );
   @override
   late final GeneratedColumn<int> tradingPointId = GeneratedColumn<int>(
-      'trading_point_id', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _orderIndexMeta =
-      const VerificationMeta('orderIndex');
+    'trading_point_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _orderIndexMeta = const VerificationMeta(
+    'orderIndex',
+  );
   @override
   late final GeneratedColumn<int> orderIndex = GeneratedColumn<int>(
-      'order_index', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'order_index',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        routeId,
-        name,
-        description,
-        latitude,
-        longitude,
-        plannedArrivalTime,
-        plannedDepartureTime,
-        actualArrivalTime,
-        actualDepartureTime,
-        type,
-        status,
-        notes,
-        tradingPointId,
-        orderIndex,
-        createdAt,
-        updatedAt
-      ];
+    id,
+    routeId,
+    name,
+    description,
+    latitude,
+    longitude,
+    plannedArrivalTime,
+    plannedDepartureTime,
+    actualArrivalTime,
+    actualDepartureTime,
+    type,
+    status,
+    notes,
+    tradingPointId,
+    orderIndex,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -980,104 +1218,141 @@ class $PointsOfInterestTableTable extends PointsOfInterestTable
   static const String $name = 'points_of_interest';
   @override
   VerificationContext validateIntegrity(
-      Insertable<PointsOfInterestTableData> instance,
-      {bool isInserting = false}) {
+    Insertable<PointsOfInterestTableData> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('route_id')) {
-      context.handle(_routeIdMeta,
-          routeId.isAcceptableOrUnknown(data['route_id']!, _routeIdMeta));
+      context.handle(
+        _routeIdMeta,
+        routeId.isAcceptableOrUnknown(data['route_id']!, _routeIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_routeIdMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
           _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
+        ),
+      );
     }
     if (data.containsKey('latitude')) {
-      context.handle(_latitudeMeta,
-          latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta));
+      context.handle(
+        _latitudeMeta,
+        latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta),
+      );
     } else if (isInserting) {
       context.missing(_latitudeMeta);
     }
     if (data.containsKey('longitude')) {
-      context.handle(_longitudeMeta,
-          longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta));
+      context.handle(
+        _longitudeMeta,
+        longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta),
+      );
     } else if (isInserting) {
       context.missing(_longitudeMeta);
     }
     if (data.containsKey('planned_arrival_time')) {
       context.handle(
+        _plannedArrivalTimeMeta,
+        plannedArrivalTime.isAcceptableOrUnknown(
+          data['planned_arrival_time']!,
           _plannedArrivalTimeMeta,
-          plannedArrivalTime.isAcceptableOrUnknown(
-              data['planned_arrival_time']!, _plannedArrivalTimeMeta));
+        ),
+      );
     }
     if (data.containsKey('planned_departure_time')) {
       context.handle(
+        _plannedDepartureTimeMeta,
+        plannedDepartureTime.isAcceptableOrUnknown(
+          data['planned_departure_time']!,
           _plannedDepartureTimeMeta,
-          plannedDepartureTime.isAcceptableOrUnknown(
-              data['planned_departure_time']!, _plannedDepartureTimeMeta));
+        ),
+      );
     }
     if (data.containsKey('actual_arrival_time')) {
       context.handle(
+        _actualArrivalTimeMeta,
+        actualArrivalTime.isAcceptableOrUnknown(
+          data['actual_arrival_time']!,
           _actualArrivalTimeMeta,
-          actualArrivalTime.isAcceptableOrUnknown(
-              data['actual_arrival_time']!, _actualArrivalTimeMeta));
+        ),
+      );
     }
     if (data.containsKey('actual_departure_time')) {
       context.handle(
+        _actualDepartureTimeMeta,
+        actualDepartureTime.isAcceptableOrUnknown(
+          data['actual_departure_time']!,
           _actualDepartureTimeMeta,
-          actualDepartureTime.isAcceptableOrUnknown(
-              data['actual_departure_time']!, _actualDepartureTimeMeta));
+        ),
+      );
     }
     if (data.containsKey('type')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
     if (data.containsKey('status')) {
-      context.handle(_statusMeta,
-          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
     } else if (isInserting) {
       context.missing(_statusMeta);
     }
     if (data.containsKey('notes')) {
       context.handle(
-          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
     }
     if (data.containsKey('trading_point_id')) {
       context.handle(
+        _tradingPointIdMeta,
+        tradingPointId.isAcceptableOrUnknown(
+          data['trading_point_id']!,
           _tradingPointIdMeta,
-          tradingPointId.isAcceptableOrUnknown(
-              data['trading_point_id']!, _tradingPointIdMeta));
+        ),
+      );
     }
     if (data.containsKey('order_index')) {
       context.handle(
-          _orderIndexMeta,
-          orderIndex.isAcceptableOrUnknown(
-              data['order_index']!, _orderIndexMeta));
+        _orderIndexMeta,
+        orderIndex.isAcceptableOrUnknown(data['order_index']!, _orderIndexMeta),
+      );
     } else if (isInserting) {
       context.missing(_orderIndexMeta);
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     }
     return context;
   }
@@ -1085,47 +1360,80 @@ class $PointsOfInterestTableTable extends PointsOfInterestTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  PointsOfInterestTableData map(Map<String, dynamic> data,
-      {String? tablePrefix}) {
+  PointsOfInterestTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PointsOfInterestTableData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      routeId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}route_id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description']),
-      latitude: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}latitude'])!,
-      longitude: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}longitude'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      routeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}route_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      latitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}latitude'],
+      )!,
+      longitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}longitude'],
+      )!,
       plannedArrivalTime: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime,
-          data['${effectivePrefix}planned_arrival_time']),
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}planned_arrival_time'],
+      ),
       plannedDepartureTime: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime,
-          data['${effectivePrefix}planned_departure_time']),
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}planned_departure_time'],
+      ),
       actualArrivalTime: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime, data['${effectivePrefix}actual_arrival_time']),
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}actual_arrival_time'],
+      ),
       actualDepartureTime: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime,
-          data['${effectivePrefix}actual_departure_time']),
-      type: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
-      status: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
-      notes: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
-      tradingPointId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}trading_point_id']),
-      orderIndex: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}order_index'])!,
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}actual_departure_time'],
+      ),
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+      tradingPointId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}trading_point_id'],
+      ),
+      orderIndex: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}order_index'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
     );
   }
 
@@ -1154,24 +1462,25 @@ class PointsOfInterestTableData extends DataClass
   final int orderIndex;
   final DateTime createdAt;
   final DateTime? updatedAt;
-  const PointsOfInterestTableData(
-      {required this.id,
-      required this.routeId,
-      required this.name,
-      this.description,
-      required this.latitude,
-      required this.longitude,
-      this.plannedArrivalTime,
-      this.plannedDepartureTime,
-      this.actualArrivalTime,
-      this.actualDepartureTime,
-      required this.type,
-      required this.status,
-      this.notes,
-      this.tradingPointId,
-      required this.orderIndex,
-      required this.createdAt,
-      this.updatedAt});
+  const PointsOfInterestTableData({
+    required this.id,
+    required this.routeId,
+    required this.name,
+    this.description,
+    required this.latitude,
+    required this.longitude,
+    this.plannedArrivalTime,
+    this.plannedDepartureTime,
+    this.actualArrivalTime,
+    this.actualDepartureTime,
+    required this.type,
+    required this.status,
+    this.notes,
+    this.tradingPointId,
+    required this.orderIndex,
+    required this.createdAt,
+    this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1235,8 +1544,9 @@ class PointsOfInterestTableData extends DataClass
           : Value(actualDepartureTime),
       type: Value(type),
       status: Value(status),
-      notes:
-          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
       tradingPointId: tradingPointId == null && nullToAbsent
           ? const Value.absent()
           : Value(tradingPointId),
@@ -1248,8 +1558,10 @@ class PointsOfInterestTableData extends DataClass
     );
   }
 
-  factory PointsOfInterestTableData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory PointsOfInterestTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PointsOfInterestTableData(
       id: serializer.fromJson<int>(json['id']),
@@ -1258,14 +1570,18 @@ class PointsOfInterestTableData extends DataClass
       description: serializer.fromJson<String?>(json['description']),
       latitude: serializer.fromJson<double>(json['latitude']),
       longitude: serializer.fromJson<double>(json['longitude']),
-      plannedArrivalTime:
-          serializer.fromJson<DateTime?>(json['plannedArrivalTime']),
-      plannedDepartureTime:
-          serializer.fromJson<DateTime?>(json['plannedDepartureTime']),
-      actualArrivalTime:
-          serializer.fromJson<DateTime?>(json['actualArrivalTime']),
-      actualDepartureTime:
-          serializer.fromJson<DateTime?>(json['actualDepartureTime']),
+      plannedArrivalTime: serializer.fromJson<DateTime?>(
+        json['plannedArrivalTime'],
+      ),
+      plannedDepartureTime: serializer.fromJson<DateTime?>(
+        json['plannedDepartureTime'],
+      ),
+      actualArrivalTime: serializer.fromJson<DateTime?>(
+        json['actualArrivalTime'],
+      ),
+      actualDepartureTime: serializer.fromJson<DateTime?>(
+        json['actualDepartureTime'],
+      ),
       type: serializer.fromJson<String>(json['type']),
       status: serializer.fromJson<String>(json['status']),
       notes: serializer.fromJson<String?>(json['notes']),
@@ -1286,8 +1602,9 @@ class PointsOfInterestTableData extends DataClass
       'latitude': serializer.toJson<double>(latitude),
       'longitude': serializer.toJson<double>(longitude),
       'plannedArrivalTime': serializer.toJson<DateTime?>(plannedArrivalTime),
-      'plannedDepartureTime':
-          serializer.toJson<DateTime?>(plannedDepartureTime),
+      'plannedDepartureTime': serializer.toJson<DateTime?>(
+        plannedDepartureTime,
+      ),
       'actualArrivalTime': serializer.toJson<DateTime?>(actualArrivalTime),
       'actualDepartureTime': serializer.toJson<DateTime?>(actualDepartureTime),
       'type': serializer.toJson<String>(type),
@@ -1300,60 +1617,63 @@ class PointsOfInterestTableData extends DataClass
     };
   }
 
-  PointsOfInterestTableData copyWith(
-          {int? id,
-          int? routeId,
-          String? name,
-          Value<String?> description = const Value.absent(),
-          double? latitude,
-          double? longitude,
-          Value<DateTime?> plannedArrivalTime = const Value.absent(),
-          Value<DateTime?> plannedDepartureTime = const Value.absent(),
-          Value<DateTime?> actualArrivalTime = const Value.absent(),
-          Value<DateTime?> actualDepartureTime = const Value.absent(),
-          String? type,
-          String? status,
-          Value<String?> notes = const Value.absent(),
-          Value<int?> tradingPointId = const Value.absent(),
-          int? orderIndex,
-          DateTime? createdAt,
-          Value<DateTime?> updatedAt = const Value.absent()}) =>
-      PointsOfInterestTableData(
-        id: id ?? this.id,
-        routeId: routeId ?? this.routeId,
-        name: name ?? this.name,
-        description: description.present ? description.value : this.description,
-        latitude: latitude ?? this.latitude,
-        longitude: longitude ?? this.longitude,
-        plannedArrivalTime: plannedArrivalTime.present
-            ? plannedArrivalTime.value
-            : this.plannedArrivalTime,
-        plannedDepartureTime: plannedDepartureTime.present
-            ? plannedDepartureTime.value
-            : this.plannedDepartureTime,
-        actualArrivalTime: actualArrivalTime.present
-            ? actualArrivalTime.value
-            : this.actualArrivalTime,
-        actualDepartureTime: actualDepartureTime.present
-            ? actualDepartureTime.value
-            : this.actualDepartureTime,
-        type: type ?? this.type,
-        status: status ?? this.status,
-        notes: notes.present ? notes.value : this.notes,
-        tradingPointId:
-            tradingPointId.present ? tradingPointId.value : this.tradingPointId,
-        orderIndex: orderIndex ?? this.orderIndex,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
-      );
+  PointsOfInterestTableData copyWith({
+    int? id,
+    int? routeId,
+    String? name,
+    Value<String?> description = const Value.absent(),
+    double? latitude,
+    double? longitude,
+    Value<DateTime?> plannedArrivalTime = const Value.absent(),
+    Value<DateTime?> plannedDepartureTime = const Value.absent(),
+    Value<DateTime?> actualArrivalTime = const Value.absent(),
+    Value<DateTime?> actualDepartureTime = const Value.absent(),
+    String? type,
+    String? status,
+    Value<String?> notes = const Value.absent(),
+    Value<int?> tradingPointId = const Value.absent(),
+    int? orderIndex,
+    DateTime? createdAt,
+    Value<DateTime?> updatedAt = const Value.absent(),
+  }) => PointsOfInterestTableData(
+    id: id ?? this.id,
+    routeId: routeId ?? this.routeId,
+    name: name ?? this.name,
+    description: description.present ? description.value : this.description,
+    latitude: latitude ?? this.latitude,
+    longitude: longitude ?? this.longitude,
+    plannedArrivalTime: plannedArrivalTime.present
+        ? plannedArrivalTime.value
+        : this.plannedArrivalTime,
+    plannedDepartureTime: plannedDepartureTime.present
+        ? plannedDepartureTime.value
+        : this.plannedDepartureTime,
+    actualArrivalTime: actualArrivalTime.present
+        ? actualArrivalTime.value
+        : this.actualArrivalTime,
+    actualDepartureTime: actualDepartureTime.present
+        ? actualDepartureTime.value
+        : this.actualDepartureTime,
+    type: type ?? this.type,
+    status: status ?? this.status,
+    notes: notes.present ? notes.value : this.notes,
+    tradingPointId: tradingPointId.present
+        ? tradingPointId.value
+        : this.tradingPointId,
+    orderIndex: orderIndex ?? this.orderIndex,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+  );
   PointsOfInterestTableData copyWithCompanion(
-      PointsOfInterestTableCompanion data) {
+    PointsOfInterestTableCompanion data,
+  ) {
     return PointsOfInterestTableData(
       id: data.id.present ? data.id.value : this.id,
       routeId: data.routeId.present ? data.routeId.value : this.routeId,
       name: data.name.present ? data.name.value : this.name,
-      description:
-          data.description.present ? data.description.value : this.description,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
       latitude: data.latitude.present ? data.latitude.value : this.latitude,
       longitude: data.longitude.present ? data.longitude.value : this.longitude,
       plannedArrivalTime: data.plannedArrivalTime.present
@@ -1374,8 +1694,9 @@ class PointsOfInterestTableData extends DataClass
       tradingPointId: data.tradingPointId.present
           ? data.tradingPointId.value
           : this.tradingPointId,
-      orderIndex:
-          data.orderIndex.present ? data.orderIndex.value : this.orderIndex,
+      orderIndex: data.orderIndex.present
+          ? data.orderIndex.value
+          : this.orderIndex,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -1407,23 +1728,24 @@ class PointsOfInterestTableData extends DataClass
 
   @override
   int get hashCode => Object.hash(
-      id,
-      routeId,
-      name,
-      description,
-      latitude,
-      longitude,
-      plannedArrivalTime,
-      plannedDepartureTime,
-      actualArrivalTime,
-      actualDepartureTime,
-      type,
-      status,
-      notes,
-      tradingPointId,
-      orderIndex,
-      createdAt,
-      updatedAt);
+    id,
+    routeId,
+    name,
+    description,
+    latitude,
+    longitude,
+    plannedArrivalTime,
+    plannedDepartureTime,
+    actualArrivalTime,
+    actualDepartureTime,
+    type,
+    status,
+    notes,
+    tradingPointId,
+    orderIndex,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1503,13 +1825,13 @@ class PointsOfInterestTableCompanion
     required int orderIndex,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : routeId = Value(routeId),
-        name = Value(name),
-        latitude = Value(latitude),
-        longitude = Value(longitude),
-        type = Value(type),
-        status = Value(status),
-        orderIndex = Value(orderIndex);
+  }) : routeId = Value(routeId),
+       name = Value(name),
+       latitude = Value(latitude),
+       longitude = Value(longitude),
+       type = Value(type),
+       status = Value(status),
+       orderIndex = Value(orderIndex);
   static Insertable<PointsOfInterestTableData> custom({
     Expression<int>? id,
     Expression<int>? routeId,
@@ -1553,24 +1875,25 @@ class PointsOfInterestTableCompanion
     });
   }
 
-  PointsOfInterestTableCompanion copyWith(
-      {Value<int>? id,
-      Value<int>? routeId,
-      Value<String>? name,
-      Value<String?>? description,
-      Value<double>? latitude,
-      Value<double>? longitude,
-      Value<DateTime?>? plannedArrivalTime,
-      Value<DateTime?>? plannedDepartureTime,
-      Value<DateTime?>? actualArrivalTime,
-      Value<DateTime?>? actualDepartureTime,
-      Value<String>? type,
-      Value<String>? status,
-      Value<String?>? notes,
-      Value<int?>? tradingPointId,
-      Value<int>? orderIndex,
-      Value<DateTime>? createdAt,
-      Value<DateTime?>? updatedAt}) {
+  PointsOfInterestTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? routeId,
+    Value<String>? name,
+    Value<String?>? description,
+    Value<double>? latitude,
+    Value<double>? longitude,
+    Value<DateTime?>? plannedArrivalTime,
+    Value<DateTime?>? plannedDepartureTime,
+    Value<DateTime?>? actualArrivalTime,
+    Value<DateTime?>? actualDepartureTime,
+    Value<String>? type,
+    Value<String>? status,
+    Value<String?>? notes,
+    Value<int?>? tradingPointId,
+    Value<int>? orderIndex,
+    Value<DateTime>? createdAt,
+    Value<DateTime?>? updatedAt,
+  }) {
     return PointsOfInterestTableCompanion(
       id: id ?? this.id,
       routeId: routeId ?? this.routeId,
@@ -1614,19 +1937,22 @@ class PointsOfInterestTableCompanion
       map['longitude'] = Variable<double>(longitude.value);
     }
     if (plannedArrivalTime.present) {
-      map['planned_arrival_time'] =
-          Variable<DateTime>(plannedArrivalTime.value);
+      map['planned_arrival_time'] = Variable<DateTime>(
+        plannedArrivalTime.value,
+      );
     }
     if (plannedDepartureTime.present) {
-      map['planned_departure_time'] =
-          Variable<DateTime>(plannedDepartureTime.value);
+      map['planned_departure_time'] = Variable<DateTime>(
+        plannedDepartureTime.value,
+      );
     }
     if (actualArrivalTime.present) {
       map['actual_arrival_time'] = Variable<DateTime>(actualArrivalTime.value);
     }
     if (actualDepartureTime.present) {
-      map['actual_departure_time'] =
-          Variable<DateTime>(actualDepartureTime.value);
+      map['actual_departure_time'] = Variable<DateTime>(
+        actualDepartureTime.value,
+      );
     }
     if (type.present) {
       map['type'] = Variable<String>(type.value);
@@ -1686,66 +2012,103 @@ class $PointStatusHistoryTableTable extends PointStatusHistoryTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _pointIdMeta =
-      const VerificationMeta('pointId');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _pointIdMeta = const VerificationMeta(
+    'pointId',
+  );
   @override
   late final GeneratedColumn<int> pointId = GeneratedColumn<int>(
-      'point_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _fromStatusMeta =
-      const VerificationMeta('fromStatus');
+    'point_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fromStatusMeta = const VerificationMeta(
+    'fromStatus',
+  );
   @override
   late final GeneratedColumn<String> fromStatus = GeneratedColumn<String>(
-      'from_status', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _toStatusMeta =
-      const VerificationMeta('toStatus');
+    'from_status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _toStatusMeta = const VerificationMeta(
+    'toStatus',
+  );
   @override
   late final GeneratedColumn<String> toStatus = GeneratedColumn<String>(
-      'to_status', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _changedByMeta =
-      const VerificationMeta('changedBy');
+    'to_status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _changedByMeta = const VerificationMeta(
+    'changedBy',
+  );
   @override
   late final GeneratedColumn<String> changedBy = GeneratedColumn<String>(
-      'changed_by', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'changed_by',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _reasonMeta = const VerificationMeta('reason');
   @override
   late final GeneratedColumn<String> reason = GeneratedColumn<String>(
-      'reason', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'reason',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        pointId,
-        fromStatus,
-        toStatus,
-        changedBy,
-        reason,
-        createdAt,
-        updatedAt
-      ];
+    id,
+    pointId,
+    fromStatus,
+    toStatus,
+    changedBy,
+    reason,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1753,50 +2116,63 @@ class $PointStatusHistoryTableTable extends PointStatusHistoryTable
   static const String $name = 'point_status_history';
   @override
   VerificationContext validateIntegrity(
-      Insertable<PointStatusHistoryTableData> instance,
-      {bool isInserting = false}) {
+    Insertable<PointStatusHistoryTableData> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('point_id')) {
-      context.handle(_pointIdMeta,
-          pointId.isAcceptableOrUnknown(data['point_id']!, _pointIdMeta));
+      context.handle(
+        _pointIdMeta,
+        pointId.isAcceptableOrUnknown(data['point_id']!, _pointIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_pointIdMeta);
     }
     if (data.containsKey('from_status')) {
       context.handle(
-          _fromStatusMeta,
-          fromStatus.isAcceptableOrUnknown(
-              data['from_status']!, _fromStatusMeta));
+        _fromStatusMeta,
+        fromStatus.isAcceptableOrUnknown(data['from_status']!, _fromStatusMeta),
+      );
     } else if (isInserting) {
       context.missing(_fromStatusMeta);
     }
     if (data.containsKey('to_status')) {
-      context.handle(_toStatusMeta,
-          toStatus.isAcceptableOrUnknown(data['to_status']!, _toStatusMeta));
+      context.handle(
+        _toStatusMeta,
+        toStatus.isAcceptableOrUnknown(data['to_status']!, _toStatusMeta),
+      );
     } else if (isInserting) {
       context.missing(_toStatusMeta);
     }
     if (data.containsKey('changed_by')) {
-      context.handle(_changedByMeta,
-          changedBy.isAcceptableOrUnknown(data['changed_by']!, _changedByMeta));
+      context.handle(
+        _changedByMeta,
+        changedBy.isAcceptableOrUnknown(data['changed_by']!, _changedByMeta),
+      );
     } else if (isInserting) {
       context.missing(_changedByMeta);
     }
     if (data.containsKey('reason')) {
-      context.handle(_reasonMeta,
-          reason.isAcceptableOrUnknown(data['reason']!, _reasonMeta));
+      context.handle(
+        _reasonMeta,
+        reason.isAcceptableOrUnknown(data['reason']!, _reasonMeta),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     }
     return context;
   }
@@ -1804,26 +2180,44 @@ class $PointStatusHistoryTableTable extends PointStatusHistoryTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  PointStatusHistoryTableData map(Map<String, dynamic> data,
-      {String? tablePrefix}) {
+  PointStatusHistoryTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PointStatusHistoryTableData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      pointId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}point_id'])!,
-      fromStatus: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}from_status'])!,
-      toStatus: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}to_status'])!,
-      changedBy: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}changed_by'])!,
-      reason: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}reason']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      pointId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}point_id'],
+      )!,
+      fromStatus: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}from_status'],
+      )!,
+      toStatus: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}to_status'],
+      )!,
+      changedBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}changed_by'],
+      )!,
+      reason: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reason'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      ),
     );
   }
 
@@ -1843,15 +2237,16 @@ class PointStatusHistoryTableData extends DataClass
   final String? reason;
   final DateTime createdAt;
   final DateTime? updatedAt;
-  const PointStatusHistoryTableData(
-      {required this.id,
-      required this.pointId,
-      required this.fromStatus,
-      required this.toStatus,
-      required this.changedBy,
-      this.reason,
-      required this.createdAt,
-      this.updatedAt});
+  const PointStatusHistoryTableData({
+    required this.id,
+    required this.pointId,
+    required this.fromStatus,
+    required this.toStatus,
+    required this.changedBy,
+    this.reason,
+    required this.createdAt,
+    this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1877,8 +2272,9 @@ class PointStatusHistoryTableData extends DataClass
       fromStatus: Value(fromStatus),
       toStatus: Value(toStatus),
       changedBy: Value(changedBy),
-      reason:
-          reason == null && nullToAbsent ? const Value.absent() : Value(reason),
+      reason: reason == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reason),
       createdAt: Value(createdAt),
       updatedAt: updatedAt == null && nullToAbsent
           ? const Value.absent()
@@ -1886,8 +2282,10 @@ class PointStatusHistoryTableData extends DataClass
     );
   }
 
-  factory PointStatusHistoryTableData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory PointStatusHistoryTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PointStatusHistoryTableData(
       id: serializer.fromJson<int>(json['id']),
@@ -1915,32 +2313,34 @@ class PointStatusHistoryTableData extends DataClass
     };
   }
 
-  PointStatusHistoryTableData copyWith(
-          {int? id,
-          int? pointId,
-          String? fromStatus,
-          String? toStatus,
-          String? changedBy,
-          Value<String?> reason = const Value.absent(),
-          DateTime? createdAt,
-          Value<DateTime?> updatedAt = const Value.absent()}) =>
-      PointStatusHistoryTableData(
-        id: id ?? this.id,
-        pointId: pointId ?? this.pointId,
-        fromStatus: fromStatus ?? this.fromStatus,
-        toStatus: toStatus ?? this.toStatus,
-        changedBy: changedBy ?? this.changedBy,
-        reason: reason.present ? reason.value : this.reason,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
-      );
+  PointStatusHistoryTableData copyWith({
+    int? id,
+    int? pointId,
+    String? fromStatus,
+    String? toStatus,
+    String? changedBy,
+    Value<String?> reason = const Value.absent(),
+    DateTime? createdAt,
+    Value<DateTime?> updatedAt = const Value.absent(),
+  }) => PointStatusHistoryTableData(
+    id: id ?? this.id,
+    pointId: pointId ?? this.pointId,
+    fromStatus: fromStatus ?? this.fromStatus,
+    toStatus: toStatus ?? this.toStatus,
+    changedBy: changedBy ?? this.changedBy,
+    reason: reason.present ? reason.value : this.reason,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+  );
   PointStatusHistoryTableData copyWithCompanion(
-      PointStatusHistoryTableCompanion data) {
+    PointStatusHistoryTableCompanion data,
+  ) {
     return PointStatusHistoryTableData(
       id: data.id.present ? data.id.value : this.id,
       pointId: data.pointId.present ? data.pointId.value : this.pointId,
-      fromStatus:
-          data.fromStatus.present ? data.fromStatus.value : this.fromStatus,
+      fromStatus: data.fromStatus.present
+          ? data.fromStatus.value
+          : this.fromStatus,
       toStatus: data.toStatus.present ? data.toStatus.value : this.toStatus,
       changedBy: data.changedBy.present ? data.changedBy.value : this.changedBy,
       reason: data.reason.present ? data.reason.value : this.reason,
@@ -1965,8 +2365,16 @@ class PointStatusHistoryTableData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, pointId, fromStatus, toStatus, changedBy,
-      reason, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    pointId,
+    fromStatus,
+    toStatus,
+    changedBy,
+    reason,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2010,10 +2418,10 @@ class PointStatusHistoryTableCompanion
     this.reason = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : pointId = Value(pointId),
-        fromStatus = Value(fromStatus),
-        toStatus = Value(toStatus),
-        changedBy = Value(changedBy);
+  }) : pointId = Value(pointId),
+       fromStatus = Value(fromStatus),
+       toStatus = Value(toStatus),
+       changedBy = Value(changedBy);
   static Insertable<PointStatusHistoryTableData> custom({
     Expression<int>? id,
     Expression<int>? pointId,
@@ -2036,15 +2444,16 @@ class PointStatusHistoryTableCompanion
     });
   }
 
-  PointStatusHistoryTableCompanion copyWith(
-      {Value<int>? id,
-      Value<int>? pointId,
-      Value<String>? fromStatus,
-      Value<String>? toStatus,
-      Value<String>? changedBy,
-      Value<String?>? reason,
-      Value<DateTime>? createdAt,
-      Value<DateTime?>? updatedAt}) {
+  PointStatusHistoryTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? pointId,
+    Value<String>? fromStatus,
+    Value<String>? toStatus,
+    Value<String>? changedBy,
+    Value<String?>? reason,
+    Value<DateTime>? createdAt,
+    Value<DateTime?>? updatedAt,
+  }) {
     return PointStatusHistoryTableCompanion(
       id: id ?? this.id,
       pointId: pointId ?? this.pointId,
@@ -2118,39 +2527,39 @@ abstract class _$RouteDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-        routesTable,
-        tradingPointsTable,
-        pointsOfInterestTable,
-        pointStatusHistoryTable
-      ];
+    routesTable,
+    tradingPointsTable,
+    pointsOfInterestTable,
+    pointStatusHistoryTable,
+  ];
 }
 
-typedef $$RoutesTableTableCreateCompanionBuilder = RoutesTableCompanion
-    Function({
-  Value<int> id,
-  required String name,
-  Value<String?> description,
-  Value<DateTime?> startTime,
-  Value<DateTime?> endTime,
-  required String status,
-  Value<String?> pathJson,
-  required int userId,
-  Value<DateTime> createdAt,
-  Value<DateTime?> updatedAt,
-});
-typedef $$RoutesTableTableUpdateCompanionBuilder = RoutesTableCompanion
-    Function({
-  Value<int> id,
-  Value<String> name,
-  Value<String?> description,
-  Value<DateTime?> startTime,
-  Value<DateTime?> endTime,
-  Value<String> status,
-  Value<String?> pathJson,
-  Value<int> userId,
-  Value<DateTime> createdAt,
-  Value<DateTime?> updatedAt,
-});
+typedef $$RoutesTableTableCreateCompanionBuilder =
+    RoutesTableCompanion Function({
+      Value<int> id,
+      required String name,
+      Value<String?> description,
+      Value<DateTime?> startTime,
+      Value<DateTime?> endTime,
+      required String status,
+      Value<String?> pathJson,
+      required int userId,
+      Value<DateTime> createdAt,
+      Value<DateTime?> updatedAt,
+    });
+typedef $$RoutesTableTableUpdateCompanionBuilder =
+    RoutesTableCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String?> description,
+      Value<DateTime?> startTime,
+      Value<DateTime?> endTime,
+      Value<String> status,
+      Value<String?> pathJson,
+      Value<int> userId,
+      Value<DateTime> createdAt,
+      Value<DateTime?> updatedAt,
+    });
 
 class $$RoutesTableTableFilterComposer
     extends Composer<_$RouteDatabase, $RoutesTableTable> {
@@ -2162,34 +2571,54 @@ class $$RoutesTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => ColumnFilters(column));
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get startTime => $composableBuilder(
-      column: $table.startTime, builder: (column) => ColumnFilters(column));
+    column: $table.startTime,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get endTime => $composableBuilder(
-      column: $table.endTime, builder: (column) => ColumnFilters(column));
+    column: $table.endTime,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get status => $composableBuilder(
-      column: $table.status, builder: (column) => ColumnFilters(column));
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get pathJson => $composableBuilder(
-      column: $table.pathJson, builder: (column) => ColumnFilters(column));
+    column: $table.pathJson,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get userId => $composableBuilder(
-      column: $table.userId, builder: (column) => ColumnFilters(column));
+    column: $table.userId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$RoutesTableTableOrderingComposer
@@ -2202,34 +2631,54 @@ class $$RoutesTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => ColumnOrderings(column));
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get startTime => $composableBuilder(
-      column: $table.startTime, builder: (column) => ColumnOrderings(column));
+    column: $table.startTime,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get endTime => $composableBuilder(
-      column: $table.endTime, builder: (column) => ColumnOrderings(column));
+    column: $table.endTime,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get status => $composableBuilder(
-      column: $table.status, builder: (column) => ColumnOrderings(column));
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get pathJson => $composableBuilder(
-      column: $table.pathJson, builder: (column) => ColumnOrderings(column));
+    column: $table.pathJson,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get userId => $composableBuilder(
-      column: $table.userId, builder: (column) => ColumnOrderings(column));
+    column: $table.userId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$RoutesTableTableAnnotationComposer
@@ -2248,7 +2697,9 @@ class $$RoutesTableTableAnnotationComposer
       $composableBuilder(column: $table.name, builder: (column) => column);
 
   GeneratedColumn<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => column);
+    column: $table.description,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get startTime =>
       $composableBuilder(column: $table.startTime, builder: (column) => column);
@@ -2272,23 +2723,27 @@ class $$RoutesTableTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$RoutesTableTableTableManager extends RootTableManager<
-    _$RouteDatabase,
-    $RoutesTableTable,
-    RoutesTableData,
-    $$RoutesTableTableFilterComposer,
-    $$RoutesTableTableOrderingComposer,
-    $$RoutesTableTableAnnotationComposer,
-    $$RoutesTableTableCreateCompanionBuilder,
-    $$RoutesTableTableUpdateCompanionBuilder,
-    (
-      RoutesTableData,
-      BaseReferences<_$RouteDatabase, $RoutesTableTable, RoutesTableData>
-    ),
-    RoutesTableData,
-    PrefetchHooks Function()> {
+class $$RoutesTableTableTableManager
+    extends
+        RootTableManager<
+          _$RouteDatabase,
+          $RoutesTableTable,
+          RoutesTableData,
+          $$RoutesTableTableFilterComposer,
+          $$RoutesTableTableOrderingComposer,
+          $$RoutesTableTableAnnotationComposer,
+          $$RoutesTableTableCreateCompanionBuilder,
+          $$RoutesTableTableUpdateCompanionBuilder,
+          (
+            RoutesTableData,
+            BaseReferences<_$RouteDatabase, $RoutesTableTable, RoutesTableData>,
+          ),
+          RoutesTableData,
+          PrefetchHooks Function()
+        > {
   $$RoutesTableTableTableManager(_$RouteDatabase db, $RoutesTableTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -2297,94 +2752,97 @@ class $$RoutesTableTableTableManager extends RootTableManager<
               $$RoutesTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$RoutesTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<String?> description = const Value.absent(),
-            Value<DateTime?> startTime = const Value.absent(),
-            Value<DateTime?> endTime = const Value.absent(),
-            Value<String> status = const Value.absent(),
-            Value<String?> pathJson = const Value.absent(),
-            Value<int> userId = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              RoutesTableCompanion(
-            id: id,
-            name: name,
-            description: description,
-            startTime: startTime,
-            endTime: endTime,
-            status: status,
-            pathJson: pathJson,
-            userId: userId,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String name,
-            Value<String?> description = const Value.absent(),
-            Value<DateTime?> startTime = const Value.absent(),
-            Value<DateTime?> endTime = const Value.absent(),
-            required String status,
-            Value<String?> pathJson = const Value.absent(),
-            required int userId,
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              RoutesTableCompanion.insert(
-            id: id,
-            name: name,
-            description: description,
-            startTime: startTime,
-            endTime: endTime,
-            status: status,
-            pathJson: pathJson,
-            userId: userId,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<DateTime?> startTime = const Value.absent(),
+                Value<DateTime?> endTime = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> pathJson = const Value.absent(),
+                Value<int> userId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
+              }) => RoutesTableCompanion(
+                id: id,
+                name: name,
+                description: description,
+                startTime: startTime,
+                endTime: endTime,
+                status: status,
+                pathJson: pathJson,
+                userId: userId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                Value<String?> description = const Value.absent(),
+                Value<DateTime?> startTime = const Value.absent(),
+                Value<DateTime?> endTime = const Value.absent(),
+                required String status,
+                Value<String?> pathJson = const Value.absent(),
+                required int userId,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
+              }) => RoutesTableCompanion.insert(
+                id: id,
+                name: name,
+                description: description,
+                startTime: startTime,
+                endTime: endTime,
+                status: status,
+                pathJson: pathJson,
+                userId: userId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$RoutesTableTableProcessedTableManager = ProcessedTableManager<
-    _$RouteDatabase,
-    $RoutesTableTable,
-    RoutesTableData,
-    $$RoutesTableTableFilterComposer,
-    $$RoutesTableTableOrderingComposer,
-    $$RoutesTableTableAnnotationComposer,
-    $$RoutesTableTableCreateCompanionBuilder,
-    $$RoutesTableTableUpdateCompanionBuilder,
-    (
+typedef $$RoutesTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$RouteDatabase,
+      $RoutesTableTable,
       RoutesTableData,
-      BaseReferences<_$RouteDatabase, $RoutesTableTable, RoutesTableData>
-    ),
-    RoutesTableData,
-    PrefetchHooks Function()>;
-typedef $$TradingPointsTableTableCreateCompanionBuilder
-    = TradingPointsTableCompanion Function({
-  Value<int> id,
-  required String externalId,
-  required String name,
-  Value<String?> inn,
-  Value<DateTime> createdAt,
-  Value<DateTime?> updatedAt,
-});
-typedef $$TradingPointsTableTableUpdateCompanionBuilder
-    = TradingPointsTableCompanion Function({
-  Value<int> id,
-  Value<String> externalId,
-  Value<String> name,
-  Value<String?> inn,
-  Value<DateTime> createdAt,
-  Value<DateTime?> updatedAt,
-});
+      $$RoutesTableTableFilterComposer,
+      $$RoutesTableTableOrderingComposer,
+      $$RoutesTableTableAnnotationComposer,
+      $$RoutesTableTableCreateCompanionBuilder,
+      $$RoutesTableTableUpdateCompanionBuilder,
+      (
+        RoutesTableData,
+        BaseReferences<_$RouteDatabase, $RoutesTableTable, RoutesTableData>,
+      ),
+      RoutesTableData,
+      PrefetchHooks Function()
+    >;
+typedef $$TradingPointsTableTableCreateCompanionBuilder =
+    TradingPointsTableCompanion Function({
+      Value<int> id,
+      required String externalId,
+      required String name,
+      Value<String?> inn,
+      Value<DateTime> createdAt,
+      Value<DateTime?> updatedAt,
+    });
+typedef $$TradingPointsTableTableUpdateCompanionBuilder =
+    TradingPointsTableCompanion Function({
+      Value<int> id,
+      Value<String> externalId,
+      Value<String> name,
+      Value<String?> inn,
+      Value<DateTime> createdAt,
+      Value<DateTime?> updatedAt,
+    });
 
 class $$TradingPointsTableTableFilterComposer
     extends Composer<_$RouteDatabase, $TradingPointsTableTable> {
@@ -2396,22 +2854,34 @@ class $$TradingPointsTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get externalId => $composableBuilder(
-      column: $table.externalId, builder: (column) => ColumnFilters(column));
+    column: $table.externalId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get inn => $composableBuilder(
-      column: $table.inn, builder: (column) => ColumnFilters(column));
+    column: $table.inn,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$TradingPointsTableTableOrderingComposer
@@ -2424,22 +2894,34 @@ class $$TradingPointsTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get externalId => $composableBuilder(
-      column: $table.externalId, builder: (column) => ColumnOrderings(column));
+    column: $table.externalId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get inn => $composableBuilder(
-      column: $table.inn, builder: (column) => ColumnOrderings(column));
+    column: $table.inn,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$TradingPointsTableTableAnnotationComposer
@@ -2455,7 +2937,9 @@ class $$TradingPointsTableTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get externalId => $composableBuilder(
-      column: $table.externalId, builder: (column) => column);
+    column: $table.externalId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
@@ -2470,25 +2954,33 @@ class $$TradingPointsTableTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$TradingPointsTableTableTableManager extends RootTableManager<
-    _$RouteDatabase,
-    $TradingPointsTableTable,
-    TradingPointsTableData,
-    $$TradingPointsTableTableFilterComposer,
-    $$TradingPointsTableTableOrderingComposer,
-    $$TradingPointsTableTableAnnotationComposer,
-    $$TradingPointsTableTableCreateCompanionBuilder,
-    $$TradingPointsTableTableUpdateCompanionBuilder,
-    (
-      TradingPointsTableData,
-      BaseReferences<_$RouteDatabase, $TradingPointsTableTable,
-          TradingPointsTableData>
-    ),
-    TradingPointsTableData,
-    PrefetchHooks Function()> {
+class $$TradingPointsTableTableTableManager
+    extends
+        RootTableManager<
+          _$RouteDatabase,
+          $TradingPointsTableTable,
+          TradingPointsTableData,
+          $$TradingPointsTableTableFilterComposer,
+          $$TradingPointsTableTableOrderingComposer,
+          $$TradingPointsTableTableAnnotationComposer,
+          $$TradingPointsTableTableCreateCompanionBuilder,
+          $$TradingPointsTableTableUpdateCompanionBuilder,
+          (
+            TradingPointsTableData,
+            BaseReferences<
+              _$RouteDatabase,
+              $TradingPointsTableTable,
+              TradingPointsTableData
+            >,
+          ),
+          TradingPointsTableData,
+          PrefetchHooks Function()
+        > {
   $$TradingPointsTableTableTableManager(
-      _$RouteDatabase db, $TradingPointsTableTable table)
-      : super(TableManagerState(
+    _$RouteDatabase db,
+    $TradingPointsTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -2497,102 +2989,110 @@ class $$TradingPointsTableTableTableManager extends RootTableManager<
               $$TradingPointsTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$TradingPointsTableTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> externalId = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<String?> inn = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              TradingPointsTableCompanion(
-            id: id,
-            externalId: externalId,
-            name: name,
-            inn: inn,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String externalId,
-            required String name,
-            Value<String?> inn = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              TradingPointsTableCompanion.insert(
-            id: id,
-            externalId: externalId,
-            name: name,
-            inn: inn,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-          ),
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> externalId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> inn = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
+              }) => TradingPointsTableCompanion(
+                id: id,
+                externalId: externalId,
+                name: name,
+                inn: inn,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String externalId,
+                required String name,
+                Value<String?> inn = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
+              }) => TradingPointsTableCompanion.insert(
+                id: id,
+                externalId: externalId,
+                name: name,
+                inn: inn,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$TradingPointsTableTableProcessedTableManager = ProcessedTableManager<
-    _$RouteDatabase,
-    $TradingPointsTableTable,
-    TradingPointsTableData,
-    $$TradingPointsTableTableFilterComposer,
-    $$TradingPointsTableTableOrderingComposer,
-    $$TradingPointsTableTableAnnotationComposer,
-    $$TradingPointsTableTableCreateCompanionBuilder,
-    $$TradingPointsTableTableUpdateCompanionBuilder,
-    (
+typedef $$TradingPointsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$RouteDatabase,
+      $TradingPointsTableTable,
       TradingPointsTableData,
-      BaseReferences<_$RouteDatabase, $TradingPointsTableTable,
-          TradingPointsTableData>
-    ),
-    TradingPointsTableData,
-    PrefetchHooks Function()>;
-typedef $$PointsOfInterestTableTableCreateCompanionBuilder
-    = PointsOfInterestTableCompanion Function({
-  Value<int> id,
-  required int routeId,
-  required String name,
-  Value<String?> description,
-  required double latitude,
-  required double longitude,
-  Value<DateTime?> plannedArrivalTime,
-  Value<DateTime?> plannedDepartureTime,
-  Value<DateTime?> actualArrivalTime,
-  Value<DateTime?> actualDepartureTime,
-  required String type,
-  required String status,
-  Value<String?> notes,
-  Value<int?> tradingPointId,
-  required int orderIndex,
-  Value<DateTime> createdAt,
-  Value<DateTime?> updatedAt,
-});
-typedef $$PointsOfInterestTableTableUpdateCompanionBuilder
-    = PointsOfInterestTableCompanion Function({
-  Value<int> id,
-  Value<int> routeId,
-  Value<String> name,
-  Value<String?> description,
-  Value<double> latitude,
-  Value<double> longitude,
-  Value<DateTime?> plannedArrivalTime,
-  Value<DateTime?> plannedDepartureTime,
-  Value<DateTime?> actualArrivalTime,
-  Value<DateTime?> actualDepartureTime,
-  Value<String> type,
-  Value<String> status,
-  Value<String?> notes,
-  Value<int?> tradingPointId,
-  Value<int> orderIndex,
-  Value<DateTime> createdAt,
-  Value<DateTime?> updatedAt,
-});
+      $$TradingPointsTableTableFilterComposer,
+      $$TradingPointsTableTableOrderingComposer,
+      $$TradingPointsTableTableAnnotationComposer,
+      $$TradingPointsTableTableCreateCompanionBuilder,
+      $$TradingPointsTableTableUpdateCompanionBuilder,
+      (
+        TradingPointsTableData,
+        BaseReferences<
+          _$RouteDatabase,
+          $TradingPointsTableTable,
+          TradingPointsTableData
+        >,
+      ),
+      TradingPointsTableData,
+      PrefetchHooks Function()
+    >;
+typedef $$PointsOfInterestTableTableCreateCompanionBuilder =
+    PointsOfInterestTableCompanion Function({
+      Value<int> id,
+      required int routeId,
+      required String name,
+      Value<String?> description,
+      required double latitude,
+      required double longitude,
+      Value<DateTime?> plannedArrivalTime,
+      Value<DateTime?> plannedDepartureTime,
+      Value<DateTime?> actualArrivalTime,
+      Value<DateTime?> actualDepartureTime,
+      required String type,
+      required String status,
+      Value<String?> notes,
+      Value<int?> tradingPointId,
+      required int orderIndex,
+      Value<DateTime> createdAt,
+      Value<DateTime?> updatedAt,
+    });
+typedef $$PointsOfInterestTableTableUpdateCompanionBuilder =
+    PointsOfInterestTableCompanion Function({
+      Value<int> id,
+      Value<int> routeId,
+      Value<String> name,
+      Value<String?> description,
+      Value<double> latitude,
+      Value<double> longitude,
+      Value<DateTime?> plannedArrivalTime,
+      Value<DateTime?> plannedDepartureTime,
+      Value<DateTime?> actualArrivalTime,
+      Value<DateTime?> actualDepartureTime,
+      Value<String> type,
+      Value<String> status,
+      Value<String?> notes,
+      Value<int?> tradingPointId,
+      Value<int> orderIndex,
+      Value<DateTime> createdAt,
+      Value<DateTime?> updatedAt,
+    });
 
 class $$PointsOfInterestTableTableFilterComposer
     extends Composer<_$RouteDatabase, $PointsOfInterestTableTable> {
@@ -2604,60 +3104,89 @@ class $$PointsOfInterestTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get routeId => $composableBuilder(
-      column: $table.routeId, builder: (column) => ColumnFilters(column));
+    column: $table.routeId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => ColumnFilters(column));
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get latitude => $composableBuilder(
-      column: $table.latitude, builder: (column) => ColumnFilters(column));
+    column: $table.latitude,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get longitude => $composableBuilder(
-      column: $table.longitude, builder: (column) => ColumnFilters(column));
+    column: $table.longitude,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get plannedArrivalTime => $composableBuilder(
-      column: $table.plannedArrivalTime,
-      builder: (column) => ColumnFilters(column));
+    column: $table.plannedArrivalTime,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get plannedDepartureTime => $composableBuilder(
-      column: $table.plannedDepartureTime,
-      builder: (column) => ColumnFilters(column));
+    column: $table.plannedDepartureTime,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get actualArrivalTime => $composableBuilder(
-      column: $table.actualArrivalTime,
-      builder: (column) => ColumnFilters(column));
+    column: $table.actualArrivalTime,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get actualDepartureTime => $composableBuilder(
-      column: $table.actualDepartureTime,
-      builder: (column) => ColumnFilters(column));
+    column: $table.actualDepartureTime,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get type => $composableBuilder(
-      column: $table.type, builder: (column) => ColumnFilters(column));
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get status => $composableBuilder(
-      column: $table.status, builder: (column) => ColumnFilters(column));
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnFilters(column));
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get tradingPointId => $composableBuilder(
-      column: $table.tradingPointId,
-      builder: (column) => ColumnFilters(column));
+    column: $table.tradingPointId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get orderIndex => $composableBuilder(
-      column: $table.orderIndex, builder: (column) => ColumnFilters(column));
+    column: $table.orderIndex,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$PointsOfInterestTableTableOrderingComposer
@@ -2670,60 +3199,89 @@ class $$PointsOfInterestTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get routeId => $composableBuilder(
-      column: $table.routeId, builder: (column) => ColumnOrderings(column));
+    column: $table.routeId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => ColumnOrderings(column));
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get latitude => $composableBuilder(
-      column: $table.latitude, builder: (column) => ColumnOrderings(column));
+    column: $table.latitude,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get longitude => $composableBuilder(
-      column: $table.longitude, builder: (column) => ColumnOrderings(column));
+    column: $table.longitude,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get plannedArrivalTime => $composableBuilder(
-      column: $table.plannedArrivalTime,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.plannedArrivalTime,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get plannedDepartureTime => $composableBuilder(
-      column: $table.plannedDepartureTime,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.plannedDepartureTime,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get actualArrivalTime => $composableBuilder(
-      column: $table.actualArrivalTime,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.actualArrivalTime,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get actualDepartureTime => $composableBuilder(
-      column: $table.actualDepartureTime,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.actualDepartureTime,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get type => $composableBuilder(
-      column: $table.type, builder: (column) => ColumnOrderings(column));
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get status => $composableBuilder(
-      column: $table.status, builder: (column) => ColumnOrderings(column));
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnOrderings(column));
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get tradingPointId => $composableBuilder(
-      column: $table.tradingPointId,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.tradingPointId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get orderIndex => $composableBuilder(
-      column: $table.orderIndex, builder: (column) => ColumnOrderings(column));
+    column: $table.orderIndex,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PointsOfInterestTableTableAnnotationComposer
@@ -2745,7 +3303,9 @@ class $$PointsOfInterestTableTableAnnotationComposer
       $composableBuilder(column: $table.name, builder: (column) => column);
 
   GeneratedColumn<String> get description => $composableBuilder(
-      column: $table.description, builder: (column) => column);
+    column: $table.description,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<double> get latitude =>
       $composableBuilder(column: $table.latitude, builder: (column) => column);
@@ -2754,16 +3314,24 @@ class $$PointsOfInterestTableTableAnnotationComposer
       $composableBuilder(column: $table.longitude, builder: (column) => column);
 
   GeneratedColumn<DateTime> get plannedArrivalTime => $composableBuilder(
-      column: $table.plannedArrivalTime, builder: (column) => column);
+    column: $table.plannedArrivalTime,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get plannedDepartureTime => $composableBuilder(
-      column: $table.plannedDepartureTime, builder: (column) => column);
+    column: $table.plannedDepartureTime,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get actualArrivalTime => $composableBuilder(
-      column: $table.actualArrivalTime, builder: (column) => column);
+    column: $table.actualArrivalTime,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get actualDepartureTime => $composableBuilder(
-      column: $table.actualDepartureTime, builder: (column) => column);
+    column: $table.actualDepartureTime,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get type =>
       $composableBuilder(column: $table.type, builder: (column) => column);
@@ -2775,10 +3343,14 @@ class $$PointsOfInterestTableTableAnnotationComposer
       $composableBuilder(column: $table.notes, builder: (column) => column);
 
   GeneratedColumn<int> get tradingPointId => $composableBuilder(
-      column: $table.tradingPointId, builder: (column) => column);
+    column: $table.tradingPointId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get orderIndex => $composableBuilder(
-      column: $table.orderIndex, builder: (column) => column);
+    column: $table.orderIndex,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -2787,158 +3359,177 @@ class $$PointsOfInterestTableTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$PointsOfInterestTableTableTableManager extends RootTableManager<
-    _$RouteDatabase,
-    $PointsOfInterestTableTable,
-    PointsOfInterestTableData,
-    $$PointsOfInterestTableTableFilterComposer,
-    $$PointsOfInterestTableTableOrderingComposer,
-    $$PointsOfInterestTableTableAnnotationComposer,
-    $$PointsOfInterestTableTableCreateCompanionBuilder,
-    $$PointsOfInterestTableTableUpdateCompanionBuilder,
-    (
-      PointsOfInterestTableData,
-      BaseReferences<_$RouteDatabase, $PointsOfInterestTableTable,
-          PointsOfInterestTableData>
-    ),
-    PointsOfInterestTableData,
-    PrefetchHooks Function()> {
+class $$PointsOfInterestTableTableTableManager
+    extends
+        RootTableManager<
+          _$RouteDatabase,
+          $PointsOfInterestTableTable,
+          PointsOfInterestTableData,
+          $$PointsOfInterestTableTableFilterComposer,
+          $$PointsOfInterestTableTableOrderingComposer,
+          $$PointsOfInterestTableTableAnnotationComposer,
+          $$PointsOfInterestTableTableCreateCompanionBuilder,
+          $$PointsOfInterestTableTableUpdateCompanionBuilder,
+          (
+            PointsOfInterestTableData,
+            BaseReferences<
+              _$RouteDatabase,
+              $PointsOfInterestTableTable,
+              PointsOfInterestTableData
+            >,
+          ),
+          PointsOfInterestTableData,
+          PrefetchHooks Function()
+        > {
   $$PointsOfInterestTableTableTableManager(
-      _$RouteDatabase db, $PointsOfInterestTableTable table)
-      : super(TableManagerState(
+    _$RouteDatabase db,
+    $PointsOfInterestTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
               $$PointsOfInterestTableTableFilterComposer(
-                  $db: db, $table: table),
+                $db: db,
+                $table: table,
+              ),
           createOrderingComposer: () =>
               $$PointsOfInterestTableTableOrderingComposer(
-                  $db: db, $table: table),
+                $db: db,
+                $table: table,
+              ),
           createComputedFieldComposer: () =>
               $$PointsOfInterestTableTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<int> routeId = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<String?> description = const Value.absent(),
-            Value<double> latitude = const Value.absent(),
-            Value<double> longitude = const Value.absent(),
-            Value<DateTime?> plannedArrivalTime = const Value.absent(),
-            Value<DateTime?> plannedDepartureTime = const Value.absent(),
-            Value<DateTime?> actualArrivalTime = const Value.absent(),
-            Value<DateTime?> actualDepartureTime = const Value.absent(),
-            Value<String> type = const Value.absent(),
-            Value<String> status = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
-            Value<int?> tradingPointId = const Value.absent(),
-            Value<int> orderIndex = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              PointsOfInterestTableCompanion(
-            id: id,
-            routeId: routeId,
-            name: name,
-            description: description,
-            latitude: latitude,
-            longitude: longitude,
-            plannedArrivalTime: plannedArrivalTime,
-            plannedDepartureTime: plannedDepartureTime,
-            actualArrivalTime: actualArrivalTime,
-            actualDepartureTime: actualDepartureTime,
-            type: type,
-            status: status,
-            notes: notes,
-            tradingPointId: tradingPointId,
-            orderIndex: orderIndex,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required int routeId,
-            required String name,
-            Value<String?> description = const Value.absent(),
-            required double latitude,
-            required double longitude,
-            Value<DateTime?> plannedArrivalTime = const Value.absent(),
-            Value<DateTime?> plannedDepartureTime = const Value.absent(),
-            Value<DateTime?> actualArrivalTime = const Value.absent(),
-            Value<DateTime?> actualDepartureTime = const Value.absent(),
-            required String type,
-            required String status,
-            Value<String?> notes = const Value.absent(),
-            Value<int?> tradingPointId = const Value.absent(),
-            required int orderIndex,
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              PointsOfInterestTableCompanion.insert(
-            id: id,
-            routeId: routeId,
-            name: name,
-            description: description,
-            latitude: latitude,
-            longitude: longitude,
-            plannedArrivalTime: plannedArrivalTime,
-            plannedDepartureTime: plannedDepartureTime,
-            actualArrivalTime: actualArrivalTime,
-            actualDepartureTime: actualDepartureTime,
-            type: type,
-            status: status,
-            notes: notes,
-            tradingPointId: tradingPointId,
-            orderIndex: orderIndex,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-          ),
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> routeId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<double> latitude = const Value.absent(),
+                Value<double> longitude = const Value.absent(),
+                Value<DateTime?> plannedArrivalTime = const Value.absent(),
+                Value<DateTime?> plannedDepartureTime = const Value.absent(),
+                Value<DateTime?> actualArrivalTime = const Value.absent(),
+                Value<DateTime?> actualDepartureTime = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<int?> tradingPointId = const Value.absent(),
+                Value<int> orderIndex = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
+              }) => PointsOfInterestTableCompanion(
+                id: id,
+                routeId: routeId,
+                name: name,
+                description: description,
+                latitude: latitude,
+                longitude: longitude,
+                plannedArrivalTime: plannedArrivalTime,
+                plannedDepartureTime: plannedDepartureTime,
+                actualArrivalTime: actualArrivalTime,
+                actualDepartureTime: actualDepartureTime,
+                type: type,
+                status: status,
+                notes: notes,
+                tradingPointId: tradingPointId,
+                orderIndex: orderIndex,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int routeId,
+                required String name,
+                Value<String?> description = const Value.absent(),
+                required double latitude,
+                required double longitude,
+                Value<DateTime?> plannedArrivalTime = const Value.absent(),
+                Value<DateTime?> plannedDepartureTime = const Value.absent(),
+                Value<DateTime?> actualArrivalTime = const Value.absent(),
+                Value<DateTime?> actualDepartureTime = const Value.absent(),
+                required String type,
+                required String status,
+                Value<String?> notes = const Value.absent(),
+                Value<int?> tradingPointId = const Value.absent(),
+                required int orderIndex,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
+              }) => PointsOfInterestTableCompanion.insert(
+                id: id,
+                routeId: routeId,
+                name: name,
+                description: description,
+                latitude: latitude,
+                longitude: longitude,
+                plannedArrivalTime: plannedArrivalTime,
+                plannedDepartureTime: plannedDepartureTime,
+                actualArrivalTime: actualArrivalTime,
+                actualDepartureTime: actualDepartureTime,
+                type: type,
+                status: status,
+                notes: notes,
+                tradingPointId: tradingPointId,
+                orderIndex: orderIndex,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$PointsOfInterestTableTableProcessedTableManager
-    = ProcessedTableManager<
-        _$RouteDatabase,
-        $PointsOfInterestTableTable,
+typedef $$PointsOfInterestTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$RouteDatabase,
+      $PointsOfInterestTableTable,
+      PointsOfInterestTableData,
+      $$PointsOfInterestTableTableFilterComposer,
+      $$PointsOfInterestTableTableOrderingComposer,
+      $$PointsOfInterestTableTableAnnotationComposer,
+      $$PointsOfInterestTableTableCreateCompanionBuilder,
+      $$PointsOfInterestTableTableUpdateCompanionBuilder,
+      (
         PointsOfInterestTableData,
-        $$PointsOfInterestTableTableFilterComposer,
-        $$PointsOfInterestTableTableOrderingComposer,
-        $$PointsOfInterestTableTableAnnotationComposer,
-        $$PointsOfInterestTableTableCreateCompanionBuilder,
-        $$PointsOfInterestTableTableUpdateCompanionBuilder,
-        (
-          PointsOfInterestTableData,
-          BaseReferences<_$RouteDatabase, $PointsOfInterestTableTable,
-              PointsOfInterestTableData>
-        ),
-        PointsOfInterestTableData,
-        PrefetchHooks Function()>;
-typedef $$PointStatusHistoryTableTableCreateCompanionBuilder
-    = PointStatusHistoryTableCompanion Function({
-  Value<int> id,
-  required int pointId,
-  required String fromStatus,
-  required String toStatus,
-  required String changedBy,
-  Value<String?> reason,
-  Value<DateTime> createdAt,
-  Value<DateTime?> updatedAt,
-});
-typedef $$PointStatusHistoryTableTableUpdateCompanionBuilder
-    = PointStatusHistoryTableCompanion Function({
-  Value<int> id,
-  Value<int> pointId,
-  Value<String> fromStatus,
-  Value<String> toStatus,
-  Value<String> changedBy,
-  Value<String?> reason,
-  Value<DateTime> createdAt,
-  Value<DateTime?> updatedAt,
-});
+        BaseReferences<
+          _$RouteDatabase,
+          $PointsOfInterestTableTable,
+          PointsOfInterestTableData
+        >,
+      ),
+      PointsOfInterestTableData,
+      PrefetchHooks Function()
+    >;
+typedef $$PointStatusHistoryTableTableCreateCompanionBuilder =
+    PointStatusHistoryTableCompanion Function({
+      Value<int> id,
+      required int pointId,
+      required String fromStatus,
+      required String toStatus,
+      required String changedBy,
+      Value<String?> reason,
+      Value<DateTime> createdAt,
+      Value<DateTime?> updatedAt,
+    });
+typedef $$PointStatusHistoryTableTableUpdateCompanionBuilder =
+    PointStatusHistoryTableCompanion Function({
+      Value<int> id,
+      Value<int> pointId,
+      Value<String> fromStatus,
+      Value<String> toStatus,
+      Value<String> changedBy,
+      Value<String?> reason,
+      Value<DateTime> createdAt,
+      Value<DateTime?> updatedAt,
+    });
 
 class $$PointStatusHistoryTableTableFilterComposer
     extends Composer<_$RouteDatabase, $PointStatusHistoryTableTable> {
@@ -2950,28 +3541,44 @@ class $$PointStatusHistoryTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get pointId => $composableBuilder(
-      column: $table.pointId, builder: (column) => ColumnFilters(column));
+    column: $table.pointId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get fromStatus => $composableBuilder(
-      column: $table.fromStatus, builder: (column) => ColumnFilters(column));
+    column: $table.fromStatus,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get toStatus => $composableBuilder(
-      column: $table.toStatus, builder: (column) => ColumnFilters(column));
+    column: $table.toStatus,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get changedBy => $composableBuilder(
-      column: $table.changedBy, builder: (column) => ColumnFilters(column));
+    column: $table.changedBy,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get reason => $composableBuilder(
-      column: $table.reason, builder: (column) => ColumnFilters(column));
+    column: $table.reason,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$PointStatusHistoryTableTableOrderingComposer
@@ -2984,28 +3591,44 @@ class $$PointStatusHistoryTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get pointId => $composableBuilder(
-      column: $table.pointId, builder: (column) => ColumnOrderings(column));
+    column: $table.pointId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get fromStatus => $composableBuilder(
-      column: $table.fromStatus, builder: (column) => ColumnOrderings(column));
+    column: $table.fromStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get toStatus => $composableBuilder(
-      column: $table.toStatus, builder: (column) => ColumnOrderings(column));
+    column: $table.toStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get changedBy => $composableBuilder(
-      column: $table.changedBy, builder: (column) => ColumnOrderings(column));
+    column: $table.changedBy,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get reason => $composableBuilder(
-      column: $table.reason, builder: (column) => ColumnOrderings(column));
+    column: $table.reason,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PointStatusHistoryTableTableAnnotationComposer
@@ -3024,7 +3647,9 @@ class $$PointStatusHistoryTableTableAnnotationComposer
       $composableBuilder(column: $table.pointId, builder: (column) => column);
 
   GeneratedColumn<String> get fromStatus => $composableBuilder(
-      column: $table.fromStatus, builder: (column) => column);
+    column: $table.fromStatus,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get toStatus =>
       $composableBuilder(column: $table.toStatus, builder: (column) => column);
@@ -3042,100 +3667,119 @@ class $$PointStatusHistoryTableTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$PointStatusHistoryTableTableTableManager extends RootTableManager<
-    _$RouteDatabase,
-    $PointStatusHistoryTableTable,
-    PointStatusHistoryTableData,
-    $$PointStatusHistoryTableTableFilterComposer,
-    $$PointStatusHistoryTableTableOrderingComposer,
-    $$PointStatusHistoryTableTableAnnotationComposer,
-    $$PointStatusHistoryTableTableCreateCompanionBuilder,
-    $$PointStatusHistoryTableTableUpdateCompanionBuilder,
-    (
-      PointStatusHistoryTableData,
-      BaseReferences<_$RouteDatabase, $PointStatusHistoryTableTable,
-          PointStatusHistoryTableData>
-    ),
-    PointStatusHistoryTableData,
-    PrefetchHooks Function()> {
+class $$PointStatusHistoryTableTableTableManager
+    extends
+        RootTableManager<
+          _$RouteDatabase,
+          $PointStatusHistoryTableTable,
+          PointStatusHistoryTableData,
+          $$PointStatusHistoryTableTableFilterComposer,
+          $$PointStatusHistoryTableTableOrderingComposer,
+          $$PointStatusHistoryTableTableAnnotationComposer,
+          $$PointStatusHistoryTableTableCreateCompanionBuilder,
+          $$PointStatusHistoryTableTableUpdateCompanionBuilder,
+          (
+            PointStatusHistoryTableData,
+            BaseReferences<
+              _$RouteDatabase,
+              $PointStatusHistoryTableTable,
+              PointStatusHistoryTableData
+            >,
+          ),
+          PointStatusHistoryTableData,
+          PrefetchHooks Function()
+        > {
   $$PointStatusHistoryTableTableTableManager(
-      _$RouteDatabase db, $PointStatusHistoryTableTable table)
-      : super(TableManagerState(
+    _$RouteDatabase db,
+    $PointStatusHistoryTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
               $$PointStatusHistoryTableTableFilterComposer(
-                  $db: db, $table: table),
+                $db: db,
+                $table: table,
+              ),
           createOrderingComposer: () =>
               $$PointStatusHistoryTableTableOrderingComposer(
-                  $db: db, $table: table),
+                $db: db,
+                $table: table,
+              ),
           createComputedFieldComposer: () =>
               $$PointStatusHistoryTableTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<int> pointId = const Value.absent(),
-            Value<String> fromStatus = const Value.absent(),
-            Value<String> toStatus = const Value.absent(),
-            Value<String> changedBy = const Value.absent(),
-            Value<String?> reason = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              PointStatusHistoryTableCompanion(
-            id: id,
-            pointId: pointId,
-            fromStatus: fromStatus,
-            toStatus: toStatus,
-            changedBy: changedBy,
-            reason: reason,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required int pointId,
-            required String fromStatus,
-            required String toStatus,
-            required String changedBy,
-            Value<String?> reason = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime?> updatedAt = const Value.absent(),
-          }) =>
-              PointStatusHistoryTableCompanion.insert(
-            id: id,
-            pointId: pointId,
-            fromStatus: fromStatus,
-            toStatus: toStatus,
-            changedBy: changedBy,
-            reason: reason,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-          ),
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> pointId = const Value.absent(),
+                Value<String> fromStatus = const Value.absent(),
+                Value<String> toStatus = const Value.absent(),
+                Value<String> changedBy = const Value.absent(),
+                Value<String?> reason = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
+              }) => PointStatusHistoryTableCompanion(
+                id: id,
+                pointId: pointId,
+                fromStatus: fromStatus,
+                toStatus: toStatus,
+                changedBy: changedBy,
+                reason: reason,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int pointId,
+                required String fromStatus,
+                required String toStatus,
+                required String changedBy,
+                Value<String?> reason = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime?> updatedAt = const Value.absent(),
+              }) => PointStatusHistoryTableCompanion.insert(
+                id: id,
+                pointId: pointId,
+                fromStatus: fromStatus,
+                toStatus: toStatus,
+                changedBy: changedBy,
+                reason: reason,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$PointStatusHistoryTableTableProcessedTableManager
-    = ProcessedTableManager<
-        _$RouteDatabase,
-        $PointStatusHistoryTableTable,
+typedef $$PointStatusHistoryTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$RouteDatabase,
+      $PointStatusHistoryTableTable,
+      PointStatusHistoryTableData,
+      $$PointStatusHistoryTableTableFilterComposer,
+      $$PointStatusHistoryTableTableOrderingComposer,
+      $$PointStatusHistoryTableTableAnnotationComposer,
+      $$PointStatusHistoryTableTableCreateCompanionBuilder,
+      $$PointStatusHistoryTableTableUpdateCompanionBuilder,
+      (
         PointStatusHistoryTableData,
-        $$PointStatusHistoryTableTableFilterComposer,
-        $$PointStatusHistoryTableTableOrderingComposer,
-        $$PointStatusHistoryTableTableAnnotationComposer,
-        $$PointStatusHistoryTableTableCreateCompanionBuilder,
-        $$PointStatusHistoryTableTableUpdateCompanionBuilder,
-        (
-          PointStatusHistoryTableData,
-          BaseReferences<_$RouteDatabase, $PointStatusHistoryTableTable,
-              PointStatusHistoryTableData>
-        ),
-        PointStatusHistoryTableData,
-        PrefetchHooks Function()>;
+        BaseReferences<
+          _$RouteDatabase,
+          $PointStatusHistoryTableTable,
+          PointStatusHistoryTableData
+        >,
+      ),
+      PointStatusHistoryTableData,
+      PrefetchHooks Function()
+    >;
 
 class $RouteDatabaseManager {
   final _$RouteDatabase _db;
@@ -3148,5 +3792,7 @@ class $RouteDatabaseManager {
       $$PointsOfInterestTableTableTableManager(_db, _db.pointsOfInterestTable);
   $$PointStatusHistoryTableTableTableManager get pointStatusHistoryTable =>
       $$PointStatusHistoryTableTableTableManager(
-          _db, _db.pointStatusHistoryTable);
+        _db,
+        _db.pointStatusHistoryTable,
+      );
 }

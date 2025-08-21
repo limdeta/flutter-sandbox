@@ -1,5 +1,6 @@
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tauzero/features/authentication/domain/entities/user.dart';
 
 import '../../domain/entities/user_track.dart';
 import '../../data/services/gps_tracking_service.dart';
@@ -14,8 +15,8 @@ class LoadHistoricalTracks extends TrackingEvent {
 }
 
 class StartTracking extends TrackingEvent {
-  final String userId;
-  StartTracking(this.userId);
+  final User user;
+  StartTracking(this.user);
 }
 
 class PauseTracking extends TrackingEvent {}
@@ -124,7 +125,7 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
 
   Future<void> _onStartTracking(StartTracking event, Emitter<TrackingState> emit) async {
     try {
-      await _trackingService.startTracking(event.userId);
+      await _trackingService.startTracking(event.user);
       
       if (state is TrackingLoaded) {
         final currentState = state as TrackingLoaded;

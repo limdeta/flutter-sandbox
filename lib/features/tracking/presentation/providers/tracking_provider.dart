@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:tauzero/features/authentication/domain/entities/user.dart';
 
 import '../../domain/entities/user_track.dart';
 import '../../data/services/gps_tracking_service.dart';
@@ -52,10 +53,10 @@ class TrackingProvider extends ChangeNotifier {
   }
 
   /// Запуск трекинга
-  Future<void> startTracking(String userId) async {
+  Future<void> startTracking(User user) async {
     try {
       _error = null;
-      await _trackingService.startTracking(userId);
+      await _trackingService.startTracking(user);
       notifyListeners();
     } catch (e) {
       _error = 'Ошибка запуска трекинга: $e';

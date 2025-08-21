@@ -39,8 +39,6 @@ Future<void> setupServiceLocator() async {
   
   getIt.registerLazySingleton<SessionRepository>(() => SessionRepositoryImpl());
 
-  getIt.registerLazySingleton<LocationTrackingService>(() => LocationTrackingService());
-
   // Path prediction services
   getIt.registerLazySingleton<OsrmPathPredictionService>(() => OsrmPathPredictionService());
 
@@ -86,6 +84,12 @@ Future<void> setupServiceLocator() async {
   
   // Tracking dependencies
   TrackingDI.registerDependencies();
+  
+  // LocationTrackingService нужно регистрировать после RouteDI, так как он зависит от IRouteRepository
+  getIt.registerLazySingleton<LocationTrackingService>(() => LocationTrackingService(
+    getIt<IUserRepository>(),
+    getIt(), // Route repository зарегистрирован в RouteDI
+  ));
   
   if (AppConfig.enableDetailedLogging) {
     print('Service locator setup completed!');

@@ -23,8 +23,10 @@ class UserMapper {
       orElse: () => domain.UserRole.user,
     );
 
-    final userResult = domain.User.create(
-      externalId: userData.externalId, // externalId - строка в БД, Uint32 в домене
+    // Используем конструктор напрямую для сохранения internalId
+    return domain.User(
+      internalId: userData.id, // ВАЖНО: сохраняем internal ID из БД
+      externalId: userData.externalId,
       lastName: userData.lastName,
       firstName: userData.firstName,
       middleName: userData.middleName,
@@ -32,13 +34,6 @@ class UserMapper {
       hashedPassword: userData.hashedPassword,
       role: role,
     );
-
-    if (userResult.isLeft()) {
-      final error = (userResult as Left<Failure, domain.User>).value;
-      throw Exception('Invalid user data in database: ${error.message}');
-    }
-
-    return (userResult as Right<Failure, domain.User>).value;
   }
 
   /// Преобразует domain.User в UserEntriesCompanion для вставки

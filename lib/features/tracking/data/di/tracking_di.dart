@@ -3,6 +3,8 @@ import 'package:get_it/get_it.dart';
 import '../repositories/user_track_repository.dart';
 import '../../domain/repositories/iuser_track_repository.dart';
 import '../../../../shared/infrastructure/database/app_database.dart';
+import '../../../authentication/domain/repositories/iuser_repository.dart';
+import '../../../route/domain/repositories/iroute_repository.dart';
 
 /// Dependency Injection для Tracking feature
 /// 
@@ -22,7 +24,11 @@ class TrackingDI {
     // Repository - реализация через Drift (использует общую базу)
     if (!getIt.isRegistered<IUserTrackRepository>()) {
       getIt.registerLazySingleton<IUserTrackRepository>(
-        () => UserTrackRepository(getIt<AppDatabase>()),
+        () => UserTrackRepository(
+          getIt<AppDatabase>(),
+          getIt<IUserRepository>(),
+          getIt<IRouteRepository>(),
+        ),
       );
     }
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:tauzero/features/authentication/domain/entities/user.dart';
 
 import '../../domain/entities/user_track.dart';
 import '../../domain/entities/track_point.dart';
@@ -48,7 +49,7 @@ class GpsTrackingService {
   bool get hasConnectionIssues => _currentState == GpsTrackingState.disconnected;
   
   /// Запуск GPS трекинга
-  Future<void> startTracking(String userId) async {
+  Future<void> startTracking(User user) async {
     if (_currentState != GpsTrackingState.idle) {
       throw StateError('Трекинг уже активен или запускается');
     }
@@ -68,7 +69,7 @@ class GpsTrackingService {
       // Создаем новый трек
       _currentTrack = UserTrack(
         id: 0, // будет установлен при сохранении
-        userId: int.parse(userId),
+        user: user,
         startTime: DateTime.now(),
         status: TrackStatus.active,
         points: [],

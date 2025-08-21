@@ -9,6 +9,7 @@ enum UserRole {
 }
 
 class User {
+  final int? internalId; // Внутренний ID из БД (null для новых пользователей)
   final String externalId;
   final String lastName;
   final String firstName;
@@ -18,6 +19,7 @@ class User {
   final String hashedPassword;
   
   const User({
+    this.internalId,
     required this.externalId,
     required this.lastName,
     required this.firstName,

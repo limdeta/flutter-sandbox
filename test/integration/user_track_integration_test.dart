@@ -6,19 +6,31 @@ import 'package:tauzero/features/authentication/domain/entities/user.dart' as do
 import 'package:tauzero/features/authentication/domain/value_objects/phone_number.dart';
 import 'package:tauzero/features/tracking/data/repositories/user_track_repository.dart';
 import 'package:tauzero/features/tracking/data/fixtures/user_track_fixtures.dart';
+import 'package:tauzero/features/authentication/data/repositories/user_repository.dart';
+import 'package:tauzero/features/route/data/repositories/route_repository.dart';
+import 'package:tauzero/features/route/data/database/route_database.dart';
 
 void main() {
   late AppDatabase database;
+  late RouteDatabase routeDatabase;
+  late UserRepository userRepository;
+  late RouteRepository routeRepository;
   late UserTrackRepository repository;
+  late UserTrackFixtures userTrackFixtures;
 
   setUp(() async {
     // Создаем in-memory database для тестов
     database = AppDatabase.forTesting(DatabaseConnection(NativeDatabase.memory()));
-    repository = UserTrackRepository(database);
+    routeDatabase = RouteDatabase.forTesting(DatabaseConnection(NativeDatabase.memory()));
+    userRepository = UserRepository(database: database);
+    routeRepository = RouteRepository(routeDatabase);
+    repository = UserTrackRepository(database, userRepository, routeRepository);
+    userTrackFixtures = UserTrackFixtures(routeRepository);
   });
 
   tearDown(() async {
     await database.close();
+    await routeDatabase.close();
   });
 
   group('User-Track Relations Integration Tests', () {
@@ -54,8 +66,8 @@ void main() {
       print('Created user with internal ID: $internalUserId, external ID: test-user-123');
 
       // Создаем тестовые треки для этого пользователя
-      final yesterdayTrack = UserTrackFixtures.createYesterdayCompletedTrack(internalUserId);
-      final todayTrack = UserTrackFixtures.createTodayActiveTrack(internalUserId);
+      final yesterdayTrack = await userTrackFixtures.createYesterdayCompletedTrack(testUser);
+      final todayTrack = await userTrackFixtures.createTodayActiveTrack(testUser);
 
       // Act: Сохраняем треки
       final savedYesterdayTrack = await repository.saveTrack(yesterdayTrack);
@@ -64,18 +76,16 @@ void main() {
       print('Saved yesterday track with ID: ${savedYesterdayTrack.id}');
       print('Saved today track with ID: ${savedTodayTrack.id}');
 
-      // Assert: Проверяем что треки сохранились с правильным userId
+      // Assert: Проверяем что треки сохранились
       expect(savedYesterdayTrack.id > 0, true);
-      expect(savedYesterdayTrack.userId, equals(internalUserId));
       expect(savedTodayTrack.id > 0, true);
-      expect(savedTodayTrack.userId, equals(internalUserId));
 
       // Act: Получаем все треки пользователя
       final userTracks = await repository.getTracksByUserId(internalUserId);
 
       // Assert: Проверяем связь один-ко-многим
       expect(userTracks.length, equals(2));
-      expect(userTracks.every((track) => track.userId == internalUserId), true);
+      expect(userTracks.every((track) => track.user.internalId == internalUserId), true);
       
       // Проверяем что треки содержат GPS точки
       final yesterdayFromDb = userTracks.firstWhere((t) => t.id == savedYesterdayTrack.id);
@@ -140,35 +150,49 @@ void main() {
       final user2Id = await database.getInternalUserIdByExternalId('user-2');
 
       // Act: Создаем треки для каждого пользователя
-      final user1Track = UserTrackFixtures.createYesterdayCompletedTrack(user1Id!);
-      final user2Track1 = UserTrackFixtures.createTodayActiveTrack(user2Id!);
-      final user2Track2 = UserTrackFixtures.createYesterdayCompletedTrack(user2Id);
+      final user1Track = await userTrackFixtures.createYesterdayCompletedTrack(user1);
+      final user2Track1 = await userTrackFixtures.createTodayActiveTrack(user2);
+      final user2Track2 = await userTrackFixtures.createYesterdayCompletedTrack(user2);
 
       await repository.saveTrack(user1Track);
       await repository.saveTrack(user2Track1);
       await repository.saveTrack(user2Track2);
 
       // Assert: Каждый пользователь видит только свои треки
-      final user1Tracks = await repository.getTracksByUserId(user1Id);
-      final user2Tracks = await repository.getTracksByUserId(user2Id);
+      final user1Tracks = await repository.getTracksByUserId(user1Id!);
+      final user2Tracks = await repository.getTracksByUserId(user2Id!);
 
       expect(user1Tracks.length, equals(1));
       expect(user2Tracks.length, equals(2));
-      expect(user1Tracks.first.userId, equals(user1Id));
-      expect(user2Tracks.every((track) => track.userId == user2Id), true);
+      expect(user1Tracks.first.user.internalId, equals(user1Id));
+      expect(user2Tracks.every((track) => track.user.internalId == user2Id), true);
 
       print('User 1 has ${user1Tracks.length} tracks');
       print('User 2 has ${user2Tracks.length} tracks');
     });
 
     test('should verify foreign key constraint', () async {
-      // Arrange: Пытаемся создать трек с несуществующим userId
-      final invalidTrack = UserTrackFixtures.createTodayActiveTrack(9999); // несуществующий userId
+      // Arrange: Создаем невалидного пользователя (без сохранения в БД)
+      final phoneResult = PhoneNumber.create('89003333333');
+      final phone = phoneResult.getOrElse(() => throw Exception('Invalid phone'));
+      
+      final invalidUserResult = domain.User.create(
+        externalId: 'invalid-user',
+        lastName: 'Несуществующий',
+        firstName: 'Пользователь',
+        role: domain.UserRole.user,
+        phoneNumber: phone,
+        hashedPassword: 'hash',
+      );
+      final invalidUser = invalidUserResult.getOrElse(() => throw Exception('User creation failed'));
+      
+      // Создаем трек для несуществующего пользователя (не сохраненного в БД)
+      final invalidTrack = await userTrackFixtures.createTodayActiveTrack(invalidUser);
 
-      // Act & Assert: Должна быть ошибка foreign key constraint
+      // Act & Assert: Должна быть ошибка о том, что пользователь не найден
       expect(
         repository.saveTrack(invalidTrack),
-        throwsA(isA<SqliteException>()),
+        throwsA(isA<StateError>()),
       );
     });
   });

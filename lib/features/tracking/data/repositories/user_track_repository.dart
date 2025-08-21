@@ -4,17 +4,37 @@ import '../../domain/entities/user_track.dart';
 import '../../domain/entities/track_point.dart';
 import '../../domain/repositories/iuser_track_repository.dart';
 import '../../../../shared/infrastructure/database/app_database.dart';
+import '../../../authentication/domain/repositories/iuser_repository.dart';
+import '../../../route/domain/repositories/iroute_repository.dart';
+import '../../../route/domain/entities/route.dart';
 
 /// Реализация репозитория треков пользователей для Drift БД
 class UserTrackRepository implements IUserTrackRepository {
   final AppDatabase _database;
+  final IUserRepository _userRepository;
+  final IRouteRepository _routeRepository;
 
-  UserTrackRepository(this._database);
+  UserTrackRepository(
+    this._database,
+    this._userRepository,
+    this._routeRepository,
+  );
 
   @override
   Future<UserTrack> saveTrack(UserTrack track) async {
+    // Получаем правильный internal ID пользователя из базы данных
+    int? userInternalId = track.user.internalId;
+    
+    // Если у объекта User нет internalId, получаем его из БД по externalId
+    if (userInternalId == null) {
+      userInternalId = await _database.getInternalUserIdByExternalId(track.user.externalId);
+      if (userInternalId == null) {
+        throw StateError('User with externalId ${track.user.externalId} not found in database');
+      }
+    }
+    
     final companion = UserTracksCompanion.insert(
-      userId: track.userId,
+      userId: userInternalId,
       routeId: Value.absentIfNull(track.routeId),
       startTime: track.startTime,
       endTime: Value.absentIfNull(track.endTime),
@@ -39,9 +59,19 @@ class UserTrackRepository implements IUserTrackRepository {
 
   @override
   Future<UserTrack> updateTrack(UserTrack track) async {
+    // Получаем правильный internal ID пользователя
+    int? userInternalId = track.user.internalId;
+    
+    if (userInternalId == null) {
+      userInternalId = await _database.getInternalUserIdByExternalId(track.user.externalId);
+      if (userInternalId == null) {
+        throw StateError('User with externalId ${track.user.externalId} not found in database');
+      }
+    }
+    
     final companion = UserTracksCompanion(
       id: Value(track.id),
-      userId: Value(track.userId),
+      userId: Value(userInternalId),
       routeId: Value.absentIfNull(track.routeId),
       startTime: Value(track.startTime),
       endTime: Value.absentIfNull(track.endTime),
@@ -68,7 +98,7 @@ class UserTrackRepository implements IUserTrackRepository {
     if (trackData == null) return null;
 
     final points = await getTrackPoints(id);
-    return _mapDataToTrack(trackData, points);
+    return await _mapDataToTrack(trackData, points);
   }
 
   @override
@@ -82,7 +112,7 @@ class UserTrackRepository implements IUserTrackRepository {
 
     for (final trackData in tracksData) {
       final points = await getTrackPoints(trackData.id);
-      tracks.add(_mapDataToTrack(trackData, points));
+      tracks.add(await _mapDataToTrack(trackData, points));
     }
 
     return tracks;
@@ -106,7 +136,7 @@ class UserTrackRepository implements IUserTrackRepository {
 
     for (final trackData in tracksData) {
       final points = await getTrackPoints(trackData.id);
-      tracks.add(_mapDataToTrack(trackData, points));
+      tracks.add(await _mapDataToTrack(trackData, points));
     }
 
     return tracks;
@@ -123,7 +153,7 @@ class UserTrackRepository implements IUserTrackRepository {
 
     for (final trackData in tracksData) {
       final points = await getTrackPoints(trackData.id);
-      tracks.add(_mapDataToTrack(trackData, points));
+      tracks.add(await _mapDataToTrack(trackData, points));
     }
 
     return tracks;
@@ -142,7 +172,7 @@ class UserTrackRepository implements IUserTrackRepository {
     if (trackData == null) return null;
 
     final points = await getTrackPoints(trackData.id);
-    return _mapDataToTrack(trackData, points);
+    return await _mapDataToTrack(trackData, points);
   }
 
   @override
@@ -251,7 +281,7 @@ class UserTrackRepository implements IUserTrackRepository {
   }
 
   /// Преобразует данные БД в доменную модель трека
-  UserTrack _mapDataToTrack(UserTrackData data, List<TrackPoint> points) {
+  Future<UserTrack> _mapDataToTrack(UserTrackData data, List<TrackPoint> points) async {
     TrackStatus status;
     switch (data.status) {
       case 'active':
@@ -279,10 +309,27 @@ class UserTrackRepository implements IUserTrackRepository {
       }
     }
 
+    // Загружаем связанный объект User
+    final userResult = await _userRepository.getUserByInternalId(data.userId);
+    final user = userResult.fold(
+      (failure) => throw Exception('User not found for ID ${data.userId}: $failure'),
+      (user) => user,
+    );
+
+    // Загружаем связанный объект Route, если есть
+    Route? route;
+    if (data.routeId != null) {
+      final routeResult = await _routeRepository.getRouteByInternalId(data.routeId!);
+      route = routeResult.fold(
+        (failure) => null, // Если маршрут не найден, продолжаем без него
+        (route) => route,
+      );
+    }
+
     return UserTrack(
       id: data.id,
-      userId: data.userId,
-      routeId: data.routeId,
+      user: user,
+      route: route,
       startTime: data.startTime,
       endTime: data.endTime,
       points: points,

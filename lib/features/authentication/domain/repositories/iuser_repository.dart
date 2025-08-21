@@ -12,6 +12,8 @@ abstract interface class IUserRepository {
 
   Future<Either<Failure, User>> getUserByExternalId(String externalId);
 
+  Future<Either<Failure, User>> getUserByInternalId(int internalId);
+
   Future<Either<Failure, List<User>>> getAllUsers();
 
   Future<Either<Failure, void>> deleteUser(String externalId);

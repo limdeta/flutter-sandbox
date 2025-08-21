@@ -4,6 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import '../entities/track_point.dart';
 import '../entities/user_track.dart';
+import '../../../authentication/domain/repositories/iuser_repository.dart';
+import '../../../route/domain/repositories/iroute_repository.dart';
+import '../../../route/domain/entities/route.dart';
 
 /// Сервис для энергоэффективного трекинга местоположения пользователя
 /// 
@@ -15,6 +18,9 @@ import '../entities/user_track.dart';
 /// - Буферизация точек для batch сохранения
 class LocationTrackingService {
   static const String _tag = 'LocationTracking';
+  
+  final IUserRepository _userRepository;
+  final IRouteRepository _routeRepository;
   
   UserTrack? _currentTrack;
   
@@ -37,6 +43,8 @@ class LocationTrackingService {
   final bool _autoPauseEnabled = true;
   
   LocationTrackingSettings _settings = const LocationTrackingSettings();
+
+  LocationTrackingService(this._userRepository, this._routeRepository);
 
   Stream<TrackPoint> get trackPointStream => _trackPointController.stream;
   
@@ -104,9 +112,26 @@ class LocationTrackingService {
         _settings = settings;
       }
 
+      // Загружаем объект User по ID
+      final userResult = await _userRepository.getUserByInternalId(userId);
+      final user = userResult.fold(
+        (failure) => throw Exception('User not found for ID $userId: $failure'),
+        (user) => user,
+      );
+
+      // Загружаем объект Route, если указан
+      Route? route;
+      if (routeId != null) {
+        final routeResult = await _routeRepository.getRouteByInternalId(routeId);
+        route = routeResult.fold(
+          (failure) => null, // Если маршрут не найден, продолжаем без него
+          (route) => route,
+        );
+      }
+
       _currentTrack = UserTrack.create(
-        userId: userId,
-        routeId: routeId,
+        user: user,
+        route: route,
         metadata: metadata,
       );
 

@@ -12,112 +12,170 @@ class $UserEntriesTable extends UserEntries
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _externalIdMeta =
-      const VerificationMeta('externalId');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _externalIdMeta = const VerificationMeta(
+    'externalId',
+  );
   @override
   late final GeneratedColumn<String> externalId = GeneratedColumn<String>(
-      'external_id', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _lastNameMeta =
-      const VerificationMeta('lastName');
+    'external_id',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 100,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastNameMeta = const VerificationMeta(
+    'lastName',
+  );
   @override
   late final GeneratedColumn<String> lastName = GeneratedColumn<String>(
-      'last_name', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _firstNameMeta =
-      const VerificationMeta('firstName');
+    'last_name',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 100,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _firstNameMeta = const VerificationMeta(
+    'firstName',
+  );
   @override
   late final GeneratedColumn<String> firstName = GeneratedColumn<String>(
-      'first_name', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _middleNameMeta =
-      const VerificationMeta('middleName');
+    'first_name',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 100,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _middleNameMeta = const VerificationMeta(
+    'middleName',
+  );
   @override
   late final GeneratedColumn<String> middleName = GeneratedColumn<String>(
-      'middle_name', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _phoneNumberMeta =
-      const VerificationMeta('phoneNumber');
+    'middle_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _phoneNumberMeta = const VerificationMeta(
+    'phoneNumber',
+  );
   @override
   late final GeneratedColumn<String> phoneNumber = GeneratedColumn<String>(
-      'phone_number', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 10, maxTextLength: 20),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _hashedPasswordMeta =
-      const VerificationMeta('hashedPassword');
+    'phone_number',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 10,
+      maxTextLength: 20,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _hashedPasswordMeta = const VerificationMeta(
+    'hashedPassword',
+  );
   @override
   late final GeneratedColumn<String> hashedPassword = GeneratedColumn<String>(
-      'hashed_password', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
+    'hashed_password',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 255,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _roleMeta = const VerificationMeta('role');
   @override
   late final GeneratedColumn<String> role = GeneratedColumn<String>(
-      'role', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'role',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
-  static const VerificationMeta _lastSyncAtMeta =
-      const VerificationMeta('lastSyncAt');
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _lastSyncAtMeta = const VerificationMeta(
+    'lastSyncAt',
+  );
   @override
   late final GeneratedColumn<DateTime> lastSyncAt = GeneratedColumn<DateTime>(
-      'last_sync_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+    'last_sync_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        externalId,
-        lastName,
-        firstName,
-        middleName,
-        phoneNumber,
-        hashedPassword,
-        role,
-        createdAt,
-        updatedAt,
-        lastSyncAt
-      ];
+    id,
+    externalId,
+    lastName,
+    firstName,
+    middleName,
+    phoneNumber,
+    hashedPassword,
+    role,
+    createdAt,
+    updatedAt,
+    lastSyncAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'users';
   @override
-  VerificationContext validateIntegrity(Insertable<UserEntry> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<UserEntry> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -125,65 +183,84 @@ class $UserEntriesTable extends UserEntries
     }
     if (data.containsKey('external_id')) {
       context.handle(
-          _externalIdMeta,
-          externalId.isAcceptableOrUnknown(
-              data['external_id']!, _externalIdMeta));
+        _externalIdMeta,
+        externalId.isAcceptableOrUnknown(data['external_id']!, _externalIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_externalIdMeta);
     }
     if (data.containsKey('last_name')) {
-      context.handle(_lastNameMeta,
-          lastName.isAcceptableOrUnknown(data['last_name']!, _lastNameMeta));
+      context.handle(
+        _lastNameMeta,
+        lastName.isAcceptableOrUnknown(data['last_name']!, _lastNameMeta),
+      );
     } else if (isInserting) {
       context.missing(_lastNameMeta);
     }
     if (data.containsKey('first_name')) {
-      context.handle(_firstNameMeta,
-          firstName.isAcceptableOrUnknown(data['first_name']!, _firstNameMeta));
+      context.handle(
+        _firstNameMeta,
+        firstName.isAcceptableOrUnknown(data['first_name']!, _firstNameMeta),
+      );
     } else if (isInserting) {
       context.missing(_firstNameMeta);
     }
     if (data.containsKey('middle_name')) {
       context.handle(
-          _middleNameMeta,
-          middleName.isAcceptableOrUnknown(
-              data['middle_name']!, _middleNameMeta));
+        _middleNameMeta,
+        middleName.isAcceptableOrUnknown(data['middle_name']!, _middleNameMeta),
+      );
     }
     if (data.containsKey('phone_number')) {
       context.handle(
+        _phoneNumberMeta,
+        phoneNumber.isAcceptableOrUnknown(
+          data['phone_number']!,
           _phoneNumberMeta,
-          phoneNumber.isAcceptableOrUnknown(
-              data['phone_number']!, _phoneNumberMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_phoneNumberMeta);
     }
     if (data.containsKey('hashed_password')) {
       context.handle(
+        _hashedPasswordMeta,
+        hashedPassword.isAcceptableOrUnknown(
+          data['hashed_password']!,
           _hashedPasswordMeta,
-          hashedPassword.isAcceptableOrUnknown(
-              data['hashed_password']!, _hashedPasswordMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_hashedPasswordMeta);
     }
     if (data.containsKey('role')) {
       context.handle(
-          _roleMeta, role.isAcceptableOrUnknown(data['role']!, _roleMeta));
+        _roleMeta,
+        role.isAcceptableOrUnknown(data['role']!, _roleMeta),
+      );
     } else if (isInserting) {
       context.missing(_roleMeta);
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     }
     if (data.containsKey('last_sync_at')) {
       context.handle(
+        _lastSyncAtMeta,
+        lastSyncAt.isAcceptableOrUnknown(
+          data['last_sync_at']!,
           _lastSyncAtMeta,
-          lastSyncAt.isAcceptableOrUnknown(
-              data['last_sync_at']!, _lastSyncAtMeta));
+        ),
+      );
     }
     return context;
   }
@@ -192,35 +269,57 @@ class $UserEntriesTable extends UserEntries
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-        {externalId},
-        {phoneNumber},
-      ];
+    {externalId},
+    {phoneNumber},
+  ];
   @override
   UserEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return UserEntry(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      externalId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}external_id'])!,
-      lastName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}last_name'])!,
-      firstName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}first_name'])!,
-      middleName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}middle_name']),
-      phoneNumber: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}phone_number'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      externalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}external_id'],
+      )!,
+      lastName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_name'],
+      )!,
+      firstName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}first_name'],
+      )!,
+      middleName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}middle_name'],
+      ),
+      phoneNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}phone_number'],
+      )!,
       hashedPassword: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}hashed_password'])!,
-      role: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}role'])!,
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
-      lastSyncAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}last_sync_at']),
+        DriftSqlType.string,
+        data['${effectivePrefix}hashed_password'],
+      )!,
+      role: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}role'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      lastSyncAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_sync_at'],
+      ),
     );
   }
 
@@ -242,18 +341,19 @@ class UserEntry extends DataClass implements Insertable<UserEntry> {
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? lastSyncAt;
-  const UserEntry(
-      {required this.id,
-      required this.externalId,
-      required this.lastName,
-      required this.firstName,
-      this.middleName,
-      required this.phoneNumber,
-      required this.hashedPassword,
-      required this.role,
-      required this.createdAt,
-      required this.updatedAt,
-      this.lastSyncAt});
+  const UserEntry({
+    required this.id,
+    required this.externalId,
+    required this.lastName,
+    required this.firstName,
+    this.middleName,
+    required this.phoneNumber,
+    required this.hashedPassword,
+    required this.role,
+    required this.createdAt,
+    required this.updatedAt,
+    this.lastSyncAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -295,8 +395,10 @@ class UserEntry extends DataClass implements Insertable<UserEntry> {
     );
   }
 
-  factory UserEntry.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory UserEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return UserEntry(
       id: serializer.fromJson<int>(json['id']),
@@ -330,50 +432,54 @@ class UserEntry extends DataClass implements Insertable<UserEntry> {
     };
   }
 
-  UserEntry copyWith(
-          {int? id,
-          String? externalId,
-          String? lastName,
-          String? firstName,
-          Value<String?> middleName = const Value.absent(),
-          String? phoneNumber,
-          String? hashedPassword,
-          String? role,
-          DateTime? createdAt,
-          DateTime? updatedAt,
-          Value<DateTime?> lastSyncAt = const Value.absent()}) =>
-      UserEntry(
-        id: id ?? this.id,
-        externalId: externalId ?? this.externalId,
-        lastName: lastName ?? this.lastName,
-        firstName: firstName ?? this.firstName,
-        middleName: middleName.present ? middleName.value : this.middleName,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        hashedPassword: hashedPassword ?? this.hashedPassword,
-        role: role ?? this.role,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        lastSyncAt: lastSyncAt.present ? lastSyncAt.value : this.lastSyncAt,
-      );
+  UserEntry copyWith({
+    int? id,
+    String? externalId,
+    String? lastName,
+    String? firstName,
+    Value<String?> middleName = const Value.absent(),
+    String? phoneNumber,
+    String? hashedPassword,
+    String? role,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> lastSyncAt = const Value.absent(),
+  }) => UserEntry(
+    id: id ?? this.id,
+    externalId: externalId ?? this.externalId,
+    lastName: lastName ?? this.lastName,
+    firstName: firstName ?? this.firstName,
+    middleName: middleName.present ? middleName.value : this.middleName,
+    phoneNumber: phoneNumber ?? this.phoneNumber,
+    hashedPassword: hashedPassword ?? this.hashedPassword,
+    role: role ?? this.role,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    lastSyncAt: lastSyncAt.present ? lastSyncAt.value : this.lastSyncAt,
+  );
   UserEntry copyWithCompanion(UserEntriesCompanion data) {
     return UserEntry(
       id: data.id.present ? data.id.value : this.id,
-      externalId:
-          data.externalId.present ? data.externalId.value : this.externalId,
+      externalId: data.externalId.present
+          ? data.externalId.value
+          : this.externalId,
       lastName: data.lastName.present ? data.lastName.value : this.lastName,
       firstName: data.firstName.present ? data.firstName.value : this.firstName,
-      middleName:
-          data.middleName.present ? data.middleName.value : this.middleName,
-      phoneNumber:
-          data.phoneNumber.present ? data.phoneNumber.value : this.phoneNumber,
+      middleName: data.middleName.present
+          ? data.middleName.value
+          : this.middleName,
+      phoneNumber: data.phoneNumber.present
+          ? data.phoneNumber.value
+          : this.phoneNumber,
       hashedPassword: data.hashedPassword.present
           ? data.hashedPassword.value
           : this.hashedPassword,
       role: data.role.present ? data.role.value : this.role,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
-      lastSyncAt:
-          data.lastSyncAt.present ? data.lastSyncAt.value : this.lastSyncAt,
+      lastSyncAt: data.lastSyncAt.present
+          ? data.lastSyncAt.value
+          : this.lastSyncAt,
     );
   }
 
@@ -397,17 +503,18 @@ class UserEntry extends DataClass implements Insertable<UserEntry> {
 
   @override
   int get hashCode => Object.hash(
-      id,
-      externalId,
-      lastName,
-      firstName,
-      middleName,
-      phoneNumber,
-      hashedPassword,
-      role,
-      createdAt,
-      updatedAt,
-      lastSyncAt);
+    id,
+    externalId,
+    lastName,
+    firstName,
+    middleName,
+    phoneNumber,
+    hashedPassword,
+    role,
+    createdAt,
+    updatedAt,
+    lastSyncAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -462,12 +569,12 @@ class UserEntriesCompanion extends UpdateCompanion<UserEntry> {
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.lastSyncAt = const Value.absent(),
-  })  : externalId = Value(externalId),
-        lastName = Value(lastName),
-        firstName = Value(firstName),
-        phoneNumber = Value(phoneNumber),
-        hashedPassword = Value(hashedPassword),
-        role = Value(role);
+  }) : externalId = Value(externalId),
+       lastName = Value(lastName),
+       firstName = Value(firstName),
+       phoneNumber = Value(phoneNumber),
+       hashedPassword = Value(hashedPassword),
+       role = Value(role);
   static Insertable<UserEntry> custom({
     Expression<int>? id,
     Expression<String>? externalId,
@@ -496,18 +603,19 @@ class UserEntriesCompanion extends UpdateCompanion<UserEntry> {
     });
   }
 
-  UserEntriesCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? externalId,
-      Value<String>? lastName,
-      Value<String>? firstName,
-      Value<String?>? middleName,
-      Value<String>? phoneNumber,
-      Value<String>? hashedPassword,
-      Value<String>? role,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt,
-      Value<DateTime?>? lastSyncAt}) {
+  UserEntriesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? externalId,
+    Value<String>? lastName,
+    Value<String>? firstName,
+    Value<String?>? middleName,
+    Value<String>? phoneNumber,
+    Value<String>? hashedPassword,
+    Value<String>? role,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? lastSyncAt,
+  }) {
     return UserEntriesCompanion(
       id: id ?? this.id,
       externalId: externalId ?? this.externalId,
@@ -590,205 +698,299 @@ class $UserTracksTable extends UserTracks
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
-      'user_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES users (id)'));
-  static const VerificationMeta _routeIdMeta =
-      const VerificationMeta('routeId');
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES users (id)',
+    ),
+  );
+  static const VerificationMeta _routeIdMeta = const VerificationMeta(
+    'routeId',
+  );
   @override
   late final GeneratedColumn<int> routeId = GeneratedColumn<int>(
-      'route_id', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _startTimeMeta =
-      const VerificationMeta('startTime');
+    'route_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _startTimeMeta = const VerificationMeta(
+    'startTime',
+  );
   @override
   late final GeneratedColumn<DateTime> startTime = GeneratedColumn<DateTime>(
-      'start_time', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _endTimeMeta =
-      const VerificationMeta('endTime');
+    'start_time',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endTimeMeta = const VerificationMeta(
+    'endTime',
+  );
   @override
   late final GeneratedColumn<DateTime> endTime = GeneratedColumn<DateTime>(
-      'end_time', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+    'end_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _totalDistanceMetersMeta =
       const VerificationMeta('totalDistanceMeters');
   @override
   late final GeneratedColumn<double> totalDistanceMeters =
-      GeneratedColumn<double>('total_distance_meters', aliasedName, false,
-          type: DriftSqlType.double,
-          requiredDuringInsert: false,
-          defaultValue: const Constant(0.0));
-  static const VerificationMeta _movingTimeSecondsMeta =
-      const VerificationMeta('movingTimeSeconds');
+      GeneratedColumn<double>(
+        'total_distance_meters',
+        aliasedName,
+        false,
+        type: DriftSqlType.double,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(0.0),
+      );
+  static const VerificationMeta _movingTimeSecondsMeta = const VerificationMeta(
+    'movingTimeSeconds',
+  );
   @override
   late final GeneratedColumn<int> movingTimeSeconds = GeneratedColumn<int>(
-      'moving_time_seconds', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _totalTimeSecondsMeta =
-      const VerificationMeta('totalTimeSeconds');
+    'moving_time_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _totalTimeSecondsMeta = const VerificationMeta(
+    'totalTimeSeconds',
+  );
   @override
   late final GeneratedColumn<int> totalTimeSeconds = GeneratedColumn<int>(
-      'total_time_seconds', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
-  static const VerificationMeta _averageSpeedKmhMeta =
-      const VerificationMeta('averageSpeedKmh');
+    'total_time_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _averageSpeedKmhMeta = const VerificationMeta(
+    'averageSpeedKmh',
+  );
   @override
   late final GeneratedColumn<double> averageSpeedKmh = GeneratedColumn<double>(
-      'average_speed_kmh', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  static const VerificationMeta _maxSpeedKmhMeta =
-      const VerificationMeta('maxSpeedKmh');
+    'average_speed_kmh',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _maxSpeedKmhMeta = const VerificationMeta(
+    'maxSpeedKmh',
+  );
   @override
   late final GeneratedColumn<double> maxSpeedKmh = GeneratedColumn<double>(
-      'max_speed_kmh', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
+    'max_speed_kmh',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
   static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<String> status = GeneratedColumn<String>(
-      'status', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _metadataMeta =
-      const VerificationMeta('metadata');
+    'status',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 20,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _metadataMeta = const VerificationMeta(
+    'metadata',
+  );
   @override
   late final GeneratedColumn<String> metadata = GeneratedColumn<String>(
-      'metadata', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'metadata',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
   @override
   late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        userId,
-        routeId,
-        startTime,
-        endTime,
-        totalDistanceMeters,
-        movingTimeSeconds,
-        totalTimeSeconds,
-        averageSpeedKmh,
-        maxSpeedKmh,
-        status,
-        metadata,
-        createdAt,
-        updatedAt
-      ];
+    id,
+    userId,
+    routeId,
+    startTime,
+    endTime,
+    totalDistanceMeters,
+    movingTimeSeconds,
+    totalTimeSeconds,
+    averageSpeedKmh,
+    maxSpeedKmh,
+    status,
+    metadata,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'user_tracks';
   @override
-  VerificationContext validateIntegrity(Insertable<UserTrackData> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<UserTrackData> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('user_id')) {
-      context.handle(_userIdMeta,
-          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+      context.handle(
+        _userIdMeta,
+        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_userIdMeta);
     }
     if (data.containsKey('route_id')) {
-      context.handle(_routeIdMeta,
-          routeId.isAcceptableOrUnknown(data['route_id']!, _routeIdMeta));
+      context.handle(
+        _routeIdMeta,
+        routeId.isAcceptableOrUnknown(data['route_id']!, _routeIdMeta),
+      );
     }
     if (data.containsKey('start_time')) {
-      context.handle(_startTimeMeta,
-          startTime.isAcceptableOrUnknown(data['start_time']!, _startTimeMeta));
+      context.handle(
+        _startTimeMeta,
+        startTime.isAcceptableOrUnknown(data['start_time']!, _startTimeMeta),
+      );
     } else if (isInserting) {
       context.missing(_startTimeMeta);
     }
     if (data.containsKey('end_time')) {
-      context.handle(_endTimeMeta,
-          endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta));
+      context.handle(
+        _endTimeMeta,
+        endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta),
+      );
     }
     if (data.containsKey('total_distance_meters')) {
       context.handle(
+        _totalDistanceMetersMeta,
+        totalDistanceMeters.isAcceptableOrUnknown(
+          data['total_distance_meters']!,
           _totalDistanceMetersMeta,
-          totalDistanceMeters.isAcceptableOrUnknown(
-              data['total_distance_meters']!, _totalDistanceMetersMeta));
+        ),
+      );
     }
     if (data.containsKey('moving_time_seconds')) {
       context.handle(
+        _movingTimeSecondsMeta,
+        movingTimeSeconds.isAcceptableOrUnknown(
+          data['moving_time_seconds']!,
           _movingTimeSecondsMeta,
-          movingTimeSeconds.isAcceptableOrUnknown(
-              data['moving_time_seconds']!, _movingTimeSecondsMeta));
+        ),
+      );
     }
     if (data.containsKey('total_time_seconds')) {
       context.handle(
+        _totalTimeSecondsMeta,
+        totalTimeSeconds.isAcceptableOrUnknown(
+          data['total_time_seconds']!,
           _totalTimeSecondsMeta,
-          totalTimeSeconds.isAcceptableOrUnknown(
-              data['total_time_seconds']!, _totalTimeSecondsMeta));
+        ),
+      );
     }
     if (data.containsKey('average_speed_kmh')) {
       context.handle(
+        _averageSpeedKmhMeta,
+        averageSpeedKmh.isAcceptableOrUnknown(
+          data['average_speed_kmh']!,
           _averageSpeedKmhMeta,
-          averageSpeedKmh.isAcceptableOrUnknown(
-              data['average_speed_kmh']!, _averageSpeedKmhMeta));
+        ),
+      );
     }
     if (data.containsKey('max_speed_kmh')) {
       context.handle(
+        _maxSpeedKmhMeta,
+        maxSpeedKmh.isAcceptableOrUnknown(
+          data['max_speed_kmh']!,
           _maxSpeedKmhMeta,
-          maxSpeedKmh.isAcceptableOrUnknown(
-              data['max_speed_kmh']!, _maxSpeedKmhMeta));
+        ),
+      );
     }
     if (data.containsKey('status')) {
-      context.handle(_statusMeta,
-          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
     } else if (isInserting) {
       context.missing(_statusMeta);
     }
     if (data.containsKey('metadata')) {
-      context.handle(_metadataMeta,
-          metadata.isAcceptableOrUnknown(data['metadata']!, _metadataMeta));
+      context.handle(
+        _metadataMeta,
+        metadata.isAcceptableOrUnknown(data['metadata']!, _metadataMeta),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
     }
     return context;
   }
@@ -799,35 +1001,62 @@ class $UserTracksTable extends UserTracks
   UserTrackData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return UserTrackData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
-      routeId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}route_id']),
-      startTime: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}start_time'])!,
-      endTime: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}end_time']),
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}user_id'],
+      )!,
+      routeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}route_id'],
+      ),
+      startTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}start_time'],
+      )!,
+      endTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}end_time'],
+      ),
       totalDistanceMeters: attachedDatabase.typeMapping.read(
-          DriftSqlType.double,
-          data['${effectivePrefix}total_distance_meters'])!,
+        DriftSqlType.double,
+        data['${effectivePrefix}total_distance_meters'],
+      )!,
       movingTimeSeconds: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}moving_time_seconds'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}moving_time_seconds'],
+      )!,
       totalTimeSeconds: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}total_time_seconds'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}total_time_seconds'],
+      )!,
       averageSpeedKmh: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}average_speed_kmh'])!,
-      maxSpeedKmh: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}max_speed_kmh'])!,
-      status: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
-      metadata: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}metadata']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+        DriftSqlType.double,
+        data['${effectivePrefix}average_speed_kmh'],
+      )!,
+      maxSpeedKmh: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}max_speed_kmh'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      metadata: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}metadata'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
     );
   }
 
@@ -879,21 +1108,22 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
 
   /// Дата последнего обновления
   final DateTime updatedAt;
-  const UserTrackData(
-      {required this.id,
-      required this.userId,
-      this.routeId,
-      required this.startTime,
-      this.endTime,
-      required this.totalDistanceMeters,
-      required this.movingTimeSeconds,
-      required this.totalTimeSeconds,
-      required this.averageSpeedKmh,
-      required this.maxSpeedKmh,
-      required this.status,
-      this.metadata,
-      required this.createdAt,
-      required this.updatedAt});
+  const UserTrackData({
+    required this.id,
+    required this.userId,
+    this.routeId,
+    required this.startTime,
+    this.endTime,
+    required this.totalDistanceMeters,
+    required this.movingTimeSeconds,
+    required this.totalTimeSeconds,
+    required this.averageSpeedKmh,
+    required this.maxSpeedKmh,
+    required this.status,
+    this.metadata,
+    required this.createdAt,
+    required this.updatedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -945,8 +1175,10 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
     );
   }
 
-  factory UserTrackData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory UserTrackData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return UserTrackData(
       id: serializer.fromJson<int>(json['id']),
@@ -954,8 +1186,9 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
       routeId: serializer.fromJson<int?>(json['routeId']),
       startTime: serializer.fromJson<DateTime>(json['startTime']),
       endTime: serializer.fromJson<DateTime?>(json['endTime']),
-      totalDistanceMeters:
-          serializer.fromJson<double>(json['totalDistanceMeters']),
+      totalDistanceMeters: serializer.fromJson<double>(
+        json['totalDistanceMeters'],
+      ),
       movingTimeSeconds: serializer.fromJson<int>(json['movingTimeSeconds']),
       totalTimeSeconds: serializer.fromJson<int>(json['totalTimeSeconds']),
       averageSpeedKmh: serializer.fromJson<double>(json['averageSpeedKmh']),
@@ -987,37 +1220,37 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
     };
   }
 
-  UserTrackData copyWith(
-          {int? id,
-          int? userId,
-          Value<int?> routeId = const Value.absent(),
-          DateTime? startTime,
-          Value<DateTime?> endTime = const Value.absent(),
-          double? totalDistanceMeters,
-          int? movingTimeSeconds,
-          int? totalTimeSeconds,
-          double? averageSpeedKmh,
-          double? maxSpeedKmh,
-          String? status,
-          Value<String?> metadata = const Value.absent(),
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      UserTrackData(
-        id: id ?? this.id,
-        userId: userId ?? this.userId,
-        routeId: routeId.present ? routeId.value : this.routeId,
-        startTime: startTime ?? this.startTime,
-        endTime: endTime.present ? endTime.value : this.endTime,
-        totalDistanceMeters: totalDistanceMeters ?? this.totalDistanceMeters,
-        movingTimeSeconds: movingTimeSeconds ?? this.movingTimeSeconds,
-        totalTimeSeconds: totalTimeSeconds ?? this.totalTimeSeconds,
-        averageSpeedKmh: averageSpeedKmh ?? this.averageSpeedKmh,
-        maxSpeedKmh: maxSpeedKmh ?? this.maxSpeedKmh,
-        status: status ?? this.status,
-        metadata: metadata.present ? metadata.value : this.metadata,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  UserTrackData copyWith({
+    int? id,
+    int? userId,
+    Value<int?> routeId = const Value.absent(),
+    DateTime? startTime,
+    Value<DateTime?> endTime = const Value.absent(),
+    double? totalDistanceMeters,
+    int? movingTimeSeconds,
+    int? totalTimeSeconds,
+    double? averageSpeedKmh,
+    double? maxSpeedKmh,
+    String? status,
+    Value<String?> metadata = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => UserTrackData(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    routeId: routeId.present ? routeId.value : this.routeId,
+    startTime: startTime ?? this.startTime,
+    endTime: endTime.present ? endTime.value : this.endTime,
+    totalDistanceMeters: totalDistanceMeters ?? this.totalDistanceMeters,
+    movingTimeSeconds: movingTimeSeconds ?? this.movingTimeSeconds,
+    totalTimeSeconds: totalTimeSeconds ?? this.totalTimeSeconds,
+    averageSpeedKmh: averageSpeedKmh ?? this.averageSpeedKmh,
+    maxSpeedKmh: maxSpeedKmh ?? this.maxSpeedKmh,
+    status: status ?? this.status,
+    metadata: metadata.present ? metadata.value : this.metadata,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
   UserTrackData copyWithCompanion(UserTracksCompanion data) {
     return UserTrackData(
       id: data.id.present ? data.id.value : this.id,
@@ -1037,8 +1270,9 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
       averageSpeedKmh: data.averageSpeedKmh.present
           ? data.averageSpeedKmh.value
           : this.averageSpeedKmh,
-      maxSpeedKmh:
-          data.maxSpeedKmh.present ? data.maxSpeedKmh.value : this.maxSpeedKmh,
+      maxSpeedKmh: data.maxSpeedKmh.present
+          ? data.maxSpeedKmh.value
+          : this.maxSpeedKmh,
       status: data.status.present ? data.status.value : this.status,
       metadata: data.metadata.present ? data.metadata.value : this.metadata,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
@@ -1069,20 +1303,21 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
 
   @override
   int get hashCode => Object.hash(
-      id,
-      userId,
-      routeId,
-      startTime,
-      endTime,
-      totalDistanceMeters,
-      movingTimeSeconds,
-      totalTimeSeconds,
-      averageSpeedKmh,
-      maxSpeedKmh,
-      status,
-      metadata,
-      createdAt,
-      updatedAt);
+    id,
+    userId,
+    routeId,
+    startTime,
+    endTime,
+    totalDistanceMeters,
+    movingTimeSeconds,
+    totalTimeSeconds,
+    averageSpeedKmh,
+    maxSpeedKmh,
+    status,
+    metadata,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1149,9 +1384,9 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
     this.metadata = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  })  : userId = Value(userId),
-        startTime = Value(startTime),
-        status = Value(status);
+  }) : userId = Value(userId),
+       startTime = Value(startTime),
+       status = Value(status);
   static Insertable<UserTrackData> custom({
     Expression<int>? id,
     Expression<int>? userId,
@@ -1187,21 +1422,22 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
     });
   }
 
-  UserTracksCompanion copyWith(
-      {Value<int>? id,
-      Value<int>? userId,
-      Value<int?>? routeId,
-      Value<DateTime>? startTime,
-      Value<DateTime?>? endTime,
-      Value<double>? totalDistanceMeters,
-      Value<int>? movingTimeSeconds,
-      Value<int>? totalTimeSeconds,
-      Value<double>? averageSpeedKmh,
-      Value<double>? maxSpeedKmh,
-      Value<String>? status,
-      Value<String?>? metadata,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt}) {
+  UserTracksCompanion copyWith({
+    Value<int>? id,
+    Value<int>? userId,
+    Value<int?>? routeId,
+    Value<DateTime>? startTime,
+    Value<DateTime?>? endTime,
+    Value<double>? totalDistanceMeters,
+    Value<int>? movingTimeSeconds,
+    Value<int>? totalTimeSeconds,
+    Value<double>? averageSpeedKmh,
+    Value<double>? maxSpeedKmh,
+    Value<String>? status,
+    Value<String?>? metadata,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+  }) {
     return UserTracksCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -1239,8 +1475,9 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
       map['end_time'] = Variable<DateTime>(endTime.value);
     }
     if (totalDistanceMeters.present) {
-      map['total_distance_meters'] =
-          Variable<double>(totalDistanceMeters.value);
+      map['total_distance_meters'] = Variable<double>(
+        totalDistanceMeters.value,
+      );
     }
     if (movingTimeSeconds.present) {
       map['moving_time_seconds'] = Variable<int>(movingTimeSeconds.value);
@@ -1300,190 +1537,289 @@ class $TrackPointsTable extends TrackPoints
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _trackIdMeta =
-      const VerificationMeta('trackId');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _trackIdMeta = const VerificationMeta(
+    'trackId',
+  );
   @override
   late final GeneratedColumn<int> trackId = GeneratedColumn<int>(
-      'track_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES user_tracks (id)'));
-  static const VerificationMeta _latitudeMeta =
-      const VerificationMeta('latitude');
+    'track_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES user_tracks (id)',
+    ),
+  );
+  static const VerificationMeta _latitudeMeta = const VerificationMeta(
+    'latitude',
+  );
   @override
   late final GeneratedColumn<double> latitude = GeneratedColumn<double>(
-      'latitude', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _longitudeMeta =
-      const VerificationMeta('longitude');
+    'latitude',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _longitudeMeta = const VerificationMeta(
+    'longitude',
+  );
   @override
   late final GeneratedColumn<double> longitude = GeneratedColumn<double>(
-      'longitude', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _timestampMeta =
-      const VerificationMeta('timestamp');
+    'longitude',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _timestampMeta = const VerificationMeta(
+    'timestamp',
+  );
   @override
   late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
-      'timestamp', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _accuracyMeta =
-      const VerificationMeta('accuracy');
+    'timestamp',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _accuracyMeta = const VerificationMeta(
+    'accuracy',
+  );
   @override
   late final GeneratedColumn<double> accuracy = GeneratedColumn<double>(
-      'accuracy', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
-  static const VerificationMeta _altitudeMeta =
-      const VerificationMeta('altitude');
+    'accuracy',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _altitudeMeta = const VerificationMeta(
+    'altitude',
+  );
   @override
   late final GeneratedColumn<double> altitude = GeneratedColumn<double>(
-      'altitude', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
-  static const VerificationMeta _altitudeAccuracyMeta =
-      const VerificationMeta('altitudeAccuracy');
+    'altitude',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _altitudeAccuracyMeta = const VerificationMeta(
+    'altitudeAccuracy',
+  );
   @override
   late final GeneratedColumn<double> altitudeAccuracy = GeneratedColumn<double>(
-      'altitude_accuracy', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
-  static const VerificationMeta _speedKmhMeta =
-      const VerificationMeta('speedKmh');
+    'altitude_accuracy',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _speedKmhMeta = const VerificationMeta(
+    'speedKmh',
+  );
   @override
   late final GeneratedColumn<double> speedKmh = GeneratedColumn<double>(
-      'speed_kmh', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
-  static const VerificationMeta _bearingMeta =
-      const VerificationMeta('bearing');
+    'speed_kmh',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _bearingMeta = const VerificationMeta(
+    'bearing',
+  );
   @override
   late final GeneratedColumn<double> bearing = GeneratedColumn<double>(
-      'bearing', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+    'bearing',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _distanceFromPreviousMeta =
       const VerificationMeta('distanceFromPrevious');
   @override
   late final GeneratedColumn<double> distanceFromPrevious =
-      GeneratedColumn<double>('distance_from_previous', aliasedName, true,
-          type: DriftSqlType.double, requiredDuringInsert: false);
-  static const VerificationMeta _timeFromPreviousMeta =
-      const VerificationMeta('timeFromPrevious');
+      GeneratedColumn<double>(
+        'distance_from_previous',
+        aliasedName,
+        true,
+        type: DriftSqlType.double,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _timeFromPreviousMeta = const VerificationMeta(
+    'timeFromPrevious',
+  );
   @override
   late final GeneratedColumn<int> timeFromPrevious = GeneratedColumn<int>(
-      'time_from_previous', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _metadataMeta =
-      const VerificationMeta('metadata');
+    'time_from_previous',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _metadataMeta = const VerificationMeta(
+    'metadata',
+  );
   @override
   late final GeneratedColumn<String> metadata = GeneratedColumn<String>(
-      'metadata', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
+    'metadata',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        trackId,
-        latitude,
-        longitude,
-        timestamp,
-        accuracy,
-        altitude,
-        altitudeAccuracy,
-        speedKmh,
-        bearing,
-        distanceFromPrevious,
-        timeFromPrevious,
-        metadata,
-        createdAt
-      ];
+    id,
+    trackId,
+    latitude,
+    longitude,
+    timestamp,
+    accuracy,
+    altitude,
+    altitudeAccuracy,
+    speedKmh,
+    bearing,
+    distanceFromPrevious,
+    timeFromPrevious,
+    metadata,
+    createdAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'track_points';
   @override
-  VerificationContext validateIntegrity(Insertable<TrackPointData> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<TrackPointData> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('track_id')) {
-      context.handle(_trackIdMeta,
-          trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta));
+      context.handle(
+        _trackIdMeta,
+        trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_trackIdMeta);
     }
     if (data.containsKey('latitude')) {
-      context.handle(_latitudeMeta,
-          latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta));
+      context.handle(
+        _latitudeMeta,
+        latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta),
+      );
     } else if (isInserting) {
       context.missing(_latitudeMeta);
     }
     if (data.containsKey('longitude')) {
-      context.handle(_longitudeMeta,
-          longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta));
+      context.handle(
+        _longitudeMeta,
+        longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta),
+      );
     } else if (isInserting) {
       context.missing(_longitudeMeta);
     }
     if (data.containsKey('timestamp')) {
-      context.handle(_timestampMeta,
-          timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta));
+      context.handle(
+        _timestampMeta,
+        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
+      );
     } else if (isInserting) {
       context.missing(_timestampMeta);
     }
     if (data.containsKey('accuracy')) {
-      context.handle(_accuracyMeta,
-          accuracy.isAcceptableOrUnknown(data['accuracy']!, _accuracyMeta));
+      context.handle(
+        _accuracyMeta,
+        accuracy.isAcceptableOrUnknown(data['accuracy']!, _accuracyMeta),
+      );
     }
     if (data.containsKey('altitude')) {
-      context.handle(_altitudeMeta,
-          altitude.isAcceptableOrUnknown(data['altitude']!, _altitudeMeta));
+      context.handle(
+        _altitudeMeta,
+        altitude.isAcceptableOrUnknown(data['altitude']!, _altitudeMeta),
+      );
     }
     if (data.containsKey('altitude_accuracy')) {
       context.handle(
+        _altitudeAccuracyMeta,
+        altitudeAccuracy.isAcceptableOrUnknown(
+          data['altitude_accuracy']!,
           _altitudeAccuracyMeta,
-          altitudeAccuracy.isAcceptableOrUnknown(
-              data['altitude_accuracy']!, _altitudeAccuracyMeta));
+        ),
+      );
     }
     if (data.containsKey('speed_kmh')) {
-      context.handle(_speedKmhMeta,
-          speedKmh.isAcceptableOrUnknown(data['speed_kmh']!, _speedKmhMeta));
+      context.handle(
+        _speedKmhMeta,
+        speedKmh.isAcceptableOrUnknown(data['speed_kmh']!, _speedKmhMeta),
+      );
     }
     if (data.containsKey('bearing')) {
-      context.handle(_bearingMeta,
-          bearing.isAcceptableOrUnknown(data['bearing']!, _bearingMeta));
+      context.handle(
+        _bearingMeta,
+        bearing.isAcceptableOrUnknown(data['bearing']!, _bearingMeta),
+      );
     }
     if (data.containsKey('distance_from_previous')) {
       context.handle(
+        _distanceFromPreviousMeta,
+        distanceFromPrevious.isAcceptableOrUnknown(
+          data['distance_from_previous']!,
           _distanceFromPreviousMeta,
-          distanceFromPrevious.isAcceptableOrUnknown(
-              data['distance_from_previous']!, _distanceFromPreviousMeta));
+        ),
+      );
     }
     if (data.containsKey('time_from_previous')) {
       context.handle(
+        _timeFromPreviousMeta,
+        timeFromPrevious.isAcceptableOrUnknown(
+          data['time_from_previous']!,
           _timeFromPreviousMeta,
-          timeFromPrevious.isAcceptableOrUnknown(
-              data['time_from_previous']!, _timeFromPreviousMeta));
+        ),
+      );
     }
     if (data.containsKey('metadata')) {
-      context.handle(_metadataMeta,
-          metadata.isAcceptableOrUnknown(data['metadata']!, _metadataMeta));
+      context.handle(
+        _metadataMeta,
+        metadata.isAcceptableOrUnknown(data['metadata']!, _metadataMeta),
+      );
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
     }
     return context;
   }
@@ -1494,35 +1830,62 @@ class $TrackPointsTable extends TrackPoints
   TrackPointData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return TrackPointData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      trackId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}track_id'])!,
-      latitude: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}latitude'])!,
-      longitude: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}longitude'])!,
-      timestamp: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}timestamp'])!,
-      accuracy: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}accuracy']),
-      altitude: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}altitude']),
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      trackId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}track_id'],
+      )!,
+      latitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}latitude'],
+      )!,
+      longitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}longitude'],
+      )!,
+      timestamp: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}timestamp'],
+      )!,
+      accuracy: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}accuracy'],
+      ),
+      altitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}altitude'],
+      ),
       altitudeAccuracy: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}altitude_accuracy']),
-      speedKmh: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}speed_kmh']),
-      bearing: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}bearing']),
+        DriftSqlType.double,
+        data['${effectivePrefix}altitude_accuracy'],
+      ),
+      speedKmh: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}speed_kmh'],
+      ),
+      bearing: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}bearing'],
+      ),
       distanceFromPrevious: attachedDatabase.typeMapping.read(
-          DriftSqlType.double,
-          data['${effectivePrefix}distance_from_previous']),
-      timeFromPrevious: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}time_from_previous']),
-      metadata: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}metadata']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+        DriftSqlType.double,
+        data['${effectivePrefix}distance_from_previous'],
+      ),
+      timeFromPrevious: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}time_from_previous'],
+      ),
+      metadata: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}metadata'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
     );
   }
 
@@ -1574,21 +1937,22 @@ class TrackPointData extends DataClass implements Insertable<TrackPointData> {
 
   /// Дата создания записи
   final DateTime createdAt;
-  const TrackPointData(
-      {required this.id,
-      required this.trackId,
-      required this.latitude,
-      required this.longitude,
-      required this.timestamp,
-      this.accuracy,
-      this.altitude,
-      this.altitudeAccuracy,
-      this.speedKmh,
-      this.bearing,
-      this.distanceFromPrevious,
-      this.timeFromPrevious,
-      this.metadata,
-      required this.createdAt});
+  const TrackPointData({
+    required this.id,
+    required this.trackId,
+    required this.latitude,
+    required this.longitude,
+    required this.timestamp,
+    this.accuracy,
+    this.altitude,
+    this.altitudeAccuracy,
+    this.speedKmh,
+    this.bearing,
+    this.distanceFromPrevious,
+    this.timeFromPrevious,
+    this.metadata,
+    required this.createdAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1660,8 +2024,10 @@ class TrackPointData extends DataClass implements Insertable<TrackPointData> {
     );
   }
 
-  factory TrackPointData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory TrackPointData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TrackPointData(
       id: serializer.fromJson<int>(json['id']),
@@ -1674,8 +2040,9 @@ class TrackPointData extends DataClass implements Insertable<TrackPointData> {
       altitudeAccuracy: serializer.fromJson<double?>(json['altitudeAccuracy']),
       speedKmh: serializer.fromJson<double?>(json['speedKmh']),
       bearing: serializer.fromJson<double?>(json['bearing']),
-      distanceFromPrevious:
-          serializer.fromJson<double?>(json['distanceFromPrevious']),
+      distanceFromPrevious: serializer.fromJson<double?>(
+        json['distanceFromPrevious'],
+      ),
       timeFromPrevious: serializer.fromJson<int?>(json['timeFromPrevious']),
       metadata: serializer.fromJson<String?>(json['metadata']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -1702,43 +2069,43 @@ class TrackPointData extends DataClass implements Insertable<TrackPointData> {
     };
   }
 
-  TrackPointData copyWith(
-          {int? id,
-          int? trackId,
-          double? latitude,
-          double? longitude,
-          DateTime? timestamp,
-          Value<double?> accuracy = const Value.absent(),
-          Value<double?> altitude = const Value.absent(),
-          Value<double?> altitudeAccuracy = const Value.absent(),
-          Value<double?> speedKmh = const Value.absent(),
-          Value<double?> bearing = const Value.absent(),
-          Value<double?> distanceFromPrevious = const Value.absent(),
-          Value<int?> timeFromPrevious = const Value.absent(),
-          Value<String?> metadata = const Value.absent(),
-          DateTime? createdAt}) =>
-      TrackPointData(
-        id: id ?? this.id,
-        trackId: trackId ?? this.trackId,
-        latitude: latitude ?? this.latitude,
-        longitude: longitude ?? this.longitude,
-        timestamp: timestamp ?? this.timestamp,
-        accuracy: accuracy.present ? accuracy.value : this.accuracy,
-        altitude: altitude.present ? altitude.value : this.altitude,
-        altitudeAccuracy: altitudeAccuracy.present
-            ? altitudeAccuracy.value
-            : this.altitudeAccuracy,
-        speedKmh: speedKmh.present ? speedKmh.value : this.speedKmh,
-        bearing: bearing.present ? bearing.value : this.bearing,
-        distanceFromPrevious: distanceFromPrevious.present
-            ? distanceFromPrevious.value
-            : this.distanceFromPrevious,
-        timeFromPrevious: timeFromPrevious.present
-            ? timeFromPrevious.value
-            : this.timeFromPrevious,
-        metadata: metadata.present ? metadata.value : this.metadata,
-        createdAt: createdAt ?? this.createdAt,
-      );
+  TrackPointData copyWith({
+    int? id,
+    int? trackId,
+    double? latitude,
+    double? longitude,
+    DateTime? timestamp,
+    Value<double?> accuracy = const Value.absent(),
+    Value<double?> altitude = const Value.absent(),
+    Value<double?> altitudeAccuracy = const Value.absent(),
+    Value<double?> speedKmh = const Value.absent(),
+    Value<double?> bearing = const Value.absent(),
+    Value<double?> distanceFromPrevious = const Value.absent(),
+    Value<int?> timeFromPrevious = const Value.absent(),
+    Value<String?> metadata = const Value.absent(),
+    DateTime? createdAt,
+  }) => TrackPointData(
+    id: id ?? this.id,
+    trackId: trackId ?? this.trackId,
+    latitude: latitude ?? this.latitude,
+    longitude: longitude ?? this.longitude,
+    timestamp: timestamp ?? this.timestamp,
+    accuracy: accuracy.present ? accuracy.value : this.accuracy,
+    altitude: altitude.present ? altitude.value : this.altitude,
+    altitudeAccuracy: altitudeAccuracy.present
+        ? altitudeAccuracy.value
+        : this.altitudeAccuracy,
+    speedKmh: speedKmh.present ? speedKmh.value : this.speedKmh,
+    bearing: bearing.present ? bearing.value : this.bearing,
+    distanceFromPrevious: distanceFromPrevious.present
+        ? distanceFromPrevious.value
+        : this.distanceFromPrevious,
+    timeFromPrevious: timeFromPrevious.present
+        ? timeFromPrevious.value
+        : this.timeFromPrevious,
+    metadata: metadata.present ? metadata.value : this.metadata,
+    createdAt: createdAt ?? this.createdAt,
+  );
   TrackPointData copyWithCompanion(TrackPointsCompanion data) {
     return TrackPointData(
       id: data.id.present ? data.id.value : this.id,
@@ -1787,20 +2154,21 @@ class TrackPointData extends DataClass implements Insertable<TrackPointData> {
 
   @override
   int get hashCode => Object.hash(
-      id,
-      trackId,
-      latitude,
-      longitude,
-      timestamp,
-      accuracy,
-      altitude,
-      altitudeAccuracy,
-      speedKmh,
-      bearing,
-      distanceFromPrevious,
-      timeFromPrevious,
-      metadata,
-      createdAt);
+    id,
+    trackId,
+    latitude,
+    longitude,
+    timestamp,
+    accuracy,
+    altitude,
+    altitudeAccuracy,
+    speedKmh,
+    bearing,
+    distanceFromPrevious,
+    timeFromPrevious,
+    metadata,
+    createdAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1867,10 +2235,10 @@ class TrackPointsCompanion extends UpdateCompanion<TrackPointData> {
     this.timeFromPrevious = const Value.absent(),
     this.metadata = const Value.absent(),
     this.createdAt = const Value.absent(),
-  })  : trackId = Value(trackId),
-        latitude = Value(latitude),
-        longitude = Value(longitude),
-        timestamp = Value(timestamp);
+  }) : trackId = Value(trackId),
+       latitude = Value(latitude),
+       longitude = Value(longitude),
+       timestamp = Value(timestamp);
   static Insertable<TrackPointData> custom({
     Expression<int>? id,
     Expression<int>? trackId,
@@ -1906,21 +2274,22 @@ class TrackPointsCompanion extends UpdateCompanion<TrackPointData> {
     });
   }
 
-  TrackPointsCompanion copyWith(
-      {Value<int>? id,
-      Value<int>? trackId,
-      Value<double>? latitude,
-      Value<double>? longitude,
-      Value<DateTime>? timestamp,
-      Value<double?>? accuracy,
-      Value<double?>? altitude,
-      Value<double?>? altitudeAccuracy,
-      Value<double?>? speedKmh,
-      Value<double?>? bearing,
-      Value<double?>? distanceFromPrevious,
-      Value<int?>? timeFromPrevious,
-      Value<String?>? metadata,
-      Value<DateTime>? createdAt}) {
+  TrackPointsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? trackId,
+    Value<double>? latitude,
+    Value<double>? longitude,
+    Value<DateTime>? timestamp,
+    Value<double?>? accuracy,
+    Value<double?>? altitude,
+    Value<double?>? altitudeAccuracy,
+    Value<double?>? speedKmh,
+    Value<double?>? bearing,
+    Value<double?>? distanceFromPrevious,
+    Value<int?>? timeFromPrevious,
+    Value<String?>? metadata,
+    Value<DateTime>? createdAt,
+  }) {
     return TrackPointsCompanion(
       id: id ?? this.id,
       trackId: trackId ?? this.trackId,
@@ -1973,8 +2342,9 @@ class TrackPointsCompanion extends UpdateCompanion<TrackPointData> {
       map['bearing'] = Variable<double>(bearing.value);
     }
     if (distanceFromPrevious.present) {
-      map['distance_from_previous'] =
-          Variable<double>(distanceFromPrevious.value);
+      map['distance_from_previous'] = Variable<double>(
+        distanceFromPrevious.value,
+      );
     }
     if (timeFromPrevious.present) {
       map['time_from_previous'] = Variable<int>(timeFromPrevious.value);
@@ -2020,56 +2390,62 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [userEntries, userTracks, trackPoints];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    userEntries,
+    userTracks,
+    trackPoints,
+  ];
 }
 
-typedef $$UserEntriesTableCreateCompanionBuilder = UserEntriesCompanion
-    Function({
-  Value<int> id,
-  required String externalId,
-  required String lastName,
-  required String firstName,
-  Value<String?> middleName,
-  required String phoneNumber,
-  required String hashedPassword,
-  required String role,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<DateTime?> lastSyncAt,
-});
-typedef $$UserEntriesTableUpdateCompanionBuilder = UserEntriesCompanion
-    Function({
-  Value<int> id,
-  Value<String> externalId,
-  Value<String> lastName,
-  Value<String> firstName,
-  Value<String?> middleName,
-  Value<String> phoneNumber,
-  Value<String> hashedPassword,
-  Value<String> role,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<DateTime?> lastSyncAt,
-});
+typedef $$UserEntriesTableCreateCompanionBuilder =
+    UserEntriesCompanion Function({
+      Value<int> id,
+      required String externalId,
+      required String lastName,
+      required String firstName,
+      Value<String?> middleName,
+      required String phoneNumber,
+      required String hashedPassword,
+      required String role,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> lastSyncAt,
+    });
+typedef $$UserEntriesTableUpdateCompanionBuilder =
+    UserEntriesCompanion Function({
+      Value<int> id,
+      Value<String> externalId,
+      Value<String> lastName,
+      Value<String> firstName,
+      Value<String?> middleName,
+      Value<String> phoneNumber,
+      Value<String> hashedPassword,
+      Value<String> role,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> lastSyncAt,
+    });
 
 final class $$UserEntriesTableReferences
     extends BaseReferences<_$AppDatabase, $UserEntriesTable, UserEntry> {
   $$UserEntriesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static MultiTypedResultKey<$UserTracksTable, List<UserTrackData>>
-      _userTracksRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-          db.userTracks,
-          aliasName:
-              $_aliasNameGenerator(db.userEntries.id, db.userTracks.userId));
+  _userTracksRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.userTracks,
+    aliasName: $_aliasNameGenerator(db.userEntries.id, db.userTracks.userId),
+  );
 
   $$UserTracksTableProcessedTableManager get userTracksRefs {
-    final manager = $$UserTracksTableTableManager($_db, $_db.userTracks)
-        .filter((f) => f.userId.id.sqlEquals($_itemColumn<int>('id')!));
+    final manager = $$UserTracksTableTableManager(
+      $_db,
+      $_db.userTracks,
+    ).filter((f) => f.userId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_userTracksRefsTable($_db));
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
+      manager.$state.copyWith(prefetchedData: cache),
+    );
   }
 }
 
@@ -2083,57 +2459,82 @@ class $$UserEntriesTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get externalId => $composableBuilder(
-      column: $table.externalId, builder: (column) => ColumnFilters(column));
+    column: $table.externalId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get lastName => $composableBuilder(
-      column: $table.lastName, builder: (column) => ColumnFilters(column));
+    column: $table.lastName,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get firstName => $composableBuilder(
-      column: $table.firstName, builder: (column) => ColumnFilters(column));
+    column: $table.firstName,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get middleName => $composableBuilder(
-      column: $table.middleName, builder: (column) => ColumnFilters(column));
+    column: $table.middleName,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get phoneNumber => $composableBuilder(
-      column: $table.phoneNumber, builder: (column) => ColumnFilters(column));
+    column: $table.phoneNumber,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get hashedPassword => $composableBuilder(
-      column: $table.hashedPassword,
-      builder: (column) => ColumnFilters(column));
+    column: $table.hashedPassword,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get role => $composableBuilder(
-      column: $table.role, builder: (column) => ColumnFilters(column));
+    column: $table.role,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get lastSyncAt => $composableBuilder(
-      column: $table.lastSyncAt, builder: (column) => ColumnFilters(column));
+    column: $table.lastSyncAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   Expression<bool> userTracksRefs(
-      Expression<bool> Function($$UserTracksTableFilterComposer f) f) {
+    Expression<bool> Function($$UserTracksTableFilterComposer f) f,
+  ) {
     final $$UserTracksTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.userTracks,
-        getReferencedColumn: (t) => t.userId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$UserTracksTableFilterComposer(
-              $db: $db,
-              $table: $db.userTracks,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.userTracks,
+      getReferencedColumn: (t) => t.userId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTracksTableFilterComposer(
+            $db: $db,
+            $table: $db.userTracks,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return f(composer);
   }
 }
@@ -2148,38 +2549,59 @@ class $$UserEntriesTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get externalId => $composableBuilder(
-      column: $table.externalId, builder: (column) => ColumnOrderings(column));
+    column: $table.externalId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get lastName => $composableBuilder(
-      column: $table.lastName, builder: (column) => ColumnOrderings(column));
+    column: $table.lastName,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get firstName => $composableBuilder(
-      column: $table.firstName, builder: (column) => ColumnOrderings(column));
+    column: $table.firstName,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get middleName => $composableBuilder(
-      column: $table.middleName, builder: (column) => ColumnOrderings(column));
+    column: $table.middleName,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get phoneNumber => $composableBuilder(
-      column: $table.phoneNumber, builder: (column) => ColumnOrderings(column));
+    column: $table.phoneNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get hashedPassword => $composableBuilder(
-      column: $table.hashedPassword,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.hashedPassword,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get role => $composableBuilder(
-      column: $table.role, builder: (column) => ColumnOrderings(column));
+    column: $table.role,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get lastSyncAt => $composableBuilder(
-      column: $table.lastSyncAt, builder: (column) => ColumnOrderings(column));
+    column: $table.lastSyncAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$UserEntriesTableAnnotationComposer
@@ -2195,7 +2617,9 @@ class $$UserEntriesTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get externalId => $composableBuilder(
-      column: $table.externalId, builder: (column) => column);
+    column: $table.externalId,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get lastName =>
       $composableBuilder(column: $table.lastName, builder: (column) => column);
@@ -2204,13 +2628,19 @@ class $$UserEntriesTableAnnotationComposer
       $composableBuilder(column: $table.firstName, builder: (column) => column);
 
   GeneratedColumn<String> get middleName => $composableBuilder(
-      column: $table.middleName, builder: (column) => column);
+    column: $table.middleName,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get phoneNumber => $composableBuilder(
-      column: $table.phoneNumber, builder: (column) => column);
+    column: $table.phoneNumber,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get hashedPassword => $composableBuilder(
-      column: $table.hashedPassword, builder: (column) => column);
+    column: $table.hashedPassword,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get role =>
       $composableBuilder(column: $table.role, builder: (column) => column);
@@ -2222,44 +2652,54 @@ class $$UserEntriesTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 
   GeneratedColumn<DateTime> get lastSyncAt => $composableBuilder(
-      column: $table.lastSyncAt, builder: (column) => column);
+    column: $table.lastSyncAt,
+    builder: (column) => column,
+  );
 
   Expression<T> userTracksRefs<T extends Object>(
-      Expression<T> Function($$UserTracksTableAnnotationComposer a) f) {
+    Expression<T> Function($$UserTracksTableAnnotationComposer a) f,
+  ) {
     final $$UserTracksTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.userTracks,
-        getReferencedColumn: (t) => t.userId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$UserTracksTableAnnotationComposer(
-              $db: $db,
-              $table: $db.userTracks,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.userTracks,
+      getReferencedColumn: (t) => t.userId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTracksTableAnnotationComposer(
+            $db: $db,
+            $table: $db.userTracks,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return f(composer);
   }
 }
 
-class $$UserEntriesTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $UserEntriesTable,
-    UserEntry,
-    $$UserEntriesTableFilterComposer,
-    $$UserEntriesTableOrderingComposer,
-    $$UserEntriesTableAnnotationComposer,
-    $$UserEntriesTableCreateCompanionBuilder,
-    $$UserEntriesTableUpdateCompanionBuilder,
-    (UserEntry, $$UserEntriesTableReferences),
-    UserEntry,
-    PrefetchHooks Function({bool userTracksRefs})> {
+class $$UserEntriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $UserEntriesTable,
+          UserEntry,
+          $$UserEntriesTableFilterComposer,
+          $$UserEntriesTableOrderingComposer,
+          $$UserEntriesTableAnnotationComposer,
+          $$UserEntriesTableCreateCompanionBuilder,
+          $$UserEntriesTableUpdateCompanionBuilder,
+          (UserEntry, $$UserEntriesTableReferences),
+          UserEntry,
+          PrefetchHooks Function({bool userTracksRefs})
+        > {
   $$UserEntriesTableTableManager(_$AppDatabase db, $UserEntriesTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -2268,63 +2708,65 @@ class $$UserEntriesTableTableManager extends RootTableManager<
               $$UserEntriesTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$UserEntriesTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> externalId = const Value.absent(),
-            Value<String> lastName = const Value.absent(),
-            Value<String> firstName = const Value.absent(),
-            Value<String?> middleName = const Value.absent(),
-            Value<String> phoneNumber = const Value.absent(),
-            Value<String> hashedPassword = const Value.absent(),
-            Value<String> role = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-            Value<DateTime?> lastSyncAt = const Value.absent(),
-          }) =>
-              UserEntriesCompanion(
-            id: id,
-            externalId: externalId,
-            lastName: lastName,
-            firstName: firstName,
-            middleName: middleName,
-            phoneNumber: phoneNumber,
-            hashedPassword: hashedPassword,
-            role: role,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            lastSyncAt: lastSyncAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String externalId,
-            required String lastName,
-            required String firstName,
-            Value<String?> middleName = const Value.absent(),
-            required String phoneNumber,
-            required String hashedPassword,
-            required String role,
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-            Value<DateTime?> lastSyncAt = const Value.absent(),
-          }) =>
-              UserEntriesCompanion.insert(
-            id: id,
-            externalId: externalId,
-            lastName: lastName,
-            firstName: firstName,
-            middleName: middleName,
-            phoneNumber: phoneNumber,
-            hashedPassword: hashedPassword,
-            role: role,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            lastSyncAt: lastSyncAt,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> externalId = const Value.absent(),
+                Value<String> lastName = const Value.absent(),
+                Value<String> firstName = const Value.absent(),
+                Value<String?> middleName = const Value.absent(),
+                Value<String> phoneNumber = const Value.absent(),
+                Value<String> hashedPassword = const Value.absent(),
+                Value<String> role = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> lastSyncAt = const Value.absent(),
+              }) => UserEntriesCompanion(
+                id: id,
+                externalId: externalId,
+                lastName: lastName,
+                firstName: firstName,
+                middleName: middleName,
+                phoneNumber: phoneNumber,
+                hashedPassword: hashedPassword,
+                role: role,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                lastSyncAt: lastSyncAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String externalId,
+                required String lastName,
+                required String firstName,
+                Value<String?> middleName = const Value.absent(),
+                required String phoneNumber,
+                required String hashedPassword,
+                required String role,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> lastSyncAt = const Value.absent(),
+              }) => UserEntriesCompanion.insert(
+                id: id,
+                externalId: externalId,
+                lastName: lastName,
+                firstName: firstName,
+                middleName: middleName,
+                phoneNumber: phoneNumber,
+                hashedPassword: hashedPassword,
+                role: role,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                lastSyncAt: lastSyncAt,
+              ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$UserEntriesTableReferences(db, table, e)
-                  ))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$UserEntriesTableReferences(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: ({userTracksRefs = false}) {
             return PrefetchHooks(
@@ -2334,69 +2776,80 @@ class $$UserEntriesTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (userTracksRefs)
-                    await $_getPrefetchedData<UserEntry, $UserEntriesTable,
-                            UserTrackData>(
-                        currentTable: table,
-                        referencedTable: $$UserEntriesTableReferences
-                            ._userTracksRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$UserEntriesTableReferences(db, table, p0)
-                                .userTracksRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.userId == item.id),
-                        typedResults: items)
+                    await $_getPrefetchedData<
+                      UserEntry,
+                      $UserEntriesTable,
+                      UserTrackData
+                    >(
+                      currentTable: table,
+                      referencedTable: $$UserEntriesTableReferences
+                          ._userTracksRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$UserEntriesTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).userTracksRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.userId == item.id),
+                      typedResults: items,
+                    ),
                 ];
               },
             );
           },
-        ));
+        ),
+      );
 }
 
-typedef $$UserEntriesTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $UserEntriesTable,
-    UserEntry,
-    $$UserEntriesTableFilterComposer,
-    $$UserEntriesTableOrderingComposer,
-    $$UserEntriesTableAnnotationComposer,
-    $$UserEntriesTableCreateCompanionBuilder,
-    $$UserEntriesTableUpdateCompanionBuilder,
-    (UserEntry, $$UserEntriesTableReferences),
-    UserEntry,
-    PrefetchHooks Function({bool userTracksRefs})>;
-typedef $$UserTracksTableCreateCompanionBuilder = UserTracksCompanion Function({
-  Value<int> id,
-  required int userId,
-  Value<int?> routeId,
-  required DateTime startTime,
-  Value<DateTime?> endTime,
-  Value<double> totalDistanceMeters,
-  Value<int> movingTimeSeconds,
-  Value<int> totalTimeSeconds,
-  Value<double> averageSpeedKmh,
-  Value<double> maxSpeedKmh,
-  required String status,
-  Value<String?> metadata,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-});
-typedef $$UserTracksTableUpdateCompanionBuilder = UserTracksCompanion Function({
-  Value<int> id,
-  Value<int> userId,
-  Value<int?> routeId,
-  Value<DateTime> startTime,
-  Value<DateTime?> endTime,
-  Value<double> totalDistanceMeters,
-  Value<int> movingTimeSeconds,
-  Value<int> totalTimeSeconds,
-  Value<double> averageSpeedKmh,
-  Value<double> maxSpeedKmh,
-  Value<String> status,
-  Value<String?> metadata,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-});
+typedef $$UserEntriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UserEntriesTable,
+      UserEntry,
+      $$UserEntriesTableFilterComposer,
+      $$UserEntriesTableOrderingComposer,
+      $$UserEntriesTableAnnotationComposer,
+      $$UserEntriesTableCreateCompanionBuilder,
+      $$UserEntriesTableUpdateCompanionBuilder,
+      (UserEntry, $$UserEntriesTableReferences),
+      UserEntry,
+      PrefetchHooks Function({bool userTracksRefs})
+    >;
+typedef $$UserTracksTableCreateCompanionBuilder =
+    UserTracksCompanion Function({
+      Value<int> id,
+      required int userId,
+      Value<int?> routeId,
+      required DateTime startTime,
+      Value<DateTime?> endTime,
+      Value<double> totalDistanceMeters,
+      Value<int> movingTimeSeconds,
+      Value<int> totalTimeSeconds,
+      Value<double> averageSpeedKmh,
+      Value<double> maxSpeedKmh,
+      required String status,
+      Value<String?> metadata,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+    });
+typedef $$UserTracksTableUpdateCompanionBuilder =
+    UserTracksCompanion Function({
+      Value<int> id,
+      Value<int> userId,
+      Value<int?> routeId,
+      Value<DateTime> startTime,
+      Value<DateTime?> endTime,
+      Value<double> totalDistanceMeters,
+      Value<int> movingTimeSeconds,
+      Value<int> totalTimeSeconds,
+      Value<double> averageSpeedKmh,
+      Value<double> maxSpeedKmh,
+      Value<String> status,
+      Value<String?> metadata,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+    });
 
 final class $$UserTracksTableReferences
     extends BaseReferences<_$AppDatabase, $UserTracksTable, UserTrackData> {
@@ -2404,32 +2857,39 @@ final class $$UserTracksTableReferences
 
   static $UserEntriesTable _userIdTable(_$AppDatabase db) =>
       db.userEntries.createAlias(
-          $_aliasNameGenerator(db.userTracks.userId, db.userEntries.id));
+        $_aliasNameGenerator(db.userTracks.userId, db.userEntries.id),
+      );
 
   $$UserEntriesTableProcessedTableManager get userId {
     final $_column = $_itemColumn<int>('user_id')!;
 
-    final manager = $$UserEntriesTableTableManager($_db, $_db.userEntries)
-        .filter((f) => f.id.sqlEquals($_column));
+    final manager = $$UserEntriesTableTableManager(
+      $_db,
+      $_db.userEntries,
+    ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_userIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
   }
 
   static MultiTypedResultKey<$TrackPointsTable, List<TrackPointData>>
-      _trackPointsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-          db.trackPoints,
-          aliasName:
-              $_aliasNameGenerator(db.userTracks.id, db.trackPoints.trackId));
+  _trackPointsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.trackPoints,
+    aliasName: $_aliasNameGenerator(db.userTracks.id, db.trackPoints.trackId),
+  );
 
   $$TrackPointsTableProcessedTableManager get trackPointsRefs {
-    final manager = $$TrackPointsTableTableManager($_db, $_db.trackPoints)
-        .filter((f) => f.trackId.id.sqlEquals($_itemColumn<int>('id')!));
+    final manager = $$TrackPointsTableTableManager(
+      $_db,
+      $_db.trackPoints,
+    ).filter((f) => f.trackId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_trackPointsRefsTable($_db));
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
+      manager.$state.copyWith(prefetchedData: cache),
+    );
   }
 }
 
@@ -2443,86 +2903,115 @@ class $$UserTracksTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get routeId => $composableBuilder(
-      column: $table.routeId, builder: (column) => ColumnFilters(column));
+    column: $table.routeId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get startTime => $composableBuilder(
-      column: $table.startTime, builder: (column) => ColumnFilters(column));
+    column: $table.startTime,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get endTime => $composableBuilder(
-      column: $table.endTime, builder: (column) => ColumnFilters(column));
+    column: $table.endTime,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get totalDistanceMeters => $composableBuilder(
-      column: $table.totalDistanceMeters,
-      builder: (column) => ColumnFilters(column));
+    column: $table.totalDistanceMeters,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get movingTimeSeconds => $composableBuilder(
-      column: $table.movingTimeSeconds,
-      builder: (column) => ColumnFilters(column));
+    column: $table.movingTimeSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get totalTimeSeconds => $composableBuilder(
-      column: $table.totalTimeSeconds,
-      builder: (column) => ColumnFilters(column));
+    column: $table.totalTimeSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get averageSpeedKmh => $composableBuilder(
-      column: $table.averageSpeedKmh,
-      builder: (column) => ColumnFilters(column));
+    column: $table.averageSpeedKmh,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get maxSpeedKmh => $composableBuilder(
-      column: $table.maxSpeedKmh, builder: (column) => ColumnFilters(column));
+    column: $table.maxSpeedKmh,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get status => $composableBuilder(
-      column: $table.status, builder: (column) => ColumnFilters(column));
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get metadata => $composableBuilder(
-      column: $table.metadata, builder: (column) => ColumnFilters(column));
+    column: $table.metadata,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   $$UserEntriesTableFilterComposer get userId {
     final $$UserEntriesTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.userId,
-        referencedTable: $db.userEntries,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$UserEntriesTableFilterComposer(
-              $db: $db,
-              $table: $db.userEntries,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.userId,
+      referencedTable: $db.userEntries,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserEntriesTableFilterComposer(
+            $db: $db,
+            $table: $db.userEntries,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 
   Expression<bool> trackPointsRefs(
-      Expression<bool> Function($$TrackPointsTableFilterComposer f) f) {
+    Expression<bool> Function($$TrackPointsTableFilterComposer f) f,
+  ) {
     final $$TrackPointsTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.trackPoints,
-        getReferencedColumn: (t) => t.trackId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$TrackPointsTableFilterComposer(
-              $db: $db,
-              $table: $db.trackPoints,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.trackPoints,
+      getReferencedColumn: (t) => t.trackId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TrackPointsTableFilterComposer(
+            $db: $db,
+            $table: $db.trackPoints,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return f(composer);
   }
 }
@@ -2537,65 +3026,90 @@ class $$UserTracksTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get routeId => $composableBuilder(
-      column: $table.routeId, builder: (column) => ColumnOrderings(column));
+    column: $table.routeId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get startTime => $composableBuilder(
-      column: $table.startTime, builder: (column) => ColumnOrderings(column));
+    column: $table.startTime,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get endTime => $composableBuilder(
-      column: $table.endTime, builder: (column) => ColumnOrderings(column));
+    column: $table.endTime,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get totalDistanceMeters => $composableBuilder(
-      column: $table.totalDistanceMeters,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.totalDistanceMeters,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get movingTimeSeconds => $composableBuilder(
-      column: $table.movingTimeSeconds,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.movingTimeSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get totalTimeSeconds => $composableBuilder(
-      column: $table.totalTimeSeconds,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.totalTimeSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get averageSpeedKmh => $composableBuilder(
-      column: $table.averageSpeedKmh,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.averageSpeedKmh,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get maxSpeedKmh => $composableBuilder(
-      column: $table.maxSpeedKmh, builder: (column) => ColumnOrderings(column));
+    column: $table.maxSpeedKmh,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get status => $composableBuilder(
-      column: $table.status, builder: (column) => ColumnOrderings(column));
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get metadata => $composableBuilder(
-      column: $table.metadata, builder: (column) => ColumnOrderings(column));
+    column: $table.metadata,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   $$UserEntriesTableOrderingComposer get userId {
     final $$UserEntriesTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.userId,
-        referencedTable: $db.userEntries,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$UserEntriesTableOrderingComposer(
-              $db: $db,
-              $table: $db.userEntries,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.userId,
+      referencedTable: $db.userEntries,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserEntriesTableOrderingComposer(
+            $db: $db,
+            $table: $db.userEntries,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 }
@@ -2622,19 +3136,29 @@ class $$UserTracksTableAnnotationComposer
       $composableBuilder(column: $table.endTime, builder: (column) => column);
 
   GeneratedColumn<double> get totalDistanceMeters => $composableBuilder(
-      column: $table.totalDistanceMeters, builder: (column) => column);
+    column: $table.totalDistanceMeters,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get movingTimeSeconds => $composableBuilder(
-      column: $table.movingTimeSeconds, builder: (column) => column);
+    column: $table.movingTimeSeconds,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get totalTimeSeconds => $composableBuilder(
-      column: $table.totalTimeSeconds, builder: (column) => column);
+    column: $table.totalTimeSeconds,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<double> get averageSpeedKmh => $composableBuilder(
-      column: $table.averageSpeedKmh, builder: (column) => column);
+    column: $table.averageSpeedKmh,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<double> get maxSpeedKmh => $composableBuilder(
-      column: $table.maxSpeedKmh, builder: (column) => column);
+    column: $table.maxSpeedKmh,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get status =>
       $composableBuilder(column: $table.status, builder: (column) => column);
@@ -2650,60 +3174,71 @@ class $$UserTracksTableAnnotationComposer
 
   $$UserEntriesTableAnnotationComposer get userId {
     final $$UserEntriesTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.userId,
-        referencedTable: $db.userEntries,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$UserEntriesTableAnnotationComposer(
-              $db: $db,
-              $table: $db.userEntries,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.userId,
+      referencedTable: $db.userEntries,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserEntriesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.userEntries,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 
   Expression<T> trackPointsRefs<T extends Object>(
-      Expression<T> Function($$TrackPointsTableAnnotationComposer a) f) {
+    Expression<T> Function($$TrackPointsTableAnnotationComposer a) f,
+  ) {
     final $$TrackPointsTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.trackPoints,
-        getReferencedColumn: (t) => t.trackId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$TrackPointsTableAnnotationComposer(
-              $db: $db,
-              $table: $db.trackPoints,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.trackPoints,
+      getReferencedColumn: (t) => t.trackId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TrackPointsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.trackPoints,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return f(composer);
   }
 }
 
-class $$UserTracksTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $UserTracksTable,
-    UserTrackData,
-    $$UserTracksTableFilterComposer,
-    $$UserTracksTableOrderingComposer,
-    $$UserTracksTableAnnotationComposer,
-    $$UserTracksTableCreateCompanionBuilder,
-    $$UserTracksTableUpdateCompanionBuilder,
-    (UserTrackData, $$UserTracksTableReferences),
-    UserTrackData,
-    PrefetchHooks Function({bool userId, bool trackPointsRefs})> {
+class $$UserTracksTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $UserTracksTable,
+          UserTrackData,
+          $$UserTracksTableFilterComposer,
+          $$UserTracksTableOrderingComposer,
+          $$UserTracksTableAnnotationComposer,
+          $$UserTracksTableCreateCompanionBuilder,
+          $$UserTracksTableUpdateCompanionBuilder,
+          (UserTrackData, $$UserTracksTableReferences),
+          UserTrackData,
+          PrefetchHooks Function({bool userId, bool trackPointsRefs})
+        > {
   $$UserTracksTableTableManager(_$AppDatabase db, $UserTracksTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -2712,82 +3247,85 @@ class $$UserTracksTableTableManager extends RootTableManager<
               $$UserTracksTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$UserTracksTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<int> userId = const Value.absent(),
-            Value<int?> routeId = const Value.absent(),
-            Value<DateTime> startTime = const Value.absent(),
-            Value<DateTime?> endTime = const Value.absent(),
-            Value<double> totalDistanceMeters = const Value.absent(),
-            Value<int> movingTimeSeconds = const Value.absent(),
-            Value<int> totalTimeSeconds = const Value.absent(),
-            Value<double> averageSpeedKmh = const Value.absent(),
-            Value<double> maxSpeedKmh = const Value.absent(),
-            Value<String> status = const Value.absent(),
-            Value<String?> metadata = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-          }) =>
-              UserTracksCompanion(
-            id: id,
-            userId: userId,
-            routeId: routeId,
-            startTime: startTime,
-            endTime: endTime,
-            totalDistanceMeters: totalDistanceMeters,
-            movingTimeSeconds: movingTimeSeconds,
-            totalTimeSeconds: totalTimeSeconds,
-            averageSpeedKmh: averageSpeedKmh,
-            maxSpeedKmh: maxSpeedKmh,
-            status: status,
-            metadata: metadata,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required int userId,
-            Value<int?> routeId = const Value.absent(),
-            required DateTime startTime,
-            Value<DateTime?> endTime = const Value.absent(),
-            Value<double> totalDistanceMeters = const Value.absent(),
-            Value<int> movingTimeSeconds = const Value.absent(),
-            Value<int> totalTimeSeconds = const Value.absent(),
-            Value<double> averageSpeedKmh = const Value.absent(),
-            Value<double> maxSpeedKmh = const Value.absent(),
-            required String status,
-            Value<String?> metadata = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
-          }) =>
-              UserTracksCompanion.insert(
-            id: id,
-            userId: userId,
-            routeId: routeId,
-            startTime: startTime,
-            endTime: endTime,
-            totalDistanceMeters: totalDistanceMeters,
-            movingTimeSeconds: movingTimeSeconds,
-            totalTimeSeconds: totalTimeSeconds,
-            averageSpeedKmh: averageSpeedKmh,
-            maxSpeedKmh: maxSpeedKmh,
-            status: status,
-            metadata: metadata,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> userId = const Value.absent(),
+                Value<int?> routeId = const Value.absent(),
+                Value<DateTime> startTime = const Value.absent(),
+                Value<DateTime?> endTime = const Value.absent(),
+                Value<double> totalDistanceMeters = const Value.absent(),
+                Value<int> movingTimeSeconds = const Value.absent(),
+                Value<int> totalTimeSeconds = const Value.absent(),
+                Value<double> averageSpeedKmh = const Value.absent(),
+                Value<double> maxSpeedKmh = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> metadata = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => UserTracksCompanion(
+                id: id,
+                userId: userId,
+                routeId: routeId,
+                startTime: startTime,
+                endTime: endTime,
+                totalDistanceMeters: totalDistanceMeters,
+                movingTimeSeconds: movingTimeSeconds,
+                totalTimeSeconds: totalTimeSeconds,
+                averageSpeedKmh: averageSpeedKmh,
+                maxSpeedKmh: maxSpeedKmh,
+                status: status,
+                metadata: metadata,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int userId,
+                Value<int?> routeId = const Value.absent(),
+                required DateTime startTime,
+                Value<DateTime?> endTime = const Value.absent(),
+                Value<double> totalDistanceMeters = const Value.absent(),
+                Value<int> movingTimeSeconds = const Value.absent(),
+                Value<int> totalTimeSeconds = const Value.absent(),
+                Value<double> averageSpeedKmh = const Value.absent(),
+                Value<double> maxSpeedKmh = const Value.absent(),
+                required String status,
+                Value<String?> metadata = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => UserTracksCompanion.insert(
+                id: id,
+                userId: userId,
+                routeId: routeId,
+                startTime: startTime,
+                endTime: endTime,
+                totalDistanceMeters: totalDistanceMeters,
+                movingTimeSeconds: movingTimeSeconds,
+                totalTimeSeconds: totalTimeSeconds,
+                averageSpeedKmh: averageSpeedKmh,
+                maxSpeedKmh: maxSpeedKmh,
+                status: status,
+                metadata: metadata,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$UserTracksTableReferences(db, table, e)
-                  ))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$UserTracksTableReferences(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: ({userId = false, trackPointsRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [if (trackPointsRefs) db.trackPoints],
-              addJoins: <
-                  T extends TableManagerState<
+              addJoins:
+                  <
+                    T extends TableManagerState<
                       dynamic,
                       dynamic,
                       dynamic,
@@ -2798,87 +3336,102 @@ class $$UserTracksTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
-                      dynamic>>(state) {
-                if (userId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.userId,
-                    referencedTable:
-                        $$UserTracksTableReferences._userIdTable(db),
-                    referencedColumn:
-                        $$UserTracksTableReferences._userIdTable(db).id,
-                  ) as T;
-                }
+                      dynamic
+                    >
+                  >(state) {
+                    if (userId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.userId,
+                                referencedTable: $$UserTracksTableReferences
+                                    ._userIdTable(db),
+                                referencedColumn: $$UserTracksTableReferences
+                                    ._userIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (trackPointsRefs)
-                    await $_getPrefetchedData<UserTrackData, $UserTracksTable, TrackPointData>(
-                        currentTable: table,
-                        referencedTable: $$UserTracksTableReferences
-                            ._trackPointsRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$UserTracksTableReferences(db, table, p0)
-                                .trackPointsRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.trackId == item.id),
-                        typedResults: items)
+                    await $_getPrefetchedData<
+                      UserTrackData,
+                      $UserTracksTable,
+                      TrackPointData
+                    >(
+                      currentTable: table,
+                      referencedTable: $$UserTracksTableReferences
+                          ._trackPointsRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$UserTracksTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).trackPointsRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.trackId == item.id),
+                      typedResults: items,
+                    ),
                 ];
               },
             );
           },
-        ));
+        ),
+      );
 }
 
-typedef $$UserTracksTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $UserTracksTable,
-    UserTrackData,
-    $$UserTracksTableFilterComposer,
-    $$UserTracksTableOrderingComposer,
-    $$UserTracksTableAnnotationComposer,
-    $$UserTracksTableCreateCompanionBuilder,
-    $$UserTracksTableUpdateCompanionBuilder,
-    (UserTrackData, $$UserTracksTableReferences),
-    UserTrackData,
-    PrefetchHooks Function({bool userId, bool trackPointsRefs})>;
-typedef $$TrackPointsTableCreateCompanionBuilder = TrackPointsCompanion
-    Function({
-  Value<int> id,
-  required int trackId,
-  required double latitude,
-  required double longitude,
-  required DateTime timestamp,
-  Value<double?> accuracy,
-  Value<double?> altitude,
-  Value<double?> altitudeAccuracy,
-  Value<double?> speedKmh,
-  Value<double?> bearing,
-  Value<double?> distanceFromPrevious,
-  Value<int?> timeFromPrevious,
-  Value<String?> metadata,
-  Value<DateTime> createdAt,
-});
-typedef $$TrackPointsTableUpdateCompanionBuilder = TrackPointsCompanion
-    Function({
-  Value<int> id,
-  Value<int> trackId,
-  Value<double> latitude,
-  Value<double> longitude,
-  Value<DateTime> timestamp,
-  Value<double?> accuracy,
-  Value<double?> altitude,
-  Value<double?> altitudeAccuracy,
-  Value<double?> speedKmh,
-  Value<double?> bearing,
-  Value<double?> distanceFromPrevious,
-  Value<int?> timeFromPrevious,
-  Value<String?> metadata,
-  Value<DateTime> createdAt,
-});
+typedef $$UserTracksTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UserTracksTable,
+      UserTrackData,
+      $$UserTracksTableFilterComposer,
+      $$UserTracksTableOrderingComposer,
+      $$UserTracksTableAnnotationComposer,
+      $$UserTracksTableCreateCompanionBuilder,
+      $$UserTracksTableUpdateCompanionBuilder,
+      (UserTrackData, $$UserTracksTableReferences),
+      UserTrackData,
+      PrefetchHooks Function({bool userId, bool trackPointsRefs})
+    >;
+typedef $$TrackPointsTableCreateCompanionBuilder =
+    TrackPointsCompanion Function({
+      Value<int> id,
+      required int trackId,
+      required double latitude,
+      required double longitude,
+      required DateTime timestamp,
+      Value<double?> accuracy,
+      Value<double?> altitude,
+      Value<double?> altitudeAccuracy,
+      Value<double?> speedKmh,
+      Value<double?> bearing,
+      Value<double?> distanceFromPrevious,
+      Value<int?> timeFromPrevious,
+      Value<String?> metadata,
+      Value<DateTime> createdAt,
+    });
+typedef $$TrackPointsTableUpdateCompanionBuilder =
+    TrackPointsCompanion Function({
+      Value<int> id,
+      Value<int> trackId,
+      Value<double> latitude,
+      Value<double> longitude,
+      Value<DateTime> timestamp,
+      Value<double?> accuracy,
+      Value<double?> altitude,
+      Value<double?> altitudeAccuracy,
+      Value<double?> speedKmh,
+      Value<double?> bearing,
+      Value<double?> distanceFromPrevious,
+      Value<int?> timeFromPrevious,
+      Value<String?> metadata,
+      Value<DateTime> createdAt,
+    });
 
 final class $$TrackPointsTableReferences
     extends BaseReferences<_$AppDatabase, $TrackPointsTable, TrackPointData> {
@@ -2886,17 +3439,21 @@ final class $$TrackPointsTableReferences
 
   static $UserTracksTable _trackIdTable(_$AppDatabase db) =>
       db.userTracks.createAlias(
-          $_aliasNameGenerator(db.trackPoints.trackId, db.userTracks.id));
+        $_aliasNameGenerator(db.trackPoints.trackId, db.userTracks.id),
+      );
 
   $$UserTracksTableProcessedTableManager get trackId {
     final $_column = $_itemColumn<int>('track_id')!;
 
-    final manager = $$UserTracksTableTableManager($_db, $_db.userTracks)
-        .filter((f) => f.id.sqlEquals($_column));
+    final manager = $$UserTracksTableTableManager(
+      $_db,
+      $_db.userTracks,
+    ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_trackIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
   }
 }
 
@@ -2910,64 +3467,90 @@ class $$TrackPointsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get latitude => $composableBuilder(
-      column: $table.latitude, builder: (column) => ColumnFilters(column));
+    column: $table.latitude,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get longitude => $composableBuilder(
-      column: $table.longitude, builder: (column) => ColumnFilters(column));
+    column: $table.longitude,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get timestamp => $composableBuilder(
-      column: $table.timestamp, builder: (column) => ColumnFilters(column));
+    column: $table.timestamp,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get accuracy => $composableBuilder(
-      column: $table.accuracy, builder: (column) => ColumnFilters(column));
+    column: $table.accuracy,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get altitude => $composableBuilder(
-      column: $table.altitude, builder: (column) => ColumnFilters(column));
+    column: $table.altitude,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get altitudeAccuracy => $composableBuilder(
-      column: $table.altitudeAccuracy,
-      builder: (column) => ColumnFilters(column));
+    column: $table.altitudeAccuracy,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get speedKmh => $composableBuilder(
-      column: $table.speedKmh, builder: (column) => ColumnFilters(column));
+    column: $table.speedKmh,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get bearing => $composableBuilder(
-      column: $table.bearing, builder: (column) => ColumnFilters(column));
+    column: $table.bearing,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get distanceFromPrevious => $composableBuilder(
-      column: $table.distanceFromPrevious,
-      builder: (column) => ColumnFilters(column));
+    column: $table.distanceFromPrevious,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get timeFromPrevious => $composableBuilder(
-      column: $table.timeFromPrevious,
-      builder: (column) => ColumnFilters(column));
+    column: $table.timeFromPrevious,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get metadata => $composableBuilder(
-      column: $table.metadata, builder: (column) => ColumnFilters(column));
+    column: $table.metadata,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
 
   $$UserTracksTableFilterComposer get trackId {
     final $$UserTracksTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.trackId,
-        referencedTable: $db.userTracks,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$UserTracksTableFilterComposer(
-              $db: $db,
-              $table: $db.userTracks,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.trackId,
+      referencedTable: $db.userTracks,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTracksTableFilterComposer(
+            $db: $db,
+            $table: $db.userTracks,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 }
@@ -2982,64 +3565,90 @@ class $$TrackPointsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get latitude => $composableBuilder(
-      column: $table.latitude, builder: (column) => ColumnOrderings(column));
+    column: $table.latitude,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get longitude => $composableBuilder(
-      column: $table.longitude, builder: (column) => ColumnOrderings(column));
+    column: $table.longitude,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get timestamp => $composableBuilder(
-      column: $table.timestamp, builder: (column) => ColumnOrderings(column));
+    column: $table.timestamp,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get accuracy => $composableBuilder(
-      column: $table.accuracy, builder: (column) => ColumnOrderings(column));
+    column: $table.accuracy,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get altitude => $composableBuilder(
-      column: $table.altitude, builder: (column) => ColumnOrderings(column));
+    column: $table.altitude,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get altitudeAccuracy => $composableBuilder(
-      column: $table.altitudeAccuracy,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.altitudeAccuracy,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get speedKmh => $composableBuilder(
-      column: $table.speedKmh, builder: (column) => ColumnOrderings(column));
+    column: $table.speedKmh,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get bearing => $composableBuilder(
-      column: $table.bearing, builder: (column) => ColumnOrderings(column));
+    column: $table.bearing,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get distanceFromPrevious => $composableBuilder(
-      column: $table.distanceFromPrevious,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.distanceFromPrevious,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get timeFromPrevious => $composableBuilder(
-      column: $table.timeFromPrevious,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.timeFromPrevious,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get metadata => $composableBuilder(
-      column: $table.metadata, builder: (column) => ColumnOrderings(column));
+    column: $table.metadata,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   $$UserTracksTableOrderingComposer get trackId {
     final $$UserTracksTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.trackId,
-        referencedTable: $db.userTracks,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$UserTracksTableOrderingComposer(
-              $db: $db,
-              $table: $db.userTracks,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.trackId,
+      referencedTable: $db.userTracks,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTracksTableOrderingComposer(
+            $db: $db,
+            $table: $db.userTracks,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 }
@@ -3072,7 +3681,9 @@ class $$TrackPointsTableAnnotationComposer
       $composableBuilder(column: $table.altitude, builder: (column) => column);
 
   GeneratedColumn<double> get altitudeAccuracy => $composableBuilder(
-      column: $table.altitudeAccuracy, builder: (column) => column);
+    column: $table.altitudeAccuracy,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<double> get speedKmh =>
       $composableBuilder(column: $table.speedKmh, builder: (column) => column);
@@ -3081,10 +3692,14 @@ class $$TrackPointsTableAnnotationComposer
       $composableBuilder(column: $table.bearing, builder: (column) => column);
 
   GeneratedColumn<double> get distanceFromPrevious => $composableBuilder(
-      column: $table.distanceFromPrevious, builder: (column) => column);
+    column: $table.distanceFromPrevious,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get timeFromPrevious => $composableBuilder(
-      column: $table.timeFromPrevious, builder: (column) => column);
+    column: $table.timeFromPrevious,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get metadata =>
       $composableBuilder(column: $table.metadata, builder: (column) => column);
@@ -3094,39 +3709,46 @@ class $$TrackPointsTableAnnotationComposer
 
   $$UserTracksTableAnnotationComposer get trackId {
     final $$UserTracksTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.trackId,
-        referencedTable: $db.userTracks,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$UserTracksTableAnnotationComposer(
-              $db: $db,
-              $table: $db.userTracks,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.trackId,
+      referencedTable: $db.userTracks,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTracksTableAnnotationComposer(
+            $db: $db,
+            $table: $db.userTracks,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 }
 
-class $$TrackPointsTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $TrackPointsTable,
-    TrackPointData,
-    $$TrackPointsTableFilterComposer,
-    $$TrackPointsTableOrderingComposer,
-    $$TrackPointsTableAnnotationComposer,
-    $$TrackPointsTableCreateCompanionBuilder,
-    $$TrackPointsTableUpdateCompanionBuilder,
-    (TrackPointData, $$TrackPointsTableReferences),
-    TrackPointData,
-    PrefetchHooks Function({bool trackId})> {
+class $$TrackPointsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TrackPointsTable,
+          TrackPointData,
+          $$TrackPointsTableFilterComposer,
+          $$TrackPointsTableOrderingComposer,
+          $$TrackPointsTableAnnotationComposer,
+          $$TrackPointsTableCreateCompanionBuilder,
+          $$TrackPointsTableUpdateCompanionBuilder,
+          (TrackPointData, $$TrackPointsTableReferences),
+          TrackPointData,
+          PrefetchHooks Function({bool trackId})
+        > {
   $$TrackPointsTableTableManager(_$AppDatabase db, $TrackPointsTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -3135,82 +3757,85 @@ class $$TrackPointsTableTableManager extends RootTableManager<
               $$TrackPointsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$TrackPointsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<int> trackId = const Value.absent(),
-            Value<double> latitude = const Value.absent(),
-            Value<double> longitude = const Value.absent(),
-            Value<DateTime> timestamp = const Value.absent(),
-            Value<double?> accuracy = const Value.absent(),
-            Value<double?> altitude = const Value.absent(),
-            Value<double?> altitudeAccuracy = const Value.absent(),
-            Value<double?> speedKmh = const Value.absent(),
-            Value<double?> bearing = const Value.absent(),
-            Value<double?> distanceFromPrevious = const Value.absent(),
-            Value<int?> timeFromPrevious = const Value.absent(),
-            Value<String?> metadata = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-          }) =>
-              TrackPointsCompanion(
-            id: id,
-            trackId: trackId,
-            latitude: latitude,
-            longitude: longitude,
-            timestamp: timestamp,
-            accuracy: accuracy,
-            altitude: altitude,
-            altitudeAccuracy: altitudeAccuracy,
-            speedKmh: speedKmh,
-            bearing: bearing,
-            distanceFromPrevious: distanceFromPrevious,
-            timeFromPrevious: timeFromPrevious,
-            metadata: metadata,
-            createdAt: createdAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required int trackId,
-            required double latitude,
-            required double longitude,
-            required DateTime timestamp,
-            Value<double?> accuracy = const Value.absent(),
-            Value<double?> altitude = const Value.absent(),
-            Value<double?> altitudeAccuracy = const Value.absent(),
-            Value<double?> speedKmh = const Value.absent(),
-            Value<double?> bearing = const Value.absent(),
-            Value<double?> distanceFromPrevious = const Value.absent(),
-            Value<int?> timeFromPrevious = const Value.absent(),
-            Value<String?> metadata = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-          }) =>
-              TrackPointsCompanion.insert(
-            id: id,
-            trackId: trackId,
-            latitude: latitude,
-            longitude: longitude,
-            timestamp: timestamp,
-            accuracy: accuracy,
-            altitude: altitude,
-            altitudeAccuracy: altitudeAccuracy,
-            speedKmh: speedKmh,
-            bearing: bearing,
-            distanceFromPrevious: distanceFromPrevious,
-            timeFromPrevious: timeFromPrevious,
-            metadata: metadata,
-            createdAt: createdAt,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> trackId = const Value.absent(),
+                Value<double> latitude = const Value.absent(),
+                Value<double> longitude = const Value.absent(),
+                Value<DateTime> timestamp = const Value.absent(),
+                Value<double?> accuracy = const Value.absent(),
+                Value<double?> altitude = const Value.absent(),
+                Value<double?> altitudeAccuracy = const Value.absent(),
+                Value<double?> speedKmh = const Value.absent(),
+                Value<double?> bearing = const Value.absent(),
+                Value<double?> distanceFromPrevious = const Value.absent(),
+                Value<int?> timeFromPrevious = const Value.absent(),
+                Value<String?> metadata = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => TrackPointsCompanion(
+                id: id,
+                trackId: trackId,
+                latitude: latitude,
+                longitude: longitude,
+                timestamp: timestamp,
+                accuracy: accuracy,
+                altitude: altitude,
+                altitudeAccuracy: altitudeAccuracy,
+                speedKmh: speedKmh,
+                bearing: bearing,
+                distanceFromPrevious: distanceFromPrevious,
+                timeFromPrevious: timeFromPrevious,
+                metadata: metadata,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int trackId,
+                required double latitude,
+                required double longitude,
+                required DateTime timestamp,
+                Value<double?> accuracy = const Value.absent(),
+                Value<double?> altitude = const Value.absent(),
+                Value<double?> altitudeAccuracy = const Value.absent(),
+                Value<double?> speedKmh = const Value.absent(),
+                Value<double?> bearing = const Value.absent(),
+                Value<double?> distanceFromPrevious = const Value.absent(),
+                Value<int?> timeFromPrevious = const Value.absent(),
+                Value<String?> metadata = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => TrackPointsCompanion.insert(
+                id: id,
+                trackId: trackId,
+                latitude: latitude,
+                longitude: longitude,
+                timestamp: timestamp,
+                accuracy: accuracy,
+                altitude: altitude,
+                altitudeAccuracy: altitudeAccuracy,
+                speedKmh: speedKmh,
+                bearing: bearing,
+                distanceFromPrevious: distanceFromPrevious,
+                timeFromPrevious: timeFromPrevious,
+                metadata: metadata,
+                createdAt: createdAt,
+              ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$TrackPointsTableReferences(db, table, e)
-                  ))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$TrackPointsTableReferences(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: ({trackId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                  T extends TableManagerState<
+              addJoins:
+                  <
+                    T extends TableManagerState<
                       dynamic,
                       dynamic,
                       dynamic,
@@ -3221,40 +3846,48 @@ class $$TrackPointsTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
-                      dynamic>>(state) {
-                if (trackId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.trackId,
-                    referencedTable:
-                        $$TrackPointsTableReferences._trackIdTable(db),
-                    referencedColumn:
-                        $$TrackPointsTableReferences._trackIdTable(db).id,
-                  ) as T;
-                }
+                      dynamic
+                    >
+                  >(state) {
+                    if (trackId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.trackId,
+                                referencedTable: $$TrackPointsTableReferences
+                                    ._trackIdTable(db),
+                                referencedColumn: $$TrackPointsTableReferences
+                                    ._trackIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
             );
           },
-        ));
+        ),
+      );
 }
 
-typedef $$TrackPointsTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $TrackPointsTable,
-    TrackPointData,
-    $$TrackPointsTableFilterComposer,
-    $$TrackPointsTableOrderingComposer,
-    $$TrackPointsTableAnnotationComposer,
-    $$TrackPointsTableCreateCompanionBuilder,
-    $$TrackPointsTableUpdateCompanionBuilder,
-    (TrackPointData, $$TrackPointsTableReferences),
-    TrackPointData,
-    PrefetchHooks Function({bool trackId})>;
+typedef $$TrackPointsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TrackPointsTable,
+      TrackPointData,
+      $$TrackPointsTableFilterComposer,
+      $$TrackPointsTableOrderingComposer,
+      $$TrackPointsTableAnnotationComposer,
+      $$TrackPointsTableCreateCompanionBuilder,
+      $$TrackPointsTableUpdateCompanionBuilder,
+      (TrackPointData, $$TrackPointsTableReferences),
+      TrackPointData,
+      PrefetchHooks Function({bool trackId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;

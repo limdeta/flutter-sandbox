@@ -1,4 +1,6 @@
 import 'track_point.dart';
+import '../../../authentication/domain/entities/user.dart';
+import '../../../route/domain/entities/route.dart';
 
 /// Трек (путь) пользователя за определенный период времени
 /// 
@@ -11,8 +13,8 @@ import 'track_point.dart';
 /// - Оптимизации маршрутов
 class UserTrack {
   final int id;
-  final int userId;
-  final int? routeId;
+  final User user;
+  final Route? route;
   
   final DateTime startTime;
   final DateTime? endTime;
@@ -38,8 +40,8 @@ class UserTrack {
 
   const UserTrack({
     required this.id,
-    required this.userId,
-    this.routeId,
+    required this.user,
+    this.route,
     required this.startTime,
     this.endTime,
     required this.points,
@@ -54,16 +56,16 @@ class UserTrack {
 
   /// Создает новый трек
   factory UserTrack.create({
-    required int userId,
-    int? routeId,
+    required User user,
+    Route? route,
     DateTime? startTime,
     Map<String, dynamic>? metadata,
   }) {
     final now = startTime ?? DateTime.now();
     return UserTrack(
       id: 0, // Будет установлен при сохранении в БД
-      userId: userId,
-      routeId: routeId,
+      user: user,
+      route: route,
       startTime: now,
       endTime: null,
       points: [],
@@ -85,6 +87,10 @@ class UserTrack {
   double get totalDistanceKm => totalDistanceMeters / 1000.0;
   double get movingTimeMinutes => movingTimeSeconds / 60.0;
   double get totalTimeMinutes => totalTimeSeconds / 60.0;
+
+  // Геттеры для совместимости с существующим кодом
+  int get userId => user.internalId ?? 0;
+  int? get routeId => route?.id;
 
   UserTrack addPoint(TrackPoint point) {
     final newPoints = List<TrackPoint>.from(points)..add(point);
@@ -161,8 +167,8 @@ class UserTrack {
   /// Создает копию трека с измененными полями
   UserTrack copyWith({
     int? id,
-    int? userId,
-    int? routeId,
+    User? user,
+    Route? route,
     DateTime? startTime,
     DateTime? endTime,
     List<TrackPoint>? points,
@@ -176,8 +182,8 @@ class UserTrack {
   }) {
     return UserTrack(
       id: id ?? this.id,
-      userId: userId ?? this.userId,
-      routeId: routeId ?? this.routeId,
+      user: user ?? this.user,
+      route: route ?? this.route,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       points: points ?? this.points,
@@ -193,7 +199,7 @@ class UserTrack {
 
   @override
   String toString() {
-    return 'UserTrack(id: $id, userId: $userId, routeId: $routeId, '
+    return 'UserTrack(id: $id, user: ${user.externalId}, route: ${route?.name}, '
         'startTime: $startTime, distance: ${totalDistanceKm.toStringAsFixed(2)}km, '
         'status: $status, points: ${points.length})';
   }

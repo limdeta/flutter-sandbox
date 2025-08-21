@@ -1,15 +1,29 @@
 import '../../domain/entities/user_track.dart';
 import '../../domain/entities/track_point.dart';
+import '../../../route/domain/repositories/iroute_repository.dart';
+import '../../../authentication/domain/entities/user.dart';
+import '../../../route/domain/entities/route.dart';
 
 class UserTrackFixtures {
-  static const int alexeyUserId = 3; // ID пользователя Алексей из auth фикстур
+  final IRouteRepository _routeRepository;
+  
+  UserTrackFixtures(this._routeRepository);
   
   /// Создает GPS трек для вчерашнего маршрута (завершенный)
-  static UserTrack createYesterdayCompletedTrack([int? userId]) {
-    final actualUserId = userId ?? alexeyUserId;
+  Future<UserTrack> createYesterdayCompletedTrack(User user, [Route? route]) async {
     final yesterday = DateTime.now().subtract(const Duration(days: 1));
     final startTime = DateTime(yesterday.year, yesterday.month, yesterday.day, 9, 0);
     final endTime = DateTime(yesterday.year, yesterday.month, yesterday.day, 17, 30);
+    
+    // Используем переданный маршрут или загружаем Route объект (ID 54 из route fixtures)
+    Route? actualRoute = route;
+    if (actualRoute == null) {
+      final routeResult = await _routeRepository.getRouteByInternalId(54);
+      actualRoute = routeResult.fold(
+        (failure) => null, // Маршрут может не существовать
+        (route) => route,
+      );
+    }
     
     // Имитация движения по маршруту Владивостока
     final points = <TrackPoint>[
@@ -122,10 +136,9 @@ class UserTrackFixtures {
       ),
     ];
     
-    
     final track = UserTrack.create(
-      userId: actualUserId,
-      routeId: 54, // ID вчерашнего маршрута из роут фикстур
+      user: user,
+      route: actualRoute,
       startTime: startTime,
       metadata: {
         'source': 'fixture',
@@ -142,11 +155,20 @@ class UserTrackFixtures {
   }
   
   /// Создает GPS трек для сегодняшнего маршрута (активный)
-  static UserTrack createTodayActiveTrack([int? userId]) {
-    final actualUserId = userId ?? alexeyUserId;
+  Future<UserTrack> createTodayActiveTrack(User user, [Route? route]) async {
     final today = DateTime.now();
     final startTime = DateTime(today.year, today.month, today.day, 9, 15);
     final currentTime = DateTime.now();
+    
+    // Используем переданный маршрут или загружаем Route объект (ID 55 для сегодняшнего маршрута)
+    Route? actualRoute = route;
+    if (actualRoute == null) {
+      final routeResult = await _routeRepository.getRouteByInternalId(55);
+      actualRoute = routeResult.fold(
+        (failure) => null,
+        (route) => route,
+      );
+    }
     
     // Если сейчас рано утром, делаем трек более коротким
     final Duration elapsedTime = currentTime.difference(startTime);
@@ -227,10 +249,9 @@ class UserTrackFixtures {
       ));
     }
     
-    
     final track = UserTrack.create(
-      userId: actualUserId,
-      routeId: 55, // ID сегодняшнего маршрута из роут фикстур
+      user: user,
+      route: actualRoute,
       startTime: startTime,
       metadata: {
         'source': 'fixture',
@@ -247,7 +268,7 @@ class UserTrackFixtures {
   }
   
   /// Создает старый завершенный трек (для статистики)
-  static UserTrack createOldCompletedTrack() {
+  Future<UserTrack> createOldCompletedTrack(User user) async {
     final oldDate = DateTime.now().subtract(const Duration(days: 7));
     final startTime = DateTime(oldDate.year, oldDate.month, oldDate.day, 8, 30);
     final endTime = DateTime(oldDate.year, oldDate.month, oldDate.day, 18, 0);
@@ -290,10 +311,9 @@ class UserTrackFixtures {
       ),
     ];
     
-    
     final track = UserTrack.create(
-      userId: alexeyUserId,
-      routeId: null, // Старый маршрут без привязки
+      user: user,
+      route: null, // Старый маршрут без привязки
       startTime: startTime,
       metadata: {
         'source': 'fixture',
@@ -309,12 +329,12 @@ class UserTrackFixtures {
     );
   }
   
-  /// Возвращает все фикстуры треков для Алексея
-  static List<UserTrack> getAllFixtures() {
+  /// Возвращает все фикстуры треков для указанного пользователя
+  Future<List<UserTrack>> getAllFixtures(User user) async {
     return [
-      createYesterdayCompletedTrack(),
-      createTodayActiveTrack(),
-      createOldCompletedTrack(),
+      await createYesterdayCompletedTrack(user),
+      await createTodayActiveTrack(user),
+      await createOldCompletedTrack(user),
     ];
   }
   

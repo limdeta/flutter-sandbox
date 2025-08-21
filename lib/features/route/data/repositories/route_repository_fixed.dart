@@ -76,6 +76,18 @@ class RouteRepository implements IRouteRepository {
   }
   
   @override
+  Future<Either<NotFoundFailure, Route>> getRouteByInternalId(int routeId) async {
+    final routeData = await _database.getRouteById(routeId);
+    if (routeData == null) {
+      return const Left(NotFoundFailure('Route not found'));
+    }
+    
+    final points = await _loadRoutePoints(routeId);
+    final foundRoute = RouteMapper.fromDatabase(routeData, points);
+    return Right(foundRoute);
+  }
+  
+  @override
   Future<Either<EntityCreationFailure, Route>> createRoute(Route route, User? user) async {
     try {
       if (user == null) {

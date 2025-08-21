@@ -22,6 +22,10 @@ abstract class IRouteRepository {
   
   /// Получить маршрут по ID
   Future<Either<NotFoundFailure, Route>> getRouteById(Route route);
+  
+  /// Получить маршрут по внутреннему ID
+  Future<Either<NotFoundFailure, Route>> getRouteByInternalId(int routeId);
+  
   Future<Either<EntityCreationFailure, Route>> createRoute(Route route, User? user);
   Future<Either<EntityUpdateFailure, Route>> updateRoute(Route route, User? user);
   Future<void> deleteRoute(Route route);

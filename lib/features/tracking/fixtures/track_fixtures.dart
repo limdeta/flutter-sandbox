@@ -42,11 +42,11 @@ class TrackFixtures {
       
       // Создаем треки
       if (yesterdayRoute?.id != null) {
-        await _createCompletedTrack(trackRepository, userId, yesterdayRoute!);
+        await _createCompletedTrack(trackRepository, user, yesterdayRoute!);
       }
       
       if (todayRoute?.id != null) {
-        await _createActiveTrack(trackRepository, userId, todayRoute!);
+        await _createActiveTrack(trackRepository, user, todayRoute!);
       }
       
       print('🎯 Тестовые GPS треки для ${user.firstName} созданы (userId: $userId)');
@@ -59,15 +59,15 @@ class TrackFixtures {
   /// Создает завершенный трек для вчерашнего маршрута
   static Future<void> _createCompletedTrack(
     IUserTrackRepository repo, 
-    int userId, 
+    User user, 
     domain.Route route,
   ) async {
     final yesterday = DateTime.now().subtract(const Duration(days: 1));
     
     final track = UserTrack(
       id: 0, // Будет назначен автоматически
-      userId: userId,
-      routeId: route.id!,
+      user: user,
+      route: route,
       startTime: yesterday.copyWith(hour: 9, minute: 0),
       endTime: yesterday.copyWith(hour: 17, minute: 30),
       totalDistanceMeters: 15240.0,
@@ -86,15 +86,15 @@ class TrackFixtures {
   /// Создает активный трек для сегодняшнего маршрута
   static Future<void> _createActiveTrack(
     IUserTrackRepository repo, 
-    int userId, 
+    User user, 
     domain.Route route,
   ) async {
     final today = DateTime.now();
     
     final track = UserTrack(
       id: 0,
-      userId: userId,
-      routeId: route.id!,
+      user: user,
+      route: route,
       startTime: today.copyWith(hour: 8, minute: 30),
       endTime: null, // Активный трек
       totalDistanceMeters: 5680.0,
