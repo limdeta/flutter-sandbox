@@ -6,34 +6,21 @@ import 'package:tauzero/shared/domain/entities/igeopoint.dart';
 /// Представляет единичную GPS точку в пути пользователя.
 /// Содержит координаты, время, скорость и другие метрики.
 class TrackPoint {
-  /// Широта в градусах
   final double latitude;
-  
-  /// Долгота в градусах
   final double longitude;
-  
-  /// Временная метка когда была записана точка
   final DateTime timestamp;
   
   /// Точность GPS в метрах (чем меньше, тем точнее)
   final double? accuracy;
   
-  /// Высота над уровнем моря в метрах
   final double? altitude;
-  
-  /// Точность высоты в метрах
   final double? altitudeAccuracy;
   
-  /// Скорость в км/ч
   final double? speedKmh;
   
-  /// Направление движения в градусах (0-360, где 0 = север)
   final double? bearing;
-  
-  /// Расстояние от предыдущей точки в метрах
   final double? distanceFromPrevious;
-  
-  /// Время от предыдущей точки в секундах
+
   final int? timeFromPrevious;
   
   /// Дополнительные метаданные (например, состояние батареи, сила сигнала)
@@ -128,7 +115,7 @@ class TrackPoint {
     return earthRadius * c;
   }
 
-  /// Вычисляет направление (азимут) к другой точке в градусах
+  /// азимут к другой точке в градусах
   double bearingTo(TrackPoint other) {
     final double lat1Rad = latitude * pi / 180;
     final double lat2Rad = other.latitude * pi / 180;
@@ -142,7 +129,6 @@ class TrackPoint {
     return (bearing + 360) % 360; // Нормализуем к 0-360°
   }
 
-  /// Создает копию точки с дополнительными данными от предыдущей точки
   TrackPoint withPreviousPointData(TrackPoint? previousPoint) {
     if (previousPoint == null) {
       return this;
@@ -169,7 +155,6 @@ class TrackPoint {
     return distance >= minDistanceMeters || timeDiff >= minTimeSeconds;
   }
 
-  /// Создает копию точки с измененными полями
   TrackPoint copyWith({
     double? latitude,
     double? longitude,
@@ -286,7 +271,6 @@ extension TrackPointListExtensions on List<TrackPoint> {
     return total;
   }
 
-  /// Получает временной диапазон точек
   Duration get timeSpan {
     if (isEmpty) return Duration.zero;
     if (length == 1) return Duration.zero;

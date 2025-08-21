@@ -13,35 +13,22 @@ class RealtimeTrackingService {
   /// Таймер для определения потери связи
   Timer? _connectionTimeoutTimer;
   
-  /// Стрим для обновлений треков
   final StreamController<UserTrack> _trackUpdateController = StreamController<UserTrack>.broadcast();
-  
-  /// Стрим для событий потери/восстановления связи
   final StreamController<ConnectionEvent> _connectionController = StreamController<ConnectionEvent>.broadcast();
-  
-  /// Стрим для уведомлений о новых точках
   final StreamController<TrackPointEvent> _trackPointController = StreamController<TrackPointEvent>.broadcast();
   
-  /// Текущий активный трек (кэш)
   UserTrack? _currentActiveTrack;
-  
-  /// Время последнего обновления
   DateTime? _lastUpdateTime;
-  
-  /// Интервал проверки обновлений (в секундах)
+
   final int updateIntervalSeconds;
-  
-  /// Таймаут потери связи (в секундах)
   final int connectionTimeoutSeconds;
-  
-  /// Максимальное количество точек в треке (для оптимизации памяти)
   final int maxTrackPoints;
 
   RealtimeTrackingService(
     this._trackRepository, {
     this.updateIntervalSeconds = 5,
     this.connectionTimeoutSeconds = 300, // 5 минут
-    this.maxTrackPoints = 1000,
+    this.maxTrackPoints = 10000,
   });
 
   /// Стрим обновлений треков
@@ -50,24 +37,18 @@ class RealtimeTrackingService {
   /// Стрим событий соединения
   Stream<ConnectionEvent> get connectionStream => _connectionController.stream;
   
-  /// Стрим событий новых точек
   Stream<TrackPointEvent> get trackPointStream => _trackPointController.stream;
   
-  /// Текущий активный трек
   UserTrack? get currentActiveTrack => _currentActiveTrack;
-  
-  /// Время последнего обновления
+
   DateTime? get lastUpdateTime => _lastUpdateTime;
   
-  /// Статус соединения
   bool get isConnected => _connectionTimeoutTimer?.isActive == true;
 
-  /// Запускает мониторинг трека пользователя
   Future<void> startTrackingUser(int userId) async {
     await stopTracking(); // Останавливаем предыдущий трекинг
     
     try {
-      // Получаем активный трек пользователя
       _currentActiveTrack = await _trackRepository.getActiveTrackByUserId(userId);
       
       if (_currentActiveTrack != null) {
@@ -86,7 +67,6 @@ class RealtimeTrackingService {
     }
   }
 
-  /// Останавливает трекинг
   Future<void> stopTracking() async {
     _trackUpdateTimer?.cancel();
     _connectionTimeoutTimer?.cancel();
@@ -94,24 +74,19 @@ class RealtimeTrackingService {
     _lastUpdateTime = null;
   }
 
-  /// Принудительно обновляет трек
   Future<void> forceRefresh(int userId) async {
     await _updateTrack(userId);
   }
 
-  /// Добавляет новую точку в текущий трек
   Future<void> addTrackPoint(TrackPoint point) async {
     if (_currentActiveTrack == null) return;
     
     try {
-      // Сохраняем точку в базу
       await _trackRepository.saveTrackPoints(_currentActiveTrack!.id, [point]);
       
-      // Обновляем локальный кэш
       final updatedPoints = List<TrackPoint>.from(_currentActiveTrack!.points);
       updatedPoints.add(point);
       
-      // Ограничиваем количество точек в памяти
       if (updatedPoints.length > maxTrackPoints) {
         updatedPoints.removeRange(0, updatedPoints.length - maxTrackPoints);
       }
@@ -119,10 +94,8 @@ class RealtimeTrackingService {
       _currentActiveTrack = _currentActiveTrack!.copyWith(points: updatedPoints);
       _lastUpdateTime = DateTime.now();
       
-      // Сбрасываем таймер потери связи
       _resetConnectionTimeout();
-      
-      // Уведомляем слушателей
+
       _trackPointController.add(TrackPointEvent.newPoint(point));
       _trackUpdateController.add(_currentActiveTrack!);
       
@@ -131,7 +104,6 @@ class RealtimeTrackingService {
     }
   }
 
-  /// Обновляет статус трека
   Future<void> updateTrackStatus(TrackStatus newStatus) async {
     if (_currentActiveTrack == null) return;
     
@@ -150,7 +122,6 @@ class RealtimeTrackingService {
     }
   }
 
-  /// Запускает периодические обновления
   void _startPeriodicUpdates(int userId) {
     _trackUpdateTimer = Timer.periodic(
       Duration(seconds: updateIntervalSeconds),
@@ -158,12 +129,10 @@ class RealtimeTrackingService {
     );
   }
 
-  /// Запускает мониторинг соединения
   void _startConnectionMonitoring() {
     _resetConnectionTimeout();
   }
 
-  /// Сбрасывает таймер потери связи
   void _resetConnectionTimeout() {
     _connectionTimeoutTimer?.cancel();
     _connectionTimeoutTimer = Timer(
@@ -172,12 +141,10 @@ class RealtimeTrackingService {
     );
   }
 
-  /// Обработка потери связи
   void _onConnectionTimeout() {
     _connectionController.add(ConnectionEvent.connectionLost());
   }
 
-  /// Обновляет трек из базы данных
   Future<void> _updateTrack(int userId) async {
     try {
       final latestTrack = await _trackRepository.getActiveTrackByUserId(userId);
@@ -214,7 +181,6 @@ class RealtimeTrackingService {
     }
   }
 
-  /// Проверяет, изменился ли трек
   bool _hasTrackChanged(UserTrack newTrack) {
     if (_currentActiveTrack == null) return true;
     
@@ -224,7 +190,6 @@ class RealtimeTrackingService {
            _currentActiveTrack!.endTime != newTrack.endTime;
   }
 
-  /// Освобождает ресурсы
   void dispose() {
     _trackUpdateTimer?.cancel();
     _connectionTimeoutTimer?.cancel();
@@ -234,7 +199,6 @@ class RealtimeTrackingService {
   }
 }
 
-/// События соединения
 class ConnectionEvent {
   final ConnectionEventType type;
   final String? message;
@@ -261,8 +225,6 @@ enum ConnectionEventType {
   trackEnded,
   statusChanged,
 }
-
-/// События новых точек трека
 class TrackPointEvent {
   final TrackPointEventType type;
   final TrackPoint? point;

@@ -16,58 +16,42 @@ import '../entities/user_track.dart';
 class LocationTrackingService {
   static const String _tag = 'LocationTracking';
   
-  /// Текущий активный трек
   UserTrack? _currentTrack;
   
-  /// Подписка на обновления местоположения
   StreamSubscription<Position>? _positionSubscription;
   
-  /// Контроллер для стрима новых точек трека
   final StreamController<TrackPoint> _trackPointController = 
       StreamController<TrackPoint>.broadcast();
   
-  /// Контроллер для стрима обновлений трека
   final StreamController<UserTrack> _trackUpdateController = 
       StreamController<UserTrack>.broadcast();
   
-  /// Буфер точек для batch сохранения
   final List<TrackPoint> _pointsBuffer = [];
   
-  /// Последняя записанная точка
   TrackPoint? _lastRecordedPoint;
   
-  /// Время последнего обновления
   DateTime? _lastUpdateTime;
   
-  /// Счетчик неподвижности (для определения остановок)
   int _stationaryCount = 0;
   
-  /// Флаг автоматической паузы при остановке
   final bool _autoPauseEnabled = true;
   
-  /// Настройки трекинга
   LocationTrackingSettings _settings = const LocationTrackingSettings();
 
-  /// Получает поток новых точек трека
   Stream<TrackPoint> get trackPointStream => _trackPointController.stream;
   
-  /// Получает поток обновлений трека
   Stream<UserTrack> get trackUpdateStream => _trackUpdateController.stream;
   
-  /// Получает текущий активный трек
   UserTrack? get currentTrack => _currentTrack;
   
-  /// Проверяет, активен ли трекинг
   bool get isTracking => _currentTrack?.isActive == true;
   
-  /// Проверяет, есть ли разрешения на геолокацию
   Future<bool> get hasLocationPermissions async {
     final permission = await Geolocator.checkPermission();
     return permission == LocationPermission.always ||
            permission == LocationPermission.whileInUse;
   }
 
-  /// Проверяет и запрашивает разрешения на геолокацию
   Future<bool> requestLocationPermissions() async {
     // Проверяем включена ли геолокация
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -76,7 +60,6 @@ class LocationTrackingService {
       return false;
     }
 
-    // Проверяем текущие разрешения
     LocationPermission permission = await Geolocator.checkPermission();
     
     if (permission == LocationPermission.denied) {
@@ -101,7 +84,6 @@ class LocationTrackingService {
     return true;
   }
 
-  /// Начинает новый трек
   Future<bool> startTracking({
     required int userId,
     int? routeId,
@@ -113,31 +95,26 @@ class LocationTrackingService {
       return false;
     }
 
-    // Проверяем разрешения
     if (!await requestLocationPermissions()) {
       return false;
     }
 
     try {
-      // Применяем настройки
       if (settings != null) {
         _settings = settings;
       }
 
-      // Создаем новый трек
       _currentTrack = UserTrack.create(
         userId: userId,
         routeId: routeId,
         metadata: metadata,
       );
 
-      // Сбрасываем состояние
       _lastRecordedPoint = null;
       _lastUpdateTime = null;
       _stationaryCount = 0;
       _pointsBuffer.clear();
 
-      // Начинаем отслеживание местоположения
       await _startLocationTracking();
 
       _log('Трекинг начат для пользователя $userId');
@@ -148,7 +125,6 @@ class LocationTrackingService {
     }
   }
 
-  /// Приостанавливает трекинг
   Future<void> pauseTracking() async {
     if (!isTracking) return;
 
@@ -160,7 +136,6 @@ class LocationTrackingService {
     _log('Трекинг приостановлен');
   }
 
-  /// Возобновляет трекинг
   Future<bool> resumeTracking() async {
     if (_currentTrack == null || !_currentTrack!.isPaused) return false;
 
@@ -176,18 +151,14 @@ class LocationTrackingService {
     return true;
   }
 
-  /// Завершает трекинг
   Future<UserTrack?> stopTracking() async {
     if (_currentTrack == null) return null;
 
-    // Сохраняем все оставшиеся точки
     await _flushPointsBuffer();
 
-    // Завершаем трек
     final completedTrack = _currentTrack!.complete();
     _currentTrack = null;
 
-    // Останавливаем отслеживание местоположения
     await _stopLocationTracking();
 
     _trackUpdateController.add(completedTrack);
@@ -196,7 +167,6 @@ class LocationTrackingService {
     return completedTrack;
   }
 
-  /// Начинает отслеживание местоположения
   Future<void> _startLocationTracking() async {
     final locationSettings = _getLocationSettings();
 
@@ -210,7 +180,6 @@ class LocationTrackingService {
     );
   }
 
-  /// Останавливает отслеживание местоположения
   Future<void> _stopLocationTracking() async {
     await _positionSubscription?.cancel();
     _positionSubscription = null;
@@ -239,31 +208,25 @@ class LocationTrackingService {
     _processTrackPoint(point);
   }
 
-  /// Обрабатывает новую точку трека
   void _processTrackPoint(TrackPoint point) {
-    // Проверяем валидность точки
     if (!point.isValid) {
       _log('Невалидная GPS точка: $point');
       return;
     }
 
-    // Фильтруем плохую точность
     if (point.accuracy != null && point.accuracy! > _settings.maxAccuracyMeters) {
       _log('Точка с плохой точностью пропущена: ${point.accuracy}м');
       return;
     }
 
-    // Проверяем значимость точки
     if (_lastRecordedPoint != null) {
       if (!point.isSignificantlyDifferentFrom(
         _lastRecordedPoint!,
         minDistanceMeters: _settings.minDistanceMeters,
         minTimeSeconds: _settings.minTimeSeconds,
       )) {
-        // Увеличиваем счетчик неподвижности
         _stationaryCount++;
         
-        // Автоматическая пауза при длительной остановке
         if (_autoPauseEnabled && 
             _stationaryCount >= _settings.stationaryThreshold) {
           _log('Автоматическая пауза: длительная остановка');
@@ -273,24 +236,18 @@ class LocationTrackingService {
       }
     }
 
-    // Сбрасываем счетчик неподвижности
     _stationaryCount = 0;
 
-    // Добавляем связь с предыдущей точкой
     final processedPoint = point.withPreviousPointData(_lastRecordedPoint);
 
-    // Добавляем точку в буфер
     _pointsBuffer.add(processedPoint);
     _lastRecordedPoint = processedPoint;
     _lastUpdateTime = DateTime.now();
 
-    // Отправляем уведомление о новой точке
     _trackPointController.add(processedPoint);
 
-    // Обновляем трек
     _updateCurrentTrack();
 
-    // Сохраняем буфер если он заполнен
     if (_pointsBuffer.length >= _settings.bufferSize) {
       _flushPointsBuffer();
     }
@@ -300,7 +257,6 @@ class LocationTrackingService {
          'скорость: ${processedPoint.speedKmh?.toStringAsFixed(1) ?? 'unknown'} км/ч');
   }
 
-  /// Обновляет текущий трек с новыми точками
   void _updateCurrentTrack() {
     if (_currentTrack == null || _pointsBuffer.isEmpty) return;
 
@@ -368,22 +324,12 @@ class LocationTrackingService {
 
 /// Настройки трекинга местоположения
 class LocationTrackingSettings {
-  /// Точность GPS
   final LocationAccuracy accuracy;
   
-  /// Минимальное расстояние между точками в метрах
   final double minDistanceMeters;
-  
-  /// Минимальное время между точками в секундах
   final int minTimeSeconds;
-  
-  /// Максимальная допустимая точность GPS в метрах
   final double maxAccuracyMeters;
-  
-  /// Интервал обновления GPS
   final Duration updateInterval;
-  
-  /// Размер буфера точек перед сохранением
   final int bufferSize;
   
   /// Порог неподвижности для автопаузы (количество подряд отфильтрованных точек)

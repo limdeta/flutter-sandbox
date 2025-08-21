@@ -10,25 +10,16 @@ import 'track_point.dart';
 /// - Анализа времени в пути
 /// - Оптимизации маршрутов
 class UserTrack {
-  /// Уникальный идентификатор трека
   final int id;
-  
-  /// ID пользователя, которому принадлежит трек
   final int userId;
-  
-  /// ID маршрута, в рамках которого записан трек (может быть null для свободного движения)
   final int? routeId;
   
-  /// Дата и время начала трека
   final DateTime startTime;
-  
-  /// Дата и время окончания трека (null если трек активен)
   final DateTime? endTime;
   
   /// Список точек трека в хронологическом порядке
   final List<TrackPoint> points;
   
-  /// Общее пройденное расстояние в метрах
   final double totalDistanceMeters;
   
   /// Общее время в движении в секундах (исключая остановки)
@@ -37,16 +28,12 @@ class UserTrack {
   /// Общее время трека в секундах (включая остановки)
   final int totalTimeSeconds;
   
-  /// Средняя скорость в км/ч
+
   final double averageSpeedKmh;
-  
-  /// Максимальная скорость в км/ч
   final double maxSpeedKmh;
-  
-  /// Статус трека
+
   final TrackStatus status;
-  
-  /// Метаданные трека (настройки, заметки и т.д.)
+
   final Map<String, dynamic>? metadata;
 
   const UserTrack({
@@ -90,43 +77,25 @@ class UserTrack {
     );
   }
 
-  /// Проверяет, активен ли трек (записывается в данный момент)
   bool get isActive => status == TrackStatus.active;
-
-  /// Проверяет, завершен ли трек
   bool get isCompleted => status == TrackStatus.completed;
-
-  /// Проверяет, приостановлен ли трек
   bool get isPaused => status == TrackStatus.paused;
-
-  /// Получает последнюю точку трека
   TrackPoint? get lastPoint => points.isNotEmpty ? points.last : null;
-
-  /// Получает первую точку трека
   TrackPoint? get firstPoint => points.isNotEmpty ? points.first : null;
-
-  /// Получает пройденное расстояние в километрах
   double get totalDistanceKm => totalDistanceMeters / 1000.0;
-
-  /// Получает время в движении в минутах
   double get movingTimeMinutes => movingTimeSeconds / 60.0;
-
-  /// Получает общее время в минутах
   double get totalTimeMinutes => totalTimeSeconds / 60.0;
 
-  /// Добавляет новую точку к треку
   UserTrack addPoint(TrackPoint point) {
     final newPoints = List<TrackPoint>.from(points)..add(point);
     return _recalculateStats(newPoints);
   }
 
-  /// Добавляет несколько точек к треку
   UserTrack addPoints(List<TrackPoint> newPoints) {
     final allPoints = List<TrackPoint>.from(points)..addAll(newPoints);
     return _recalculateStats(allPoints);
   }
 
-  /// Завершает трек
   UserTrack complete({DateTime? endTime}) {
     return copyWith(
       endTime: endTime ?? DateTime.now(),
@@ -134,12 +103,10 @@ class UserTrack {
     );
   }
 
-  /// Приостанавливает трек
   UserTrack pause() {
     return copyWith(status: TrackStatus.paused);
   }
 
-  /// Возобновляет трек
   UserTrack resume() {
     return copyWith(status: TrackStatus.active);
   }
@@ -234,16 +201,9 @@ class UserTrack {
 
 /// Статус трека
 enum TrackStatus {
-  /// Трек активно записывается
   active,
-  
-  /// Трек приостановлен
   paused,
-  
-  /// Трек завершен
   completed,
-  
-  /// Трек прерван/отменен
   cancelled,
 }
 
@@ -263,7 +223,6 @@ extension TrackStatusExtension on TrackStatus {
     }
   }
 
-  /// Проверяет, можно ли добавлять точки к треку
   bool get canAddPoints {
     return this == TrackStatus.active;
   }
