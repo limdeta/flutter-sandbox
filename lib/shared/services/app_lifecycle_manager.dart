@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import '../../features/tracking/domain/services/location_tracking_service.dart';
 import '../../features/tracking/domain/repositories/iuser_track_repository.dart';
 import '../../features/tracking/domain/entities/user_track.dart';
+import '../../features/authentication/domain/entities/user.dart';
 import '../../features/authentication/domain/usecases/get_current_session_usecase.dart';
 
 /// Менеджер жизненного цикла приложения для GPS трекинга
@@ -159,8 +160,8 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// Начинает трекинг для рабочего дня
   Future<bool> startWorkDayTracking({
-    required int userId,
-    int? routeId,
+    required User user,
+    String? routeId,
   }) async {
     if (_trackingService.isTracking) {
       _log('Трекинг уже активен');
@@ -169,12 +170,8 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
     try {
       final success = await _trackingService.startTracking(
-        userId: userId,
+        user: user,
         routeId: routeId,
-        metadata: {
-          'autoStarted': true,
-          'startedAt': DateTime.now().toIso8601String(),
-        },
       );
 
       if (success) {

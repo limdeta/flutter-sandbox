@@ -190,7 +190,10 @@ class RouteFixtureService {
           type: PointType.warehouse,
           plannedArrivalTime: startOfDay,
           plannedDepartureTime: startOfDay.add(const Duration(minutes: 30)),
-          status: VisitStatus.planned, // Еще не начали день
+          actualArrivalTime: startOfDay.add(const Duration(minutes: 5)), // Приехал с небольшой задержкой
+          actualDepartureTime: startOfDay.add(const Duration(minutes: 25)), // Уехал немного раньше
+          status: VisitStatus.completed, // Посещен
+          notes: 'Загрузка завершена успешно',
           order: 0,
         ),
         TradingPointOfInterest(
@@ -203,7 +206,10 @@ class RouteFixtureService {
           coordinates: const LatLng(43.1332, 131.9118),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 1)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 1, minutes: 45)),
-          status: VisitStatus.planned, // Планируется
+          actualArrivalTime: startOfDay.add(const Duration(hours: 1, minutes: 5)), // Приехал вовремя
+          actualDepartureTime: startOfDay.add(const Duration(hours: 1, minutes: 40)), // Уехал немного раньше
+          status: VisitStatus.completed, // Посещен
+          notes: 'Визит завершен успешно, товар доставлен',
           order: 1,
         ),
         TradingPointOfInterest(
@@ -216,7 +222,10 @@ class RouteFixtureService {
           coordinates: const LatLng(43.1372, 131.9501),
           plannedArrivalTime: startOfDay.add(const Duration(hours: 2, minutes: 30)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 3, minutes: 15)),
-          status: VisitStatus.planned, // Планируется
+          actualArrivalTime: startOfDay.add(const Duration(hours: 2, minutes: 35)), // Небольшая задержка
+          actualDepartureTime: startOfDay.add(const Duration(hours: 3, minutes: 10)), // Уехал раньше
+          status: VisitStatus.completed, // Посещен
+          notes: 'Визит завершен, клиент доволен обслуживанием',
           order: 2,
         ),
         TradingPointOfInterest(

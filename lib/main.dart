@@ -17,7 +17,6 @@ import 'features/route/presentation/pages/routes_page.dart';
 import 'features/products/presentation/pages/product_catalog_page.dart';
 import 'features/products/presentation/pages/product_categories_page.dart';
 import 'features/products/presentation/pages/promotions_page.dart';
-import 'features/tracking/presentation/pages/tracking_architecture_demo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,7 +67,6 @@ class TauZeroApp extends StatelessWidget {
           '/products/catalog': (context) => const ProductCatalogPage(),
           '/products/categories': (context) => const ProductCategoriesPage(),
           '/products/promotions': (context) => const PromotionsPage(),
-          '/tracking-map': (context) => const TrackingArchitectureDemo(),
         },
         ),
       ),

@@ -3,7 +3,7 @@ import 'package:tauzero/features/authentication/domain/value_objects/phone_numbe
 import 'package:tauzero/features/authentication/data/fixtures/user_fixture_service.dart';
 import 'package:tauzero/features/route/data/fixtures/route_fixture_service.dart';
 import 'package:tauzero/features/route/data/fixtures/trading_points_fixture_service.dart';
-import 'package:tauzero/features/tracking/fixtures/track_fixtures.dart';
+import 'package:tauzero/features/tracking/data/fixtures/track_fixtures.dart';
 import 'package:get_it/get_it.dart';
 import '../../features/authentication/domain/repositories/iuser_repository.dart';
 import '../../features/route/domain/repositories/iroute_repository.dart';
@@ -131,28 +131,66 @@ class DevFixtureOrchestrator {
     }
   }
 
+  /// Создает тестовые треки с привязкой к сегодняшним маршрутам
+  /// Для каждого торгового представителя создает активный трек с реальными GPS данными,
+  /// привязанный к его сегодняшнему маршруту из _createTodayRoute
   Future<void> _createTestTracks() async {
-      final userRepository = GetIt.instance<IUserRepository>();
-      final routeRepository = GetIt.instance<IRouteRepository>();
-      
-      // Получаем всех пользователей и находим торговых представителей
-      final usersResult = await userRepository.getAllUsers();
-      if (usersResult.isLeft()) {
-        return;
-      }
-      
-      final allUsers = usersResult.fold((l) => <User>[], (r) => r);
-      final salesReps = allUsers.where((u) => u.role == UserRole.user).toList();
-      
-      for (final salesRep in salesReps) {
+    print('🚗 Создаем тестовые треки с привязкой к маршрутам...');
+    
+    final userRepository = GetIt.instance<IUserRepository>();
+    final routeRepository = GetIt.instance<IRouteRepository>();
+    
+    // Получаем всех пользователей и находим торговых представителей
+    final usersResult = await userRepository.getAllUsers();
+    if (usersResult.isLeft()) {
+      print('❌ Не удалось получить пользователей для создания треков');
+      return;
+    }
+    
+    final allUsers = usersResult.fold((l) => <User>[], (r) => r);
+    final salesReps = allUsers.where((u) => u.role == UserRole.user).toList();
+    
+    print('📍 Найдено ${salesReps.length} торговых представителей для создания треков');
+    
+    for (final salesRep in salesReps) {
+      try {
+        // Получаем все маршруты пользователя
         final routesStream = routeRepository.watchUserRoutes(salesRep);
         final routes = await routesStream.first;
         
-        await TrackFixtures.createTestTracksForUser(
-          user: salesRep,
-          routes: routes,
+        if (routes.isEmpty) {
+          print('⚠️ У пользователя ${salesRep.fullName} нет маршрутов');
+          continue;
+        }
+        
+        // Находим активный маршрут (сегодняшний) - это должен быть маршрут из _createTodayRoute
+        final todayRoute = routes.firstWhere(
+          (route) => route.status.name == 'active',
+          orElse: () => routes.first,
         );
+        
+        print('🗺️ Создаем трек для маршрута "${todayRoute.name}" пользователя ${salesRep.fullName}');
+        
+        // Создаем трек с реальными GPS данными, связанный с конкретным маршрутом
+        final userTrack = await TrackFixtures.createCurrentDayTrack(
+          user: salesRep,
+          route: todayRoute,
+        );
+        
+        if (userTrack != null) {
+          print('✅ Трек создан: ${userTrack.totalPoints} GPS точек, '
+                '${userTrack.totalDistanceKm.toStringAsFixed(2)} км, '
+                'привязан к маршруту ID: ${todayRoute.id}');
+        } else {
+          print('❌ Не удалось создать трек для пользователя ${salesRep.fullName}');
+        }
+        
+      } catch (e) {
+        print('❌ Ошибка при создании трека для ${salesRep.fullName}: $e');
       }
+    }
+    
+    print('🏁 Завершено создание тестовых треков');
   }
 }
 

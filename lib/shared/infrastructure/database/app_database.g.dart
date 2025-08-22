@@ -753,78 +753,50 @@ class $UserTracksTable extends UserTracks
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _totalDistanceMetersMeta =
-      const VerificationMeta('totalDistanceMeters');
-  @override
-  late final GeneratedColumn<double> totalDistanceMeters =
-      GeneratedColumn<double>(
-        'total_distance_meters',
-        aliasedName,
-        false,
-        type: DriftSqlType.double,
-        requiredDuringInsert: false,
-        defaultValue: const Constant(0.0),
-      );
-  static const VerificationMeta _movingTimeSecondsMeta = const VerificationMeta(
-    'movingTimeSeconds',
-  );
-  @override
-  late final GeneratedColumn<int> movingTimeSeconds = GeneratedColumn<int>(
-    'moving_time_seconds',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0),
-  );
-  static const VerificationMeta _totalTimeSecondsMeta = const VerificationMeta(
-    'totalTimeSeconds',
-  );
-  @override
-  late final GeneratedColumn<int> totalTimeSeconds = GeneratedColumn<int>(
-    'total_time_seconds',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0),
-  );
-  static const VerificationMeta _averageSpeedKmhMeta = const VerificationMeta(
-    'averageSpeedKmh',
-  );
-  @override
-  late final GeneratedColumn<double> averageSpeedKmh = GeneratedColumn<double>(
-    'average_speed_kmh',
-    aliasedName,
-    false,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0.0),
-  );
-  static const VerificationMeta _maxSpeedKmhMeta = const VerificationMeta(
-    'maxSpeedKmh',
-  );
-  @override
-  late final GeneratedColumn<double> maxSpeedKmh = GeneratedColumn<double>(
-    'max_speed_kmh',
-    aliasedName,
-    false,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0.0),
-  );
   static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<String> status = GeneratedColumn<String>(
     'status',
     aliasedName,
     false,
-    additionalChecks: GeneratedColumn.checkTextLength(
-      minTextLength: 1,
-      maxTextLength: 20,
-    ),
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('active'),
+  );
+  static const VerificationMeta _totalPointsMeta = const VerificationMeta(
+    'totalPoints',
+  );
+  @override
+  late final GeneratedColumn<int> totalPoints = GeneratedColumn<int>(
+    'total_points',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _totalDistanceKmMeta = const VerificationMeta(
+    'totalDistanceKm',
+  );
+  @override
+  late final GeneratedColumn<double> totalDistanceKm = GeneratedColumn<double>(
+    'total_distance_km',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _totalDurationSecondsMeta =
+      const VerificationMeta('totalDurationSeconds');
+  @override
+  late final GeneratedColumn<int> totalDurationSeconds = GeneratedColumn<int>(
+    'total_duration_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
   );
   static const VerificationMeta _metadataMeta = const VerificationMeta(
     'metadata',
@@ -868,12 +840,10 @@ class $UserTracksTable extends UserTracks
     routeId,
     startTime,
     endTime,
-    totalDistanceMeters,
-    movingTimeSeconds,
-    totalTimeSeconds,
-    averageSpeedKmh,
-    maxSpeedKmh,
     status,
+    totalPoints,
+    totalDistanceKm,
+    totalDurationSeconds,
     metadata,
     createdAt,
     updatedAt,
@@ -921,58 +891,38 @@ class $UserTracksTable extends UserTracks
         endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta),
       );
     }
-    if (data.containsKey('total_distance_meters')) {
-      context.handle(
-        _totalDistanceMetersMeta,
-        totalDistanceMeters.isAcceptableOrUnknown(
-          data['total_distance_meters']!,
-          _totalDistanceMetersMeta,
-        ),
-      );
-    }
-    if (data.containsKey('moving_time_seconds')) {
-      context.handle(
-        _movingTimeSecondsMeta,
-        movingTimeSeconds.isAcceptableOrUnknown(
-          data['moving_time_seconds']!,
-          _movingTimeSecondsMeta,
-        ),
-      );
-    }
-    if (data.containsKey('total_time_seconds')) {
-      context.handle(
-        _totalTimeSecondsMeta,
-        totalTimeSeconds.isAcceptableOrUnknown(
-          data['total_time_seconds']!,
-          _totalTimeSecondsMeta,
-        ),
-      );
-    }
-    if (data.containsKey('average_speed_kmh')) {
-      context.handle(
-        _averageSpeedKmhMeta,
-        averageSpeedKmh.isAcceptableOrUnknown(
-          data['average_speed_kmh']!,
-          _averageSpeedKmhMeta,
-        ),
-      );
-    }
-    if (data.containsKey('max_speed_kmh')) {
-      context.handle(
-        _maxSpeedKmhMeta,
-        maxSpeedKmh.isAcceptableOrUnknown(
-          data['max_speed_kmh']!,
-          _maxSpeedKmhMeta,
-        ),
-      );
-    }
     if (data.containsKey('status')) {
       context.handle(
         _statusMeta,
         status.isAcceptableOrUnknown(data['status']!, _statusMeta),
       );
-    } else if (isInserting) {
-      context.missing(_statusMeta);
+    }
+    if (data.containsKey('total_points')) {
+      context.handle(
+        _totalPointsMeta,
+        totalPoints.isAcceptableOrUnknown(
+          data['total_points']!,
+          _totalPointsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('total_distance_km')) {
+      context.handle(
+        _totalDistanceKmMeta,
+        totalDistanceKm.isAcceptableOrUnknown(
+          data['total_distance_km']!,
+          _totalDistanceKmMeta,
+        ),
+      );
+    }
+    if (data.containsKey('total_duration_seconds')) {
+      context.handle(
+        _totalDurationSecondsMeta,
+        totalDurationSeconds.isAcceptableOrUnknown(
+          data['total_duration_seconds']!,
+          _totalDurationSecondsMeta,
+        ),
+      );
     }
     if (data.containsKey('metadata')) {
       context.handle(
@@ -1021,29 +971,21 @@ class $UserTracksTable extends UserTracks
         DriftSqlType.dateTime,
         data['${effectivePrefix}end_time'],
       ),
-      totalDistanceMeters: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}total_distance_meters'],
-      )!,
-      movingTimeSeconds: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}moving_time_seconds'],
-      )!,
-      totalTimeSeconds: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}total_time_seconds'],
-      )!,
-      averageSpeedKmh: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}average_speed_kmh'],
-      )!,
-      maxSpeedKmh: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}max_speed_kmh'],
-      )!,
       status: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}status'],
+      )!,
+      totalPoints: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_points'],
+      )!,
+      totalDistanceKm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}total_distance_km'],
+      )!,
+      totalDurationSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_duration_seconds'],
       )!,
       metadata: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -1082,23 +1024,17 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
   /// Дата и время окончания трека (null если трек активен)
   final DateTime? endTime;
 
-  /// Общая дистанция в метрах
-  final double totalDistanceMeters;
-
-  /// Время в движении в секундах
-  final int movingTimeSeconds;
-
-  /// Общее время трека в секундах
-  final int totalTimeSeconds;
-
-  /// Средняя скорость в км/ч
-  final double averageSpeedKmh;
-
-  /// Максимальная скорость в км/ч
-  final double maxSpeedKmh;
-
-  /// Статус трека: active, paused, completed, cancelled
+  /// Статус трека (active, paused, completed, cancelled)
   final String status;
+
+  /// Кешированное количество точек в треке
+  final int totalPoints;
+
+  /// Кешированная общая дистанция в километрах
+  final double totalDistanceKm;
+
+  /// Кешированная общая длительность в секундах
+  final int totalDurationSeconds;
 
   /// Дополнительные метаданные в формате JSON
   final String? metadata;
@@ -1114,12 +1050,10 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
     this.routeId,
     required this.startTime,
     this.endTime,
-    required this.totalDistanceMeters,
-    required this.movingTimeSeconds,
-    required this.totalTimeSeconds,
-    required this.averageSpeedKmh,
-    required this.maxSpeedKmh,
     required this.status,
+    required this.totalPoints,
+    required this.totalDistanceKm,
+    required this.totalDurationSeconds,
     this.metadata,
     required this.createdAt,
     required this.updatedAt,
@@ -1136,12 +1070,10 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
     if (!nullToAbsent || endTime != null) {
       map['end_time'] = Variable<DateTime>(endTime);
     }
-    map['total_distance_meters'] = Variable<double>(totalDistanceMeters);
-    map['moving_time_seconds'] = Variable<int>(movingTimeSeconds);
-    map['total_time_seconds'] = Variable<int>(totalTimeSeconds);
-    map['average_speed_kmh'] = Variable<double>(averageSpeedKmh);
-    map['max_speed_kmh'] = Variable<double>(maxSpeedKmh);
     map['status'] = Variable<String>(status);
+    map['total_points'] = Variable<int>(totalPoints);
+    map['total_distance_km'] = Variable<double>(totalDistanceKm);
+    map['total_duration_seconds'] = Variable<int>(totalDurationSeconds);
     if (!nullToAbsent || metadata != null) {
       map['metadata'] = Variable<String>(metadata);
     }
@@ -1161,12 +1093,10 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
       endTime: endTime == null && nullToAbsent
           ? const Value.absent()
           : Value(endTime),
-      totalDistanceMeters: Value(totalDistanceMeters),
-      movingTimeSeconds: Value(movingTimeSeconds),
-      totalTimeSeconds: Value(totalTimeSeconds),
-      averageSpeedKmh: Value(averageSpeedKmh),
-      maxSpeedKmh: Value(maxSpeedKmh),
       status: Value(status),
+      totalPoints: Value(totalPoints),
+      totalDistanceKm: Value(totalDistanceKm),
+      totalDurationSeconds: Value(totalDurationSeconds),
       metadata: metadata == null && nullToAbsent
           ? const Value.absent()
           : Value(metadata),
@@ -1186,14 +1116,12 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
       routeId: serializer.fromJson<int?>(json['routeId']),
       startTime: serializer.fromJson<DateTime>(json['startTime']),
       endTime: serializer.fromJson<DateTime?>(json['endTime']),
-      totalDistanceMeters: serializer.fromJson<double>(
-        json['totalDistanceMeters'],
-      ),
-      movingTimeSeconds: serializer.fromJson<int>(json['movingTimeSeconds']),
-      totalTimeSeconds: serializer.fromJson<int>(json['totalTimeSeconds']),
-      averageSpeedKmh: serializer.fromJson<double>(json['averageSpeedKmh']),
-      maxSpeedKmh: serializer.fromJson<double>(json['maxSpeedKmh']),
       status: serializer.fromJson<String>(json['status']),
+      totalPoints: serializer.fromJson<int>(json['totalPoints']),
+      totalDistanceKm: serializer.fromJson<double>(json['totalDistanceKm']),
+      totalDurationSeconds: serializer.fromJson<int>(
+        json['totalDurationSeconds'],
+      ),
       metadata: serializer.fromJson<String?>(json['metadata']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -1208,12 +1136,10 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
       'routeId': serializer.toJson<int?>(routeId),
       'startTime': serializer.toJson<DateTime>(startTime),
       'endTime': serializer.toJson<DateTime?>(endTime),
-      'totalDistanceMeters': serializer.toJson<double>(totalDistanceMeters),
-      'movingTimeSeconds': serializer.toJson<int>(movingTimeSeconds),
-      'totalTimeSeconds': serializer.toJson<int>(totalTimeSeconds),
-      'averageSpeedKmh': serializer.toJson<double>(averageSpeedKmh),
-      'maxSpeedKmh': serializer.toJson<double>(maxSpeedKmh),
       'status': serializer.toJson<String>(status),
+      'totalPoints': serializer.toJson<int>(totalPoints),
+      'totalDistanceKm': serializer.toJson<double>(totalDistanceKm),
+      'totalDurationSeconds': serializer.toJson<int>(totalDurationSeconds),
       'metadata': serializer.toJson<String?>(metadata),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -1226,12 +1152,10 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
     Value<int?> routeId = const Value.absent(),
     DateTime? startTime,
     Value<DateTime?> endTime = const Value.absent(),
-    double? totalDistanceMeters,
-    int? movingTimeSeconds,
-    int? totalTimeSeconds,
-    double? averageSpeedKmh,
-    double? maxSpeedKmh,
     String? status,
+    int? totalPoints,
+    double? totalDistanceKm,
+    int? totalDurationSeconds,
     Value<String?> metadata = const Value.absent(),
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -1241,12 +1165,10 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
     routeId: routeId.present ? routeId.value : this.routeId,
     startTime: startTime ?? this.startTime,
     endTime: endTime.present ? endTime.value : this.endTime,
-    totalDistanceMeters: totalDistanceMeters ?? this.totalDistanceMeters,
-    movingTimeSeconds: movingTimeSeconds ?? this.movingTimeSeconds,
-    totalTimeSeconds: totalTimeSeconds ?? this.totalTimeSeconds,
-    averageSpeedKmh: averageSpeedKmh ?? this.averageSpeedKmh,
-    maxSpeedKmh: maxSpeedKmh ?? this.maxSpeedKmh,
     status: status ?? this.status,
+    totalPoints: totalPoints ?? this.totalPoints,
+    totalDistanceKm: totalDistanceKm ?? this.totalDistanceKm,
+    totalDurationSeconds: totalDurationSeconds ?? this.totalDurationSeconds,
     metadata: metadata.present ? metadata.value : this.metadata,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
@@ -1258,22 +1180,16 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
       routeId: data.routeId.present ? data.routeId.value : this.routeId,
       startTime: data.startTime.present ? data.startTime.value : this.startTime,
       endTime: data.endTime.present ? data.endTime.value : this.endTime,
-      totalDistanceMeters: data.totalDistanceMeters.present
-          ? data.totalDistanceMeters.value
-          : this.totalDistanceMeters,
-      movingTimeSeconds: data.movingTimeSeconds.present
-          ? data.movingTimeSeconds.value
-          : this.movingTimeSeconds,
-      totalTimeSeconds: data.totalTimeSeconds.present
-          ? data.totalTimeSeconds.value
-          : this.totalTimeSeconds,
-      averageSpeedKmh: data.averageSpeedKmh.present
-          ? data.averageSpeedKmh.value
-          : this.averageSpeedKmh,
-      maxSpeedKmh: data.maxSpeedKmh.present
-          ? data.maxSpeedKmh.value
-          : this.maxSpeedKmh,
       status: data.status.present ? data.status.value : this.status,
+      totalPoints: data.totalPoints.present
+          ? data.totalPoints.value
+          : this.totalPoints,
+      totalDistanceKm: data.totalDistanceKm.present
+          ? data.totalDistanceKm.value
+          : this.totalDistanceKm,
+      totalDurationSeconds: data.totalDurationSeconds.present
+          ? data.totalDurationSeconds.value
+          : this.totalDurationSeconds,
       metadata: data.metadata.present ? data.metadata.value : this.metadata,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
@@ -1288,12 +1204,10 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
           ..write('routeId: $routeId, ')
           ..write('startTime: $startTime, ')
           ..write('endTime: $endTime, ')
-          ..write('totalDistanceMeters: $totalDistanceMeters, ')
-          ..write('movingTimeSeconds: $movingTimeSeconds, ')
-          ..write('totalTimeSeconds: $totalTimeSeconds, ')
-          ..write('averageSpeedKmh: $averageSpeedKmh, ')
-          ..write('maxSpeedKmh: $maxSpeedKmh, ')
           ..write('status: $status, ')
+          ..write('totalPoints: $totalPoints, ')
+          ..write('totalDistanceKm: $totalDistanceKm, ')
+          ..write('totalDurationSeconds: $totalDurationSeconds, ')
           ..write('metadata: $metadata, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
@@ -1308,12 +1222,10 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
     routeId,
     startTime,
     endTime,
-    totalDistanceMeters,
-    movingTimeSeconds,
-    totalTimeSeconds,
-    averageSpeedKmh,
-    maxSpeedKmh,
     status,
+    totalPoints,
+    totalDistanceKm,
+    totalDurationSeconds,
     metadata,
     createdAt,
     updatedAt,
@@ -1327,12 +1239,10 @@ class UserTrackData extends DataClass implements Insertable<UserTrackData> {
           other.routeId == this.routeId &&
           other.startTime == this.startTime &&
           other.endTime == this.endTime &&
-          other.totalDistanceMeters == this.totalDistanceMeters &&
-          other.movingTimeSeconds == this.movingTimeSeconds &&
-          other.totalTimeSeconds == this.totalTimeSeconds &&
-          other.averageSpeedKmh == this.averageSpeedKmh &&
-          other.maxSpeedKmh == this.maxSpeedKmh &&
           other.status == this.status &&
+          other.totalPoints == this.totalPoints &&
+          other.totalDistanceKm == this.totalDistanceKm &&
+          other.totalDurationSeconds == this.totalDurationSeconds &&
           other.metadata == this.metadata &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
@@ -1344,12 +1254,10 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
   final Value<int?> routeId;
   final Value<DateTime> startTime;
   final Value<DateTime?> endTime;
-  final Value<double> totalDistanceMeters;
-  final Value<int> movingTimeSeconds;
-  final Value<int> totalTimeSeconds;
-  final Value<double> averageSpeedKmh;
-  final Value<double> maxSpeedKmh;
   final Value<String> status;
+  final Value<int> totalPoints;
+  final Value<double> totalDistanceKm;
+  final Value<int> totalDurationSeconds;
   final Value<String?> metadata;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -1359,12 +1267,10 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
     this.routeId = const Value.absent(),
     this.startTime = const Value.absent(),
     this.endTime = const Value.absent(),
-    this.totalDistanceMeters = const Value.absent(),
-    this.movingTimeSeconds = const Value.absent(),
-    this.totalTimeSeconds = const Value.absent(),
-    this.averageSpeedKmh = const Value.absent(),
-    this.maxSpeedKmh = const Value.absent(),
     this.status = const Value.absent(),
+    this.totalPoints = const Value.absent(),
+    this.totalDistanceKm = const Value.absent(),
+    this.totalDurationSeconds = const Value.absent(),
     this.metadata = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -1375,30 +1281,25 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
     this.routeId = const Value.absent(),
     required DateTime startTime,
     this.endTime = const Value.absent(),
-    this.totalDistanceMeters = const Value.absent(),
-    this.movingTimeSeconds = const Value.absent(),
-    this.totalTimeSeconds = const Value.absent(),
-    this.averageSpeedKmh = const Value.absent(),
-    this.maxSpeedKmh = const Value.absent(),
-    required String status,
+    this.status = const Value.absent(),
+    this.totalPoints = const Value.absent(),
+    this.totalDistanceKm = const Value.absent(),
+    this.totalDurationSeconds = const Value.absent(),
     this.metadata = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   }) : userId = Value(userId),
-       startTime = Value(startTime),
-       status = Value(status);
+       startTime = Value(startTime);
   static Insertable<UserTrackData> custom({
     Expression<int>? id,
     Expression<int>? userId,
     Expression<int>? routeId,
     Expression<DateTime>? startTime,
     Expression<DateTime>? endTime,
-    Expression<double>? totalDistanceMeters,
-    Expression<int>? movingTimeSeconds,
-    Expression<int>? totalTimeSeconds,
-    Expression<double>? averageSpeedKmh,
-    Expression<double>? maxSpeedKmh,
     Expression<String>? status,
+    Expression<int>? totalPoints,
+    Expression<double>? totalDistanceKm,
+    Expression<int>? totalDurationSeconds,
     Expression<String>? metadata,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -1409,13 +1310,11 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
       if (routeId != null) 'route_id': routeId,
       if (startTime != null) 'start_time': startTime,
       if (endTime != null) 'end_time': endTime,
-      if (totalDistanceMeters != null)
-        'total_distance_meters': totalDistanceMeters,
-      if (movingTimeSeconds != null) 'moving_time_seconds': movingTimeSeconds,
-      if (totalTimeSeconds != null) 'total_time_seconds': totalTimeSeconds,
-      if (averageSpeedKmh != null) 'average_speed_kmh': averageSpeedKmh,
-      if (maxSpeedKmh != null) 'max_speed_kmh': maxSpeedKmh,
       if (status != null) 'status': status,
+      if (totalPoints != null) 'total_points': totalPoints,
+      if (totalDistanceKm != null) 'total_distance_km': totalDistanceKm,
+      if (totalDurationSeconds != null)
+        'total_duration_seconds': totalDurationSeconds,
       if (metadata != null) 'metadata': metadata,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -1428,12 +1327,10 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
     Value<int?>? routeId,
     Value<DateTime>? startTime,
     Value<DateTime?>? endTime,
-    Value<double>? totalDistanceMeters,
-    Value<int>? movingTimeSeconds,
-    Value<int>? totalTimeSeconds,
-    Value<double>? averageSpeedKmh,
-    Value<double>? maxSpeedKmh,
     Value<String>? status,
+    Value<int>? totalPoints,
+    Value<double>? totalDistanceKm,
+    Value<int>? totalDurationSeconds,
     Value<String?>? metadata,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
@@ -1444,12 +1341,10 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
       routeId: routeId ?? this.routeId,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
-      totalDistanceMeters: totalDistanceMeters ?? this.totalDistanceMeters,
-      movingTimeSeconds: movingTimeSeconds ?? this.movingTimeSeconds,
-      totalTimeSeconds: totalTimeSeconds ?? this.totalTimeSeconds,
-      averageSpeedKmh: averageSpeedKmh ?? this.averageSpeedKmh,
-      maxSpeedKmh: maxSpeedKmh ?? this.maxSpeedKmh,
       status: status ?? this.status,
+      totalPoints: totalPoints ?? this.totalPoints,
+      totalDistanceKm: totalDistanceKm ?? this.totalDistanceKm,
+      totalDurationSeconds: totalDurationSeconds ?? this.totalDurationSeconds,
       metadata: metadata ?? this.metadata,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -1474,25 +1369,17 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
     if (endTime.present) {
       map['end_time'] = Variable<DateTime>(endTime.value);
     }
-    if (totalDistanceMeters.present) {
-      map['total_distance_meters'] = Variable<double>(
-        totalDistanceMeters.value,
-      );
-    }
-    if (movingTimeSeconds.present) {
-      map['moving_time_seconds'] = Variable<int>(movingTimeSeconds.value);
-    }
-    if (totalTimeSeconds.present) {
-      map['total_time_seconds'] = Variable<int>(totalTimeSeconds.value);
-    }
-    if (averageSpeedKmh.present) {
-      map['average_speed_kmh'] = Variable<double>(averageSpeedKmh.value);
-    }
-    if (maxSpeedKmh.present) {
-      map['max_speed_kmh'] = Variable<double>(maxSpeedKmh.value);
-    }
     if (status.present) {
       map['status'] = Variable<String>(status.value);
+    }
+    if (totalPoints.present) {
+      map['total_points'] = Variable<int>(totalPoints.value);
+    }
+    if (totalDistanceKm.present) {
+      map['total_distance_km'] = Variable<double>(totalDistanceKm.value);
+    }
+    if (totalDurationSeconds.present) {
+      map['total_duration_seconds'] = Variable<int>(totalDurationSeconds.value);
     }
     if (metadata.present) {
       map['metadata'] = Variable<String>(metadata.value);
@@ -1514,12 +1401,10 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
           ..write('routeId: $routeId, ')
           ..write('startTime: $startTime, ')
           ..write('endTime: $endTime, ')
-          ..write('totalDistanceMeters: $totalDistanceMeters, ')
-          ..write('movingTimeSeconds: $movingTimeSeconds, ')
-          ..write('totalTimeSeconds: $totalTimeSeconds, ')
-          ..write('averageSpeedKmh: $averageSpeedKmh, ')
-          ..write('maxSpeedKmh: $maxSpeedKmh, ')
           ..write('status: $status, ')
+          ..write('totalPoints: $totalPoints, ')
+          ..write('totalDistanceKm: $totalDistanceKm, ')
+          ..write('totalDurationSeconds: $totalDurationSeconds, ')
           ..write('metadata: $metadata, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
@@ -1528,12 +1413,12 @@ class UserTracksCompanion extends UpdateCompanion<UserTrackData> {
   }
 }
 
-class $TrackPointsTable extends TrackPoints
-    with TableInfo<$TrackPointsTable, TrackPointData> {
+class $CompactTracksTable extends CompactTracks
+    with TableInfo<$CompactTracksTable, CompactTrackData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TrackPointsTable(this.attachedDatabase, [this._alias]);
+  $CompactTracksTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -1547,12 +1432,12 @@ class $TrackPointsTable extends TrackPoints
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _trackIdMeta = const VerificationMeta(
-    'trackId',
+  static const VerificationMeta _userTrackIdMeta = const VerificationMeta(
+    'userTrackId',
   );
   @override
-  late final GeneratedColumn<int> trackId = GeneratedColumn<int>(
-    'track_id',
+  late final GeneratedColumn<int> userTrackId = GeneratedColumn<int>(
+    'user_track_id',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -1561,126 +1446,75 @@ class $TrackPointsTable extends TrackPoints
       'REFERENCES user_tracks (id)',
     ),
   );
-  static const VerificationMeta _latitudeMeta = const VerificationMeta(
-    'latitude',
+  static const VerificationMeta _coordinatesBlobMeta = const VerificationMeta(
+    'coordinatesBlob',
   );
   @override
-  late final GeneratedColumn<double> latitude = GeneratedColumn<double>(
-    'latitude',
-    aliasedName,
-    false,
-    type: DriftSqlType.double,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _longitudeMeta = const VerificationMeta(
-    'longitude',
-  );
-  @override
-  late final GeneratedColumn<double> longitude = GeneratedColumn<double>(
-    'longitude',
-    aliasedName,
-    false,
-    type: DriftSqlType.double,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _timestampMeta = const VerificationMeta(
-    'timestamp',
-  );
-  @override
-  late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
-    'timestamp',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _accuracyMeta = const VerificationMeta(
-    'accuracy',
-  );
-  @override
-  late final GeneratedColumn<double> accuracy = GeneratedColumn<double>(
-    'accuracy',
-    aliasedName,
-    true,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _altitudeMeta = const VerificationMeta(
-    'altitude',
-  );
-  @override
-  late final GeneratedColumn<double> altitude = GeneratedColumn<double>(
-    'altitude',
-    aliasedName,
-    true,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _altitudeAccuracyMeta = const VerificationMeta(
-    'altitudeAccuracy',
-  );
-  @override
-  late final GeneratedColumn<double> altitudeAccuracy = GeneratedColumn<double>(
-    'altitude_accuracy',
-    aliasedName,
-    true,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _speedKmhMeta = const VerificationMeta(
-    'speedKmh',
-  );
-  @override
-  late final GeneratedColumn<double> speedKmh = GeneratedColumn<double>(
-    'speed_kmh',
-    aliasedName,
-    true,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _bearingMeta = const VerificationMeta(
-    'bearing',
-  );
-  @override
-  late final GeneratedColumn<double> bearing = GeneratedColumn<double>(
-    'bearing',
-    aliasedName,
-    true,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _distanceFromPreviousMeta =
-      const VerificationMeta('distanceFromPrevious');
-  @override
-  late final GeneratedColumn<double> distanceFromPrevious =
-      GeneratedColumn<double>(
-        'distance_from_previous',
+  late final GeneratedColumn<Uint8List> coordinatesBlob =
+      GeneratedColumn<Uint8List>(
+        'coordinates_blob',
         aliasedName,
-        true,
-        type: DriftSqlType.double,
-        requiredDuringInsert: false,
+        false,
+        type: DriftSqlType.blob,
+        requiredDuringInsert: true,
       );
-  static const VerificationMeta _timeFromPreviousMeta = const VerificationMeta(
-    'timeFromPrevious',
+  static const VerificationMeta _timestampsBlobMeta = const VerificationMeta(
+    'timestampsBlob',
   );
   @override
-  late final GeneratedColumn<int> timeFromPrevious = GeneratedColumn<int>(
-    'time_from_previous',
+  late final GeneratedColumn<Uint8List> timestampsBlob =
+      GeneratedColumn<Uint8List>(
+        'timestamps_blob',
+        aliasedName,
+        false,
+        type: DriftSqlType.blob,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _speedsBlobMeta = const VerificationMeta(
+    'speedsBlob',
+  );
+  @override
+  late final GeneratedColumn<Uint8List> speedsBlob = GeneratedColumn<Uint8List>(
+    'speeds_blob',
     aliasedName,
-    true,
+    false,
+    type: DriftSqlType.blob,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _accuraciesBlobMeta = const VerificationMeta(
+    'accuraciesBlob',
+  );
+  @override
+  late final GeneratedColumn<Uint8List> accuraciesBlob =
+      GeneratedColumn<Uint8List>(
+        'accuracies_blob',
+        aliasedName,
+        false,
+        type: DriftSqlType.blob,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _bearingsBlobMeta = const VerificationMeta(
+    'bearingsBlob',
+  );
+  @override
+  late final GeneratedColumn<Uint8List> bearingsBlob =
+      GeneratedColumn<Uint8List>(
+        'bearings_blob',
+        aliasedName,
+        false,
+        type: DriftSqlType.blob,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _segmentOrderMeta = const VerificationMeta(
+    'segmentOrder',
+  );
+  @override
+  late final GeneratedColumn<int> segmentOrder = GeneratedColumn<int>(
+    'segment_order',
+    aliasedName,
+    false,
     type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _metadataMeta = const VerificationMeta(
-    'metadata',
-  );
-  @override
-  late final GeneratedColumn<String> metadata = GeneratedColumn<String>(
-    'metadata',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
@@ -1697,28 +1531,23 @@ class $TrackPointsTable extends TrackPoints
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    trackId,
-    latitude,
-    longitude,
-    timestamp,
-    accuracy,
-    altitude,
-    altitudeAccuracy,
-    speedKmh,
-    bearing,
-    distanceFromPrevious,
-    timeFromPrevious,
-    metadata,
+    userTrackId,
+    coordinatesBlob,
+    timestampsBlob,
+    speedsBlob,
+    accuraciesBlob,
+    bearingsBlob,
+    segmentOrder,
     createdAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'track_points';
+  static const String $name = 'compact_tracks';
   @override
   VerificationContext validateIntegrity(
-    Insertable<TrackPointData> instance, {
+    Insertable<CompactTrackData> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -1726,94 +1555,79 @@ class $TrackPointsTable extends TrackPoints
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('track_id')) {
+    if (data.containsKey('user_track_id')) {
       context.handle(
-        _trackIdMeta,
-        trackId.isAcceptableOrUnknown(data['track_id']!, _trackIdMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_trackIdMeta);
-    }
-    if (data.containsKey('latitude')) {
-      context.handle(
-        _latitudeMeta,
-        latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_latitudeMeta);
-    }
-    if (data.containsKey('longitude')) {
-      context.handle(
-        _longitudeMeta,
-        longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_longitudeMeta);
-    }
-    if (data.containsKey('timestamp')) {
-      context.handle(
-        _timestampMeta,
-        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_timestampMeta);
-    }
-    if (data.containsKey('accuracy')) {
-      context.handle(
-        _accuracyMeta,
-        accuracy.isAcceptableOrUnknown(data['accuracy']!, _accuracyMeta),
-      );
-    }
-    if (data.containsKey('altitude')) {
-      context.handle(
-        _altitudeMeta,
-        altitude.isAcceptableOrUnknown(data['altitude']!, _altitudeMeta),
-      );
-    }
-    if (data.containsKey('altitude_accuracy')) {
-      context.handle(
-        _altitudeAccuracyMeta,
-        altitudeAccuracy.isAcceptableOrUnknown(
-          data['altitude_accuracy']!,
-          _altitudeAccuracyMeta,
+        _userTrackIdMeta,
+        userTrackId.isAcceptableOrUnknown(
+          data['user_track_id']!,
+          _userTrackIdMeta,
         ),
       );
+    } else if (isInserting) {
+      context.missing(_userTrackIdMeta);
     }
-    if (data.containsKey('speed_kmh')) {
+    if (data.containsKey('coordinates_blob')) {
       context.handle(
-        _speedKmhMeta,
-        speedKmh.isAcceptableOrUnknown(data['speed_kmh']!, _speedKmhMeta),
-      );
-    }
-    if (data.containsKey('bearing')) {
-      context.handle(
-        _bearingMeta,
-        bearing.isAcceptableOrUnknown(data['bearing']!, _bearingMeta),
-      );
-    }
-    if (data.containsKey('distance_from_previous')) {
-      context.handle(
-        _distanceFromPreviousMeta,
-        distanceFromPrevious.isAcceptableOrUnknown(
-          data['distance_from_previous']!,
-          _distanceFromPreviousMeta,
+        _coordinatesBlobMeta,
+        coordinatesBlob.isAcceptableOrUnknown(
+          data['coordinates_blob']!,
+          _coordinatesBlobMeta,
         ),
       );
+    } else if (isInserting) {
+      context.missing(_coordinatesBlobMeta);
     }
-    if (data.containsKey('time_from_previous')) {
+    if (data.containsKey('timestamps_blob')) {
       context.handle(
-        _timeFromPreviousMeta,
-        timeFromPrevious.isAcceptableOrUnknown(
-          data['time_from_previous']!,
-          _timeFromPreviousMeta,
+        _timestampsBlobMeta,
+        timestampsBlob.isAcceptableOrUnknown(
+          data['timestamps_blob']!,
+          _timestampsBlobMeta,
         ),
       );
+    } else if (isInserting) {
+      context.missing(_timestampsBlobMeta);
     }
-    if (data.containsKey('metadata')) {
+    if (data.containsKey('speeds_blob')) {
       context.handle(
-        _metadataMeta,
-        metadata.isAcceptableOrUnknown(data['metadata']!, _metadataMeta),
+        _speedsBlobMeta,
+        speedsBlob.isAcceptableOrUnknown(data['speeds_blob']!, _speedsBlobMeta),
       );
+    } else if (isInserting) {
+      context.missing(_speedsBlobMeta);
+    }
+    if (data.containsKey('accuracies_blob')) {
+      context.handle(
+        _accuraciesBlobMeta,
+        accuraciesBlob.isAcceptableOrUnknown(
+          data['accuracies_blob']!,
+          _accuraciesBlobMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_accuraciesBlobMeta);
+    }
+    if (data.containsKey('bearings_blob')) {
+      context.handle(
+        _bearingsBlobMeta,
+        bearingsBlob.isAcceptableOrUnknown(
+          data['bearings_blob']!,
+          _bearingsBlobMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_bearingsBlobMeta);
+    }
+    if (data.containsKey('segment_order')) {
+      context.handle(
+        _segmentOrderMeta,
+        segmentOrder.isAcceptableOrUnknown(
+          data['segment_order']!,
+          _segmentOrderMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_segmentOrderMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(
@@ -1827,61 +1641,41 @@ class $TrackPointsTable extends TrackPoints
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  TrackPointData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  CompactTrackData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TrackPointData(
+    return CompactTrackData(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      trackId: attachedDatabase.typeMapping.read(
+      userTrackId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}track_id'],
+        data['${effectivePrefix}user_track_id'],
       )!,
-      latitude: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}latitude'],
+      coordinatesBlob: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}coordinates_blob'],
       )!,
-      longitude: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}longitude'],
+      timestampsBlob: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}timestamps_blob'],
       )!,
-      timestamp: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}timestamp'],
+      speedsBlob: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}speeds_blob'],
       )!,
-      accuracy: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}accuracy'],
-      ),
-      altitude: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}altitude'],
-      ),
-      altitudeAccuracy: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}altitude_accuracy'],
-      ),
-      speedKmh: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}speed_kmh'],
-      ),
-      bearing: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}bearing'],
-      ),
-      distanceFromPrevious: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}distance_from_previous'],
-      ),
-      timeFromPrevious: attachedDatabase.typeMapping.read(
+      accuraciesBlob: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}accuracies_blob'],
+      )!,
+      bearingsBlob: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}bearings_blob'],
+      )!,
+      segmentOrder: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}time_from_previous'],
-      ),
-      metadata: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}metadata'],
-      ),
+        data['${effectivePrefix}segment_order'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -1890,161 +1684,93 @@ class $TrackPointsTable extends TrackPoints
   }
 
   @override
-  $TrackPointsTable createAlias(String alias) {
-    return $TrackPointsTable(attachedDatabase, alias);
+  $CompactTracksTable createAlias(String alias) {
+    return $CompactTracksTable(attachedDatabase, alias);
   }
 }
 
-class TrackPointData extends DataClass implements Insertable<TrackPointData> {
-  /// Уникальный ID точки
+class CompactTrackData extends DataClass
+    implements Insertable<CompactTrackData> {
+  /// Уникальный ID компактного трека
   final int id;
 
-  /// ID трека, к которому относится точка
-  final int trackId;
+  /// ID пользовательского трека, к которому относится этот сегмент
+  final int userTrackId;
 
-  /// Широта
-  final double latitude;
+  /// Координаты в бинарном формате Float64List -> Uint8List
+  final Uint8List coordinatesBlob;
 
-  /// Долгота
-  final double longitude;
+  /// Временные метки в бинарном формате Int64List -> Uint8List
+  final Uint8List timestampsBlob;
 
-  /// Временная метка GPS точки
-  final DateTime timestamp;
+  /// Скорости в бинарном формате Float32List -> Uint8List
+  final Uint8List speedsBlob;
 
-  /// Точность GPS в метрах
-  final double? accuracy;
+  /// Точность GPS в бинарном формате Float32List -> Uint8List
+  final Uint8List accuraciesBlob;
 
-  /// Высота над уровнем моря в метрах
-  final double? altitude;
+  /// Направление движения в бинарном формате Float32List -> Uint8List
+  final Uint8List bearingsBlob;
 
-  /// Точность высоты в метрах
-  final double? altitudeAccuracy;
-
-  /// Скорость в км/ч
-  final double? speedKmh;
-
-  /// Направление движения в градусах (0-360)
-  final double? bearing;
-
-  /// Расстояние от предыдущей точки в метрах
-  final double? distanceFromPrevious;
-
-  /// Время от предыдущей точки в секундах
-  final int? timeFromPrevious;
-
-  /// Дополнительные метаданные в формате JSON
-  final String? metadata;
+  /// Порядковый номер сегмента в треке (для правильной сортировки)
+  final int segmentOrder;
 
   /// Дата создания записи
   final DateTime createdAt;
-  const TrackPointData({
+  const CompactTrackData({
     required this.id,
-    required this.trackId,
-    required this.latitude,
-    required this.longitude,
-    required this.timestamp,
-    this.accuracy,
-    this.altitude,
-    this.altitudeAccuracy,
-    this.speedKmh,
-    this.bearing,
-    this.distanceFromPrevious,
-    this.timeFromPrevious,
-    this.metadata,
+    required this.userTrackId,
+    required this.coordinatesBlob,
+    required this.timestampsBlob,
+    required this.speedsBlob,
+    required this.accuraciesBlob,
+    required this.bearingsBlob,
+    required this.segmentOrder,
     required this.createdAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['track_id'] = Variable<int>(trackId);
-    map['latitude'] = Variable<double>(latitude);
-    map['longitude'] = Variable<double>(longitude);
-    map['timestamp'] = Variable<DateTime>(timestamp);
-    if (!nullToAbsent || accuracy != null) {
-      map['accuracy'] = Variable<double>(accuracy);
-    }
-    if (!nullToAbsent || altitude != null) {
-      map['altitude'] = Variable<double>(altitude);
-    }
-    if (!nullToAbsent || altitudeAccuracy != null) {
-      map['altitude_accuracy'] = Variable<double>(altitudeAccuracy);
-    }
-    if (!nullToAbsent || speedKmh != null) {
-      map['speed_kmh'] = Variable<double>(speedKmh);
-    }
-    if (!nullToAbsent || bearing != null) {
-      map['bearing'] = Variable<double>(bearing);
-    }
-    if (!nullToAbsent || distanceFromPrevious != null) {
-      map['distance_from_previous'] = Variable<double>(distanceFromPrevious);
-    }
-    if (!nullToAbsent || timeFromPrevious != null) {
-      map['time_from_previous'] = Variable<int>(timeFromPrevious);
-    }
-    if (!nullToAbsent || metadata != null) {
-      map['metadata'] = Variable<String>(metadata);
-    }
+    map['user_track_id'] = Variable<int>(userTrackId);
+    map['coordinates_blob'] = Variable<Uint8List>(coordinatesBlob);
+    map['timestamps_blob'] = Variable<Uint8List>(timestampsBlob);
+    map['speeds_blob'] = Variable<Uint8List>(speedsBlob);
+    map['accuracies_blob'] = Variable<Uint8List>(accuraciesBlob);
+    map['bearings_blob'] = Variable<Uint8List>(bearingsBlob);
+    map['segment_order'] = Variable<int>(segmentOrder);
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
 
-  TrackPointsCompanion toCompanion(bool nullToAbsent) {
-    return TrackPointsCompanion(
+  CompactTracksCompanion toCompanion(bool nullToAbsent) {
+    return CompactTracksCompanion(
       id: Value(id),
-      trackId: Value(trackId),
-      latitude: Value(latitude),
-      longitude: Value(longitude),
-      timestamp: Value(timestamp),
-      accuracy: accuracy == null && nullToAbsent
-          ? const Value.absent()
-          : Value(accuracy),
-      altitude: altitude == null && nullToAbsent
-          ? const Value.absent()
-          : Value(altitude),
-      altitudeAccuracy: altitudeAccuracy == null && nullToAbsent
-          ? const Value.absent()
-          : Value(altitudeAccuracy),
-      speedKmh: speedKmh == null && nullToAbsent
-          ? const Value.absent()
-          : Value(speedKmh),
-      bearing: bearing == null && nullToAbsent
-          ? const Value.absent()
-          : Value(bearing),
-      distanceFromPrevious: distanceFromPrevious == null && nullToAbsent
-          ? const Value.absent()
-          : Value(distanceFromPrevious),
-      timeFromPrevious: timeFromPrevious == null && nullToAbsent
-          ? const Value.absent()
-          : Value(timeFromPrevious),
-      metadata: metadata == null && nullToAbsent
-          ? const Value.absent()
-          : Value(metadata),
+      userTrackId: Value(userTrackId),
+      coordinatesBlob: Value(coordinatesBlob),
+      timestampsBlob: Value(timestampsBlob),
+      speedsBlob: Value(speedsBlob),
+      accuraciesBlob: Value(accuraciesBlob),
+      bearingsBlob: Value(bearingsBlob),
+      segmentOrder: Value(segmentOrder),
       createdAt: Value(createdAt),
     );
   }
 
-  factory TrackPointData.fromJson(
+  factory CompactTrackData.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TrackPointData(
+    return CompactTrackData(
       id: serializer.fromJson<int>(json['id']),
-      trackId: serializer.fromJson<int>(json['trackId']),
-      latitude: serializer.fromJson<double>(json['latitude']),
-      longitude: serializer.fromJson<double>(json['longitude']),
-      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
-      accuracy: serializer.fromJson<double?>(json['accuracy']),
-      altitude: serializer.fromJson<double?>(json['altitude']),
-      altitudeAccuracy: serializer.fromJson<double?>(json['altitudeAccuracy']),
-      speedKmh: serializer.fromJson<double?>(json['speedKmh']),
-      bearing: serializer.fromJson<double?>(json['bearing']),
-      distanceFromPrevious: serializer.fromJson<double?>(
-        json['distanceFromPrevious'],
-      ),
-      timeFromPrevious: serializer.fromJson<int?>(json['timeFromPrevious']),
-      metadata: serializer.fromJson<String?>(json['metadata']),
+      userTrackId: serializer.fromJson<int>(json['userTrackId']),
+      coordinatesBlob: serializer.fromJson<Uint8List>(json['coordinatesBlob']),
+      timestampsBlob: serializer.fromJson<Uint8List>(json['timestampsBlob']),
+      speedsBlob: serializer.fromJson<Uint8List>(json['speedsBlob']),
+      accuraciesBlob: serializer.fromJson<Uint8List>(json['accuraciesBlob']),
+      bearingsBlob: serializer.fromJson<Uint8List>(json['bearingsBlob']),
+      segmentOrder: serializer.fromJson<int>(json['segmentOrder']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -2053,100 +1779,77 @@ class TrackPointData extends DataClass implements Insertable<TrackPointData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'trackId': serializer.toJson<int>(trackId),
-      'latitude': serializer.toJson<double>(latitude),
-      'longitude': serializer.toJson<double>(longitude),
-      'timestamp': serializer.toJson<DateTime>(timestamp),
-      'accuracy': serializer.toJson<double?>(accuracy),
-      'altitude': serializer.toJson<double?>(altitude),
-      'altitudeAccuracy': serializer.toJson<double?>(altitudeAccuracy),
-      'speedKmh': serializer.toJson<double?>(speedKmh),
-      'bearing': serializer.toJson<double?>(bearing),
-      'distanceFromPrevious': serializer.toJson<double?>(distanceFromPrevious),
-      'timeFromPrevious': serializer.toJson<int?>(timeFromPrevious),
-      'metadata': serializer.toJson<String?>(metadata),
+      'userTrackId': serializer.toJson<int>(userTrackId),
+      'coordinatesBlob': serializer.toJson<Uint8List>(coordinatesBlob),
+      'timestampsBlob': serializer.toJson<Uint8List>(timestampsBlob),
+      'speedsBlob': serializer.toJson<Uint8List>(speedsBlob),
+      'accuraciesBlob': serializer.toJson<Uint8List>(accuraciesBlob),
+      'bearingsBlob': serializer.toJson<Uint8List>(bearingsBlob),
+      'segmentOrder': serializer.toJson<int>(segmentOrder),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
-  TrackPointData copyWith({
+  CompactTrackData copyWith({
     int? id,
-    int? trackId,
-    double? latitude,
-    double? longitude,
-    DateTime? timestamp,
-    Value<double?> accuracy = const Value.absent(),
-    Value<double?> altitude = const Value.absent(),
-    Value<double?> altitudeAccuracy = const Value.absent(),
-    Value<double?> speedKmh = const Value.absent(),
-    Value<double?> bearing = const Value.absent(),
-    Value<double?> distanceFromPrevious = const Value.absent(),
-    Value<int?> timeFromPrevious = const Value.absent(),
-    Value<String?> metadata = const Value.absent(),
+    int? userTrackId,
+    Uint8List? coordinatesBlob,
+    Uint8List? timestampsBlob,
+    Uint8List? speedsBlob,
+    Uint8List? accuraciesBlob,
+    Uint8List? bearingsBlob,
+    int? segmentOrder,
     DateTime? createdAt,
-  }) => TrackPointData(
+  }) => CompactTrackData(
     id: id ?? this.id,
-    trackId: trackId ?? this.trackId,
-    latitude: latitude ?? this.latitude,
-    longitude: longitude ?? this.longitude,
-    timestamp: timestamp ?? this.timestamp,
-    accuracy: accuracy.present ? accuracy.value : this.accuracy,
-    altitude: altitude.present ? altitude.value : this.altitude,
-    altitudeAccuracy: altitudeAccuracy.present
-        ? altitudeAccuracy.value
-        : this.altitudeAccuracy,
-    speedKmh: speedKmh.present ? speedKmh.value : this.speedKmh,
-    bearing: bearing.present ? bearing.value : this.bearing,
-    distanceFromPrevious: distanceFromPrevious.present
-        ? distanceFromPrevious.value
-        : this.distanceFromPrevious,
-    timeFromPrevious: timeFromPrevious.present
-        ? timeFromPrevious.value
-        : this.timeFromPrevious,
-    metadata: metadata.present ? metadata.value : this.metadata,
+    userTrackId: userTrackId ?? this.userTrackId,
+    coordinatesBlob: coordinatesBlob ?? this.coordinatesBlob,
+    timestampsBlob: timestampsBlob ?? this.timestampsBlob,
+    speedsBlob: speedsBlob ?? this.speedsBlob,
+    accuraciesBlob: accuraciesBlob ?? this.accuraciesBlob,
+    bearingsBlob: bearingsBlob ?? this.bearingsBlob,
+    segmentOrder: segmentOrder ?? this.segmentOrder,
     createdAt: createdAt ?? this.createdAt,
   );
-  TrackPointData copyWithCompanion(TrackPointsCompanion data) {
-    return TrackPointData(
+  CompactTrackData copyWithCompanion(CompactTracksCompanion data) {
+    return CompactTrackData(
       id: data.id.present ? data.id.value : this.id,
-      trackId: data.trackId.present ? data.trackId.value : this.trackId,
-      latitude: data.latitude.present ? data.latitude.value : this.latitude,
-      longitude: data.longitude.present ? data.longitude.value : this.longitude,
-      timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
-      accuracy: data.accuracy.present ? data.accuracy.value : this.accuracy,
-      altitude: data.altitude.present ? data.altitude.value : this.altitude,
-      altitudeAccuracy: data.altitudeAccuracy.present
-          ? data.altitudeAccuracy.value
-          : this.altitudeAccuracy,
-      speedKmh: data.speedKmh.present ? data.speedKmh.value : this.speedKmh,
-      bearing: data.bearing.present ? data.bearing.value : this.bearing,
-      distanceFromPrevious: data.distanceFromPrevious.present
-          ? data.distanceFromPrevious.value
-          : this.distanceFromPrevious,
-      timeFromPrevious: data.timeFromPrevious.present
-          ? data.timeFromPrevious.value
-          : this.timeFromPrevious,
-      metadata: data.metadata.present ? data.metadata.value : this.metadata,
+      userTrackId: data.userTrackId.present
+          ? data.userTrackId.value
+          : this.userTrackId,
+      coordinatesBlob: data.coordinatesBlob.present
+          ? data.coordinatesBlob.value
+          : this.coordinatesBlob,
+      timestampsBlob: data.timestampsBlob.present
+          ? data.timestampsBlob.value
+          : this.timestampsBlob,
+      speedsBlob: data.speedsBlob.present
+          ? data.speedsBlob.value
+          : this.speedsBlob,
+      accuraciesBlob: data.accuraciesBlob.present
+          ? data.accuraciesBlob.value
+          : this.accuraciesBlob,
+      bearingsBlob: data.bearingsBlob.present
+          ? data.bearingsBlob.value
+          : this.bearingsBlob,
+      segmentOrder: data.segmentOrder.present
+          ? data.segmentOrder.value
+          : this.segmentOrder,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('TrackPointData(')
+    return (StringBuffer('CompactTrackData(')
           ..write('id: $id, ')
-          ..write('trackId: $trackId, ')
-          ..write('latitude: $latitude, ')
-          ..write('longitude: $longitude, ')
-          ..write('timestamp: $timestamp, ')
-          ..write('accuracy: $accuracy, ')
-          ..write('altitude: $altitude, ')
-          ..write('altitudeAccuracy: $altitudeAccuracy, ')
-          ..write('speedKmh: $speedKmh, ')
-          ..write('bearing: $bearing, ')
-          ..write('distanceFromPrevious: $distanceFromPrevious, ')
-          ..write('timeFromPrevious: $timeFromPrevious, ')
-          ..write('metadata: $metadata, ')
+          ..write('userTrackId: $userTrackId, ')
+          ..write('coordinatesBlob: $coordinatesBlob, ')
+          ..write('timestampsBlob: $timestampsBlob, ')
+          ..write('speedsBlob: $speedsBlob, ')
+          ..write('accuraciesBlob: $accuraciesBlob, ')
+          ..write('bearingsBlob: $bearingsBlob, ')
+          ..write('segmentOrder: $segmentOrder, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -2155,155 +1858,121 @@ class TrackPointData extends DataClass implements Insertable<TrackPointData> {
   @override
   int get hashCode => Object.hash(
     id,
-    trackId,
-    latitude,
-    longitude,
-    timestamp,
-    accuracy,
-    altitude,
-    altitudeAccuracy,
-    speedKmh,
-    bearing,
-    distanceFromPrevious,
-    timeFromPrevious,
-    metadata,
+    userTrackId,
+    $driftBlobEquality.hash(coordinatesBlob),
+    $driftBlobEquality.hash(timestampsBlob),
+    $driftBlobEquality.hash(speedsBlob),
+    $driftBlobEquality.hash(accuraciesBlob),
+    $driftBlobEquality.hash(bearingsBlob),
+    segmentOrder,
     createdAt,
   );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is TrackPointData &&
+      (other is CompactTrackData &&
           other.id == this.id &&
-          other.trackId == this.trackId &&
-          other.latitude == this.latitude &&
-          other.longitude == this.longitude &&
-          other.timestamp == this.timestamp &&
-          other.accuracy == this.accuracy &&
-          other.altitude == this.altitude &&
-          other.altitudeAccuracy == this.altitudeAccuracy &&
-          other.speedKmh == this.speedKmh &&
-          other.bearing == this.bearing &&
-          other.distanceFromPrevious == this.distanceFromPrevious &&
-          other.timeFromPrevious == this.timeFromPrevious &&
-          other.metadata == this.metadata &&
+          other.userTrackId == this.userTrackId &&
+          $driftBlobEquality.equals(
+            other.coordinatesBlob,
+            this.coordinatesBlob,
+          ) &&
+          $driftBlobEquality.equals(
+            other.timestampsBlob,
+            this.timestampsBlob,
+          ) &&
+          $driftBlobEquality.equals(other.speedsBlob, this.speedsBlob) &&
+          $driftBlobEquality.equals(
+            other.accuraciesBlob,
+            this.accuraciesBlob,
+          ) &&
+          $driftBlobEquality.equals(other.bearingsBlob, this.bearingsBlob) &&
+          other.segmentOrder == this.segmentOrder &&
           other.createdAt == this.createdAt);
 }
 
-class TrackPointsCompanion extends UpdateCompanion<TrackPointData> {
+class CompactTracksCompanion extends UpdateCompanion<CompactTrackData> {
   final Value<int> id;
-  final Value<int> trackId;
-  final Value<double> latitude;
-  final Value<double> longitude;
-  final Value<DateTime> timestamp;
-  final Value<double?> accuracy;
-  final Value<double?> altitude;
-  final Value<double?> altitudeAccuracy;
-  final Value<double?> speedKmh;
-  final Value<double?> bearing;
-  final Value<double?> distanceFromPrevious;
-  final Value<int?> timeFromPrevious;
-  final Value<String?> metadata;
+  final Value<int> userTrackId;
+  final Value<Uint8List> coordinatesBlob;
+  final Value<Uint8List> timestampsBlob;
+  final Value<Uint8List> speedsBlob;
+  final Value<Uint8List> accuraciesBlob;
+  final Value<Uint8List> bearingsBlob;
+  final Value<int> segmentOrder;
   final Value<DateTime> createdAt;
-  const TrackPointsCompanion({
+  const CompactTracksCompanion({
     this.id = const Value.absent(),
-    this.trackId = const Value.absent(),
-    this.latitude = const Value.absent(),
-    this.longitude = const Value.absent(),
-    this.timestamp = const Value.absent(),
-    this.accuracy = const Value.absent(),
-    this.altitude = const Value.absent(),
-    this.altitudeAccuracy = const Value.absent(),
-    this.speedKmh = const Value.absent(),
-    this.bearing = const Value.absent(),
-    this.distanceFromPrevious = const Value.absent(),
-    this.timeFromPrevious = const Value.absent(),
-    this.metadata = const Value.absent(),
+    this.userTrackId = const Value.absent(),
+    this.coordinatesBlob = const Value.absent(),
+    this.timestampsBlob = const Value.absent(),
+    this.speedsBlob = const Value.absent(),
+    this.accuraciesBlob = const Value.absent(),
+    this.bearingsBlob = const Value.absent(),
+    this.segmentOrder = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
-  TrackPointsCompanion.insert({
+  CompactTracksCompanion.insert({
     this.id = const Value.absent(),
-    required int trackId,
-    required double latitude,
-    required double longitude,
-    required DateTime timestamp,
-    this.accuracy = const Value.absent(),
-    this.altitude = const Value.absent(),
-    this.altitudeAccuracy = const Value.absent(),
-    this.speedKmh = const Value.absent(),
-    this.bearing = const Value.absent(),
-    this.distanceFromPrevious = const Value.absent(),
-    this.timeFromPrevious = const Value.absent(),
-    this.metadata = const Value.absent(),
+    required int userTrackId,
+    required Uint8List coordinatesBlob,
+    required Uint8List timestampsBlob,
+    required Uint8List speedsBlob,
+    required Uint8List accuraciesBlob,
+    required Uint8List bearingsBlob,
+    required int segmentOrder,
     this.createdAt = const Value.absent(),
-  }) : trackId = Value(trackId),
-       latitude = Value(latitude),
-       longitude = Value(longitude),
-       timestamp = Value(timestamp);
-  static Insertable<TrackPointData> custom({
+  }) : userTrackId = Value(userTrackId),
+       coordinatesBlob = Value(coordinatesBlob),
+       timestampsBlob = Value(timestampsBlob),
+       speedsBlob = Value(speedsBlob),
+       accuraciesBlob = Value(accuraciesBlob),
+       bearingsBlob = Value(bearingsBlob),
+       segmentOrder = Value(segmentOrder);
+  static Insertable<CompactTrackData> custom({
     Expression<int>? id,
-    Expression<int>? trackId,
-    Expression<double>? latitude,
-    Expression<double>? longitude,
-    Expression<DateTime>? timestamp,
-    Expression<double>? accuracy,
-    Expression<double>? altitude,
-    Expression<double>? altitudeAccuracy,
-    Expression<double>? speedKmh,
-    Expression<double>? bearing,
-    Expression<double>? distanceFromPrevious,
-    Expression<int>? timeFromPrevious,
-    Expression<String>? metadata,
+    Expression<int>? userTrackId,
+    Expression<Uint8List>? coordinatesBlob,
+    Expression<Uint8List>? timestampsBlob,
+    Expression<Uint8List>? speedsBlob,
+    Expression<Uint8List>? accuraciesBlob,
+    Expression<Uint8List>? bearingsBlob,
+    Expression<int>? segmentOrder,
     Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (trackId != null) 'track_id': trackId,
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
-      if (timestamp != null) 'timestamp': timestamp,
-      if (accuracy != null) 'accuracy': accuracy,
-      if (altitude != null) 'altitude': altitude,
-      if (altitudeAccuracy != null) 'altitude_accuracy': altitudeAccuracy,
-      if (speedKmh != null) 'speed_kmh': speedKmh,
-      if (bearing != null) 'bearing': bearing,
-      if (distanceFromPrevious != null)
-        'distance_from_previous': distanceFromPrevious,
-      if (timeFromPrevious != null) 'time_from_previous': timeFromPrevious,
-      if (metadata != null) 'metadata': metadata,
+      if (userTrackId != null) 'user_track_id': userTrackId,
+      if (coordinatesBlob != null) 'coordinates_blob': coordinatesBlob,
+      if (timestampsBlob != null) 'timestamps_blob': timestampsBlob,
+      if (speedsBlob != null) 'speeds_blob': speedsBlob,
+      if (accuraciesBlob != null) 'accuracies_blob': accuraciesBlob,
+      if (bearingsBlob != null) 'bearings_blob': bearingsBlob,
+      if (segmentOrder != null) 'segment_order': segmentOrder,
       if (createdAt != null) 'created_at': createdAt,
     });
   }
 
-  TrackPointsCompanion copyWith({
+  CompactTracksCompanion copyWith({
     Value<int>? id,
-    Value<int>? trackId,
-    Value<double>? latitude,
-    Value<double>? longitude,
-    Value<DateTime>? timestamp,
-    Value<double?>? accuracy,
-    Value<double?>? altitude,
-    Value<double?>? altitudeAccuracy,
-    Value<double?>? speedKmh,
-    Value<double?>? bearing,
-    Value<double?>? distanceFromPrevious,
-    Value<int?>? timeFromPrevious,
-    Value<String?>? metadata,
+    Value<int>? userTrackId,
+    Value<Uint8List>? coordinatesBlob,
+    Value<Uint8List>? timestampsBlob,
+    Value<Uint8List>? speedsBlob,
+    Value<Uint8List>? accuraciesBlob,
+    Value<Uint8List>? bearingsBlob,
+    Value<int>? segmentOrder,
     Value<DateTime>? createdAt,
   }) {
-    return TrackPointsCompanion(
+    return CompactTracksCompanion(
       id: id ?? this.id,
-      trackId: trackId ?? this.trackId,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      timestamp: timestamp ?? this.timestamp,
-      accuracy: accuracy ?? this.accuracy,
-      altitude: altitude ?? this.altitude,
-      altitudeAccuracy: altitudeAccuracy ?? this.altitudeAccuracy,
-      speedKmh: speedKmh ?? this.speedKmh,
-      bearing: bearing ?? this.bearing,
-      distanceFromPrevious: distanceFromPrevious ?? this.distanceFromPrevious,
-      timeFromPrevious: timeFromPrevious ?? this.timeFromPrevious,
-      metadata: metadata ?? this.metadata,
+      userTrackId: userTrackId ?? this.userTrackId,
+      coordinatesBlob: coordinatesBlob ?? this.coordinatesBlob,
+      timestampsBlob: timestampsBlob ?? this.timestampsBlob,
+      speedsBlob: speedsBlob ?? this.speedsBlob,
+      accuraciesBlob: accuraciesBlob ?? this.accuraciesBlob,
+      bearingsBlob: bearingsBlob ?? this.bearingsBlob,
+      segmentOrder: segmentOrder ?? this.segmentOrder,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -2314,43 +1983,26 @@ class TrackPointsCompanion extends UpdateCompanion<TrackPointData> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (trackId.present) {
-      map['track_id'] = Variable<int>(trackId.value);
+    if (userTrackId.present) {
+      map['user_track_id'] = Variable<int>(userTrackId.value);
     }
-    if (latitude.present) {
-      map['latitude'] = Variable<double>(latitude.value);
+    if (coordinatesBlob.present) {
+      map['coordinates_blob'] = Variable<Uint8List>(coordinatesBlob.value);
     }
-    if (longitude.present) {
-      map['longitude'] = Variable<double>(longitude.value);
+    if (timestampsBlob.present) {
+      map['timestamps_blob'] = Variable<Uint8List>(timestampsBlob.value);
     }
-    if (timestamp.present) {
-      map['timestamp'] = Variable<DateTime>(timestamp.value);
+    if (speedsBlob.present) {
+      map['speeds_blob'] = Variable<Uint8List>(speedsBlob.value);
     }
-    if (accuracy.present) {
-      map['accuracy'] = Variable<double>(accuracy.value);
+    if (accuraciesBlob.present) {
+      map['accuracies_blob'] = Variable<Uint8List>(accuraciesBlob.value);
     }
-    if (altitude.present) {
-      map['altitude'] = Variable<double>(altitude.value);
+    if (bearingsBlob.present) {
+      map['bearings_blob'] = Variable<Uint8List>(bearingsBlob.value);
     }
-    if (altitudeAccuracy.present) {
-      map['altitude_accuracy'] = Variable<double>(altitudeAccuracy.value);
-    }
-    if (speedKmh.present) {
-      map['speed_kmh'] = Variable<double>(speedKmh.value);
-    }
-    if (bearing.present) {
-      map['bearing'] = Variable<double>(bearing.value);
-    }
-    if (distanceFromPrevious.present) {
-      map['distance_from_previous'] = Variable<double>(
-        distanceFromPrevious.value,
-      );
-    }
-    if (timeFromPrevious.present) {
-      map['time_from_previous'] = Variable<int>(timeFromPrevious.value);
-    }
-    if (metadata.present) {
-      map['metadata'] = Variable<String>(metadata.value);
+    if (segmentOrder.present) {
+      map['segment_order'] = Variable<int>(segmentOrder.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -2360,20 +2012,15 @@ class TrackPointsCompanion extends UpdateCompanion<TrackPointData> {
 
   @override
   String toString() {
-    return (StringBuffer('TrackPointsCompanion(')
+    return (StringBuffer('CompactTracksCompanion(')
           ..write('id: $id, ')
-          ..write('trackId: $trackId, ')
-          ..write('latitude: $latitude, ')
-          ..write('longitude: $longitude, ')
-          ..write('timestamp: $timestamp, ')
-          ..write('accuracy: $accuracy, ')
-          ..write('altitude: $altitude, ')
-          ..write('altitudeAccuracy: $altitudeAccuracy, ')
-          ..write('speedKmh: $speedKmh, ')
-          ..write('bearing: $bearing, ')
-          ..write('distanceFromPrevious: $distanceFromPrevious, ')
-          ..write('timeFromPrevious: $timeFromPrevious, ')
-          ..write('metadata: $metadata, ')
+          ..write('userTrackId: $userTrackId, ')
+          ..write('coordinatesBlob: $coordinatesBlob, ')
+          ..write('timestampsBlob: $timestampsBlob, ')
+          ..write('speedsBlob: $speedsBlob, ')
+          ..write('accuraciesBlob: $accuraciesBlob, ')
+          ..write('bearingsBlob: $bearingsBlob, ')
+          ..write('segmentOrder: $segmentOrder, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -4894,7 +4541,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $UserEntriesTable userEntries = $UserEntriesTable(this);
   late final $UserTracksTable userTracks = $UserTracksTable(this);
-  late final $TrackPointsTable trackPoints = $TrackPointsTable(this);
+  late final $CompactTracksTable compactTracks = $CompactTracksTable(this);
   late final $RoutesTableTable routesTable = $RoutesTableTable(this);
   late final $TradingPointsTableTable tradingPointsTable =
       $TradingPointsTableTable(this);
@@ -4909,7 +4556,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     userEntries,
     userTracks,
-    trackPoints,
+    compactTracks,
     routesTable,
     tradingPointsTable,
     pointsOfInterestTable,
@@ -5343,12 +4990,10 @@ typedef $$UserTracksTableCreateCompanionBuilder =
       Value<int?> routeId,
       required DateTime startTime,
       Value<DateTime?> endTime,
-      Value<double> totalDistanceMeters,
-      Value<int> movingTimeSeconds,
-      Value<int> totalTimeSeconds,
-      Value<double> averageSpeedKmh,
-      Value<double> maxSpeedKmh,
-      required String status,
+      Value<String> status,
+      Value<int> totalPoints,
+      Value<double> totalDistanceKm,
+      Value<int> totalDurationSeconds,
       Value<String?> metadata,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -5360,12 +5005,10 @@ typedef $$UserTracksTableUpdateCompanionBuilder =
       Value<int?> routeId,
       Value<DateTime> startTime,
       Value<DateTime?> endTime,
-      Value<double> totalDistanceMeters,
-      Value<int> movingTimeSeconds,
-      Value<int> totalTimeSeconds,
-      Value<double> averageSpeedKmh,
-      Value<double> maxSpeedKmh,
       Value<String> status,
+      Value<int> totalPoints,
+      Value<double> totalDistanceKm,
+      Value<int> totalDurationSeconds,
       Value<String?> metadata,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -5394,19 +5037,22 @@ final class $$UserTracksTableReferences
     );
   }
 
-  static MultiTypedResultKey<$TrackPointsTable, List<TrackPointData>>
-  _trackPointsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-    db.trackPoints,
-    aliasName: $_aliasNameGenerator(db.userTracks.id, db.trackPoints.trackId),
+  static MultiTypedResultKey<$CompactTracksTable, List<CompactTrackData>>
+  _compactTracksRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.compactTracks,
+    aliasName: $_aliasNameGenerator(
+      db.userTracks.id,
+      db.compactTracks.userTrackId,
+    ),
   );
 
-  $$TrackPointsTableProcessedTableManager get trackPointsRefs {
-    final manager = $$TrackPointsTableTableManager(
+  $$CompactTracksTableProcessedTableManager get compactTracksRefs {
+    final manager = $$CompactTracksTableTableManager(
       $_db,
-      $_db.trackPoints,
-    ).filter((f) => f.trackId.id.sqlEquals($_itemColumn<int>('id')!));
+      $_db.compactTracks,
+    ).filter((f) => f.userTrackId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final cache = $_typedResult.readTableOrNull(_trackPointsRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_compactTracksRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -5442,33 +5088,23 @@ class $$UserTracksTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<double> get totalDistanceMeters => $composableBuilder(
-    column: $table.totalDistanceMeters,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get movingTimeSeconds => $composableBuilder(
-    column: $table.movingTimeSeconds,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get totalTimeSeconds => $composableBuilder(
-    column: $table.totalTimeSeconds,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<double> get averageSpeedKmh => $composableBuilder(
-    column: $table.averageSpeedKmh,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<double> get maxSpeedKmh => $composableBuilder(
-    column: $table.maxSpeedKmh,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<String> get status => $composableBuilder(
     column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get totalPoints => $composableBuilder(
+    column: $table.totalPoints,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get totalDistanceKm => $composableBuilder(
+    column: $table.totalDistanceKm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get totalDurationSeconds => $composableBuilder(
+    column: $table.totalDurationSeconds,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5510,22 +5146,22 @@ class $$UserTracksTableFilterComposer
     return composer;
   }
 
-  Expression<bool> trackPointsRefs(
-    Expression<bool> Function($$TrackPointsTableFilterComposer f) f,
+  Expression<bool> compactTracksRefs(
+    Expression<bool> Function($$CompactTracksTableFilterComposer f) f,
   ) {
-    final $$TrackPointsTableFilterComposer composer = $composerBuilder(
+    final $$CompactTracksTableFilterComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.trackPoints,
-      getReferencedColumn: (t) => t.trackId,
+      referencedTable: $db.compactTracks,
+      getReferencedColumn: (t) => t.userTrackId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$TrackPointsTableFilterComposer(
+          }) => $$CompactTracksTableFilterComposer(
             $db: $db,
-            $table: $db.trackPoints,
+            $table: $db.compactTracks,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5565,33 +5201,23 @@ class $$UserTracksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<double> get totalDistanceMeters => $composableBuilder(
-    column: $table.totalDistanceMeters,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get movingTimeSeconds => $composableBuilder(
-    column: $table.movingTimeSeconds,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get totalTimeSeconds => $composableBuilder(
-    column: $table.totalTimeSeconds,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<double> get averageSpeedKmh => $composableBuilder(
-    column: $table.averageSpeedKmh,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<double> get maxSpeedKmh => $composableBuilder(
-    column: $table.maxSpeedKmh,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get status => $composableBuilder(
     column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get totalPoints => $composableBuilder(
+    column: $table.totalPoints,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get totalDistanceKm => $composableBuilder(
+    column: $table.totalDistanceKm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get totalDurationSeconds => $composableBuilder(
+    column: $table.totalDurationSeconds,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -5655,33 +5281,23 @@ class $$UserTracksTableAnnotationComposer
   GeneratedColumn<DateTime> get endTime =>
       $composableBuilder(column: $table.endTime, builder: (column) => column);
 
-  GeneratedColumn<double> get totalDistanceMeters => $composableBuilder(
-    column: $table.totalDistanceMeters,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<int> get movingTimeSeconds => $composableBuilder(
-    column: $table.movingTimeSeconds,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<int> get totalTimeSeconds => $composableBuilder(
-    column: $table.totalTimeSeconds,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<double> get averageSpeedKmh => $composableBuilder(
-    column: $table.averageSpeedKmh,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<double> get maxSpeedKmh => $composableBuilder(
-    column: $table.maxSpeedKmh,
-    builder: (column) => column,
-  );
-
   GeneratedColumn<String> get status =>
       $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<int> get totalPoints => $composableBuilder(
+    column: $table.totalPoints,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get totalDistanceKm => $composableBuilder(
+    column: $table.totalDistanceKm,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get totalDurationSeconds => $composableBuilder(
+    column: $table.totalDurationSeconds,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get metadata =>
       $composableBuilder(column: $table.metadata, builder: (column) => column);
@@ -5715,22 +5331,22 @@ class $$UserTracksTableAnnotationComposer
     return composer;
   }
 
-  Expression<T> trackPointsRefs<T extends Object>(
-    Expression<T> Function($$TrackPointsTableAnnotationComposer a) f,
+  Expression<T> compactTracksRefs<T extends Object>(
+    Expression<T> Function($$CompactTracksTableAnnotationComposer a) f,
   ) {
-    final $$TrackPointsTableAnnotationComposer composer = $composerBuilder(
+    final $$CompactTracksTableAnnotationComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.trackPoints,
-      getReferencedColumn: (t) => t.trackId,
+      referencedTable: $db.compactTracks,
+      getReferencedColumn: (t) => t.userTrackId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$TrackPointsTableAnnotationComposer(
+          }) => $$CompactTracksTableAnnotationComposer(
             $db: $db,
-            $table: $db.trackPoints,
+            $table: $db.compactTracks,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5754,7 +5370,7 @@ class $$UserTracksTableTableManager
           $$UserTracksTableUpdateCompanionBuilder,
           (UserTrackData, $$UserTracksTableReferences),
           UserTrackData,
-          PrefetchHooks Function({bool userId, bool trackPointsRefs})
+          PrefetchHooks Function({bool userId, bool compactTracksRefs})
         > {
   $$UserTracksTableTableManager(_$AppDatabase db, $UserTracksTable table)
     : super(
@@ -5774,12 +5390,10 @@ class $$UserTracksTableTableManager
                 Value<int?> routeId = const Value.absent(),
                 Value<DateTime> startTime = const Value.absent(),
                 Value<DateTime?> endTime = const Value.absent(),
-                Value<double> totalDistanceMeters = const Value.absent(),
-                Value<int> movingTimeSeconds = const Value.absent(),
-                Value<int> totalTimeSeconds = const Value.absent(),
-                Value<double> averageSpeedKmh = const Value.absent(),
-                Value<double> maxSpeedKmh = const Value.absent(),
                 Value<String> status = const Value.absent(),
+                Value<int> totalPoints = const Value.absent(),
+                Value<double> totalDistanceKm = const Value.absent(),
+                Value<int> totalDurationSeconds = const Value.absent(),
                 Value<String?> metadata = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -5789,12 +5403,10 @@ class $$UserTracksTableTableManager
                 routeId: routeId,
                 startTime: startTime,
                 endTime: endTime,
-                totalDistanceMeters: totalDistanceMeters,
-                movingTimeSeconds: movingTimeSeconds,
-                totalTimeSeconds: totalTimeSeconds,
-                averageSpeedKmh: averageSpeedKmh,
-                maxSpeedKmh: maxSpeedKmh,
                 status: status,
+                totalPoints: totalPoints,
+                totalDistanceKm: totalDistanceKm,
+                totalDurationSeconds: totalDurationSeconds,
                 metadata: metadata,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
@@ -5806,12 +5418,10 @@ class $$UserTracksTableTableManager
                 Value<int?> routeId = const Value.absent(),
                 required DateTime startTime,
                 Value<DateTime?> endTime = const Value.absent(),
-                Value<double> totalDistanceMeters = const Value.absent(),
-                Value<int> movingTimeSeconds = const Value.absent(),
-                Value<int> totalTimeSeconds = const Value.absent(),
-                Value<double> averageSpeedKmh = const Value.absent(),
-                Value<double> maxSpeedKmh = const Value.absent(),
-                required String status,
+                Value<String> status = const Value.absent(),
+                Value<int> totalPoints = const Value.absent(),
+                Value<double> totalDistanceKm = const Value.absent(),
+                Value<int> totalDurationSeconds = const Value.absent(),
                 Value<String?> metadata = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -5821,12 +5431,10 @@ class $$UserTracksTableTableManager
                 routeId: routeId,
                 startTime: startTime,
                 endTime: endTime,
-                totalDistanceMeters: totalDistanceMeters,
-                movingTimeSeconds: movingTimeSeconds,
-                totalTimeSeconds: totalTimeSeconds,
-                averageSpeedKmh: averageSpeedKmh,
-                maxSpeedKmh: maxSpeedKmh,
                 status: status,
+                totalPoints: totalPoints,
+                totalDistanceKm: totalDistanceKm,
+                totalDurationSeconds: totalDurationSeconds,
                 metadata: metadata,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
@@ -5839,10 +5447,12 @@ class $$UserTracksTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({userId = false, trackPointsRefs = false}) {
+          prefetchHooksCallback: ({userId = false, compactTracksRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (trackPointsRefs) db.trackPoints],
+              explicitlyWatchedTables: [
+                if (compactTracksRefs) db.compactTracks,
+              ],
               addJoins:
                   <
                     T extends TableManagerState<
@@ -5877,23 +5487,25 @@ class $$UserTracksTableTableManager
                   },
               getPrefetchedDataCallback: (items) async {
                 return [
-                  if (trackPointsRefs)
+                  if (compactTracksRefs)
                     await $_getPrefetchedData<
                       UserTrackData,
                       $UserTracksTable,
-                      TrackPointData
+                      CompactTrackData
                     >(
                       currentTable: table,
                       referencedTable: $$UserTracksTableReferences
-                          ._trackPointsRefsTable(db),
+                          ._compactTracksRefsTable(db),
                       managerFromTypedResult: (p0) =>
                           $$UserTracksTableReferences(
                             db,
                             table,
                             p0,
-                          ).trackPointsRefs,
+                          ).compactTracksRefs,
                       referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.trackId == item.id),
+                          referencedItems.where(
+                            (e) => e.userTrackId == item.id,
+                          ),
                       typedResults: items,
                     ),
                 ];
@@ -5916,60 +5528,55 @@ typedef $$UserTracksTableProcessedTableManager =
       $$UserTracksTableUpdateCompanionBuilder,
       (UserTrackData, $$UserTracksTableReferences),
       UserTrackData,
-      PrefetchHooks Function({bool userId, bool trackPointsRefs})
+      PrefetchHooks Function({bool userId, bool compactTracksRefs})
     >;
-typedef $$TrackPointsTableCreateCompanionBuilder =
-    TrackPointsCompanion Function({
+typedef $$CompactTracksTableCreateCompanionBuilder =
+    CompactTracksCompanion Function({
       Value<int> id,
-      required int trackId,
-      required double latitude,
-      required double longitude,
-      required DateTime timestamp,
-      Value<double?> accuracy,
-      Value<double?> altitude,
-      Value<double?> altitudeAccuracy,
-      Value<double?> speedKmh,
-      Value<double?> bearing,
-      Value<double?> distanceFromPrevious,
-      Value<int?> timeFromPrevious,
-      Value<String?> metadata,
+      required int userTrackId,
+      required Uint8List coordinatesBlob,
+      required Uint8List timestampsBlob,
+      required Uint8List speedsBlob,
+      required Uint8List accuraciesBlob,
+      required Uint8List bearingsBlob,
+      required int segmentOrder,
       Value<DateTime> createdAt,
     });
-typedef $$TrackPointsTableUpdateCompanionBuilder =
-    TrackPointsCompanion Function({
+typedef $$CompactTracksTableUpdateCompanionBuilder =
+    CompactTracksCompanion Function({
       Value<int> id,
-      Value<int> trackId,
-      Value<double> latitude,
-      Value<double> longitude,
-      Value<DateTime> timestamp,
-      Value<double?> accuracy,
-      Value<double?> altitude,
-      Value<double?> altitudeAccuracy,
-      Value<double?> speedKmh,
-      Value<double?> bearing,
-      Value<double?> distanceFromPrevious,
-      Value<int?> timeFromPrevious,
-      Value<String?> metadata,
+      Value<int> userTrackId,
+      Value<Uint8List> coordinatesBlob,
+      Value<Uint8List> timestampsBlob,
+      Value<Uint8List> speedsBlob,
+      Value<Uint8List> accuraciesBlob,
+      Value<Uint8List> bearingsBlob,
+      Value<int> segmentOrder,
       Value<DateTime> createdAt,
     });
 
-final class $$TrackPointsTableReferences
-    extends BaseReferences<_$AppDatabase, $TrackPointsTable, TrackPointData> {
-  $$TrackPointsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+final class $$CompactTracksTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $CompactTracksTable, CompactTrackData> {
+  $$CompactTracksTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
 
-  static $UserTracksTable _trackIdTable(_$AppDatabase db) =>
+  static $UserTracksTable _userTrackIdTable(_$AppDatabase db) =>
       db.userTracks.createAlias(
-        $_aliasNameGenerator(db.trackPoints.trackId, db.userTracks.id),
+        $_aliasNameGenerator(db.compactTracks.userTrackId, db.userTracks.id),
       );
 
-  $$UserTracksTableProcessedTableManager get trackId {
-    final $_column = $_itemColumn<int>('track_id')!;
+  $$UserTracksTableProcessedTableManager get userTrackId {
+    final $_column = $_itemColumn<int>('user_track_id')!;
 
     final manager = $$UserTracksTableTableManager(
       $_db,
       $_db.userTracks,
     ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_trackIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_userTrackIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -5977,9 +5584,9 @@ final class $$TrackPointsTableReferences
   }
 }
 
-class $$TrackPointsTableFilterComposer
-    extends Composer<_$AppDatabase, $TrackPointsTable> {
-  $$TrackPointsTableFilterComposer({
+class $$CompactTracksTableFilterComposer
+    extends Composer<_$AppDatabase, $CompactTracksTable> {
+  $$CompactTracksTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -5991,58 +5598,33 @@ class $$TrackPointsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<double> get latitude => $composableBuilder(
-    column: $table.latitude,
+  ColumnFilters<Uint8List> get coordinatesBlob => $composableBuilder(
+    column: $table.coordinatesBlob,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<double> get longitude => $composableBuilder(
-    column: $table.longitude,
+  ColumnFilters<Uint8List> get timestampsBlob => $composableBuilder(
+    column: $table.timestampsBlob,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get timestamp => $composableBuilder(
-    column: $table.timestamp,
+  ColumnFilters<Uint8List> get speedsBlob => $composableBuilder(
+    column: $table.speedsBlob,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<double> get accuracy => $composableBuilder(
-    column: $table.accuracy,
+  ColumnFilters<Uint8List> get accuraciesBlob => $composableBuilder(
+    column: $table.accuraciesBlob,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<double> get altitude => $composableBuilder(
-    column: $table.altitude,
+  ColumnFilters<Uint8List> get bearingsBlob => $composableBuilder(
+    column: $table.bearingsBlob,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<double> get altitudeAccuracy => $composableBuilder(
-    column: $table.altitudeAccuracy,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<double> get speedKmh => $composableBuilder(
-    column: $table.speedKmh,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<double> get bearing => $composableBuilder(
-    column: $table.bearing,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<double> get distanceFromPrevious => $composableBuilder(
-    column: $table.distanceFromPrevious,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get timeFromPrevious => $composableBuilder(
-    column: $table.timeFromPrevious,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get metadata => $composableBuilder(
-    column: $table.metadata,
+  ColumnFilters<int> get segmentOrder => $composableBuilder(
+    column: $table.segmentOrder,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6051,10 +5633,10 @@ class $$TrackPointsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  $$UserTracksTableFilterComposer get trackId {
+  $$UserTracksTableFilterComposer get userTrackId {
     final $$UserTracksTableFilterComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.trackId,
+      getCurrentColumn: (t) => t.userTrackId,
       referencedTable: $db.userTracks,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -6075,9 +5657,9 @@ class $$TrackPointsTableFilterComposer
   }
 }
 
-class $$TrackPointsTableOrderingComposer
-    extends Composer<_$AppDatabase, $TrackPointsTable> {
-  $$TrackPointsTableOrderingComposer({
+class $$CompactTracksTableOrderingComposer
+    extends Composer<_$AppDatabase, $CompactTracksTable> {
+  $$CompactTracksTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -6089,58 +5671,33 @@ class $$TrackPointsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<double> get latitude => $composableBuilder(
-    column: $table.latitude,
+  ColumnOrderings<Uint8List> get coordinatesBlob => $composableBuilder(
+    column: $table.coordinatesBlob,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<double> get longitude => $composableBuilder(
-    column: $table.longitude,
+  ColumnOrderings<Uint8List> get timestampsBlob => $composableBuilder(
+    column: $table.timestampsBlob,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get timestamp => $composableBuilder(
-    column: $table.timestamp,
+  ColumnOrderings<Uint8List> get speedsBlob => $composableBuilder(
+    column: $table.speedsBlob,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<double> get accuracy => $composableBuilder(
-    column: $table.accuracy,
+  ColumnOrderings<Uint8List> get accuraciesBlob => $composableBuilder(
+    column: $table.accuraciesBlob,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<double> get altitude => $composableBuilder(
-    column: $table.altitude,
+  ColumnOrderings<Uint8List> get bearingsBlob => $composableBuilder(
+    column: $table.bearingsBlob,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<double> get altitudeAccuracy => $composableBuilder(
-    column: $table.altitudeAccuracy,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<double> get speedKmh => $composableBuilder(
-    column: $table.speedKmh,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<double> get bearing => $composableBuilder(
-    column: $table.bearing,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<double> get distanceFromPrevious => $composableBuilder(
-    column: $table.distanceFromPrevious,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get timeFromPrevious => $composableBuilder(
-    column: $table.timeFromPrevious,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get metadata => $composableBuilder(
-    column: $table.metadata,
+  ColumnOrderings<int> get segmentOrder => $composableBuilder(
+    column: $table.segmentOrder,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -6149,10 +5706,10 @@ class $$TrackPointsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  $$UserTracksTableOrderingComposer get trackId {
+  $$UserTracksTableOrderingComposer get userTrackId {
     final $$UserTracksTableOrderingComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.trackId,
+      getCurrentColumn: (t) => t.userTrackId,
       referencedTable: $db.userTracks,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -6173,9 +5730,9 @@ class $$TrackPointsTableOrderingComposer
   }
 }
 
-class $$TrackPointsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $TrackPointsTable> {
-  $$TrackPointsTableAnnotationComposer({
+class $$CompactTracksTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CompactTracksTable> {
+  $$CompactTracksTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -6185,52 +5742,43 @@ class $$TrackPointsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<double> get latitude =>
-      $composableBuilder(column: $table.latitude, builder: (column) => column);
-
-  GeneratedColumn<double> get longitude =>
-      $composableBuilder(column: $table.longitude, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get timestamp =>
-      $composableBuilder(column: $table.timestamp, builder: (column) => column);
-
-  GeneratedColumn<double> get accuracy =>
-      $composableBuilder(column: $table.accuracy, builder: (column) => column);
-
-  GeneratedColumn<double> get altitude =>
-      $composableBuilder(column: $table.altitude, builder: (column) => column);
-
-  GeneratedColumn<double> get altitudeAccuracy => $composableBuilder(
-    column: $table.altitudeAccuracy,
+  GeneratedColumn<Uint8List> get coordinatesBlob => $composableBuilder(
+    column: $table.coordinatesBlob,
     builder: (column) => column,
   );
 
-  GeneratedColumn<double> get speedKmh =>
-      $composableBuilder(column: $table.speedKmh, builder: (column) => column);
-
-  GeneratedColumn<double> get bearing =>
-      $composableBuilder(column: $table.bearing, builder: (column) => column);
-
-  GeneratedColumn<double> get distanceFromPrevious => $composableBuilder(
-    column: $table.distanceFromPrevious,
+  GeneratedColumn<Uint8List> get timestampsBlob => $composableBuilder(
+    column: $table.timestampsBlob,
     builder: (column) => column,
   );
 
-  GeneratedColumn<int> get timeFromPrevious => $composableBuilder(
-    column: $table.timeFromPrevious,
+  GeneratedColumn<Uint8List> get speedsBlob => $composableBuilder(
+    column: $table.speedsBlob,
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get metadata =>
-      $composableBuilder(column: $table.metadata, builder: (column) => column);
+  GeneratedColumn<Uint8List> get accuraciesBlob => $composableBuilder(
+    column: $table.accuraciesBlob,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<Uint8List> get bearingsBlob => $composableBuilder(
+    column: $table.bearingsBlob,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get segmentOrder => $composableBuilder(
+    column: $table.segmentOrder,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
-  $$UserTracksTableAnnotationComposer get trackId {
+  $$UserTracksTableAnnotationComposer get userTrackId {
     final $$UserTracksTableAnnotationComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.trackId,
+      getCurrentColumn: (t) => t.userTrackId,
       referencedTable: $db.userTracks,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -6251,105 +5799,85 @@ class $$TrackPointsTableAnnotationComposer
   }
 }
 
-class $$TrackPointsTableTableManager
+class $$CompactTracksTableTableManager
     extends
         RootTableManager<
           _$AppDatabase,
-          $TrackPointsTable,
-          TrackPointData,
-          $$TrackPointsTableFilterComposer,
-          $$TrackPointsTableOrderingComposer,
-          $$TrackPointsTableAnnotationComposer,
-          $$TrackPointsTableCreateCompanionBuilder,
-          $$TrackPointsTableUpdateCompanionBuilder,
-          (TrackPointData, $$TrackPointsTableReferences),
-          TrackPointData,
-          PrefetchHooks Function({bool trackId})
+          $CompactTracksTable,
+          CompactTrackData,
+          $$CompactTracksTableFilterComposer,
+          $$CompactTracksTableOrderingComposer,
+          $$CompactTracksTableAnnotationComposer,
+          $$CompactTracksTableCreateCompanionBuilder,
+          $$CompactTracksTableUpdateCompanionBuilder,
+          (CompactTrackData, $$CompactTracksTableReferences),
+          CompactTrackData,
+          PrefetchHooks Function({bool userTrackId})
         > {
-  $$TrackPointsTableTableManager(_$AppDatabase db, $TrackPointsTable table)
+  $$CompactTracksTableTableManager(_$AppDatabase db, $CompactTracksTable table)
     : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$TrackPointsTableFilterComposer($db: db, $table: table),
+              $$CompactTracksTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$TrackPointsTableOrderingComposer($db: db, $table: table),
+              $$CompactTracksTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$TrackPointsTableAnnotationComposer($db: db, $table: table),
+              $$CompactTracksTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<int> trackId = const Value.absent(),
-                Value<double> latitude = const Value.absent(),
-                Value<double> longitude = const Value.absent(),
-                Value<DateTime> timestamp = const Value.absent(),
-                Value<double?> accuracy = const Value.absent(),
-                Value<double?> altitude = const Value.absent(),
-                Value<double?> altitudeAccuracy = const Value.absent(),
-                Value<double?> speedKmh = const Value.absent(),
-                Value<double?> bearing = const Value.absent(),
-                Value<double?> distanceFromPrevious = const Value.absent(),
-                Value<int?> timeFromPrevious = const Value.absent(),
-                Value<String?> metadata = const Value.absent(),
+                Value<int> userTrackId = const Value.absent(),
+                Value<Uint8List> coordinatesBlob = const Value.absent(),
+                Value<Uint8List> timestampsBlob = const Value.absent(),
+                Value<Uint8List> speedsBlob = const Value.absent(),
+                Value<Uint8List> accuraciesBlob = const Value.absent(),
+                Value<Uint8List> bearingsBlob = const Value.absent(),
+                Value<int> segmentOrder = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
-              }) => TrackPointsCompanion(
+              }) => CompactTracksCompanion(
                 id: id,
-                trackId: trackId,
-                latitude: latitude,
-                longitude: longitude,
-                timestamp: timestamp,
-                accuracy: accuracy,
-                altitude: altitude,
-                altitudeAccuracy: altitudeAccuracy,
-                speedKmh: speedKmh,
-                bearing: bearing,
-                distanceFromPrevious: distanceFromPrevious,
-                timeFromPrevious: timeFromPrevious,
-                metadata: metadata,
+                userTrackId: userTrackId,
+                coordinatesBlob: coordinatesBlob,
+                timestampsBlob: timestampsBlob,
+                speedsBlob: speedsBlob,
+                accuraciesBlob: accuraciesBlob,
+                bearingsBlob: bearingsBlob,
+                segmentOrder: segmentOrder,
                 createdAt: createdAt,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required int trackId,
-                required double latitude,
-                required double longitude,
-                required DateTime timestamp,
-                Value<double?> accuracy = const Value.absent(),
-                Value<double?> altitude = const Value.absent(),
-                Value<double?> altitudeAccuracy = const Value.absent(),
-                Value<double?> speedKmh = const Value.absent(),
-                Value<double?> bearing = const Value.absent(),
-                Value<double?> distanceFromPrevious = const Value.absent(),
-                Value<int?> timeFromPrevious = const Value.absent(),
-                Value<String?> metadata = const Value.absent(),
+                required int userTrackId,
+                required Uint8List coordinatesBlob,
+                required Uint8List timestampsBlob,
+                required Uint8List speedsBlob,
+                required Uint8List accuraciesBlob,
+                required Uint8List bearingsBlob,
+                required int segmentOrder,
                 Value<DateTime> createdAt = const Value.absent(),
-              }) => TrackPointsCompanion.insert(
+              }) => CompactTracksCompanion.insert(
                 id: id,
-                trackId: trackId,
-                latitude: latitude,
-                longitude: longitude,
-                timestamp: timestamp,
-                accuracy: accuracy,
-                altitude: altitude,
-                altitudeAccuracy: altitudeAccuracy,
-                speedKmh: speedKmh,
-                bearing: bearing,
-                distanceFromPrevious: distanceFromPrevious,
-                timeFromPrevious: timeFromPrevious,
-                metadata: metadata,
+                userTrackId: userTrackId,
+                coordinatesBlob: coordinatesBlob,
+                timestampsBlob: timestampsBlob,
+                speedsBlob: speedsBlob,
+                accuraciesBlob: accuraciesBlob,
+                bearingsBlob: bearingsBlob,
+                segmentOrder: segmentOrder,
                 createdAt: createdAt,
               ),
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
                   e.readTable(table),
-                  $$TrackPointsTableReferences(db, table, e),
+                  $$CompactTracksTableReferences(db, table, e),
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({trackId = false}) {
+          prefetchHooksCallback: ({userTrackId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -6369,15 +5897,15 @@ class $$TrackPointsTableTableManager
                       dynamic
                     >
                   >(state) {
-                    if (trackId) {
+                    if (userTrackId) {
                       state =
                           state.withJoin(
                                 currentTable: table,
-                                currentColumn: table.trackId,
-                                referencedTable: $$TrackPointsTableReferences
-                                    ._trackIdTable(db),
-                                referencedColumn: $$TrackPointsTableReferences
-                                    ._trackIdTable(db)
+                                currentColumn: table.userTrackId,
+                                referencedTable: $$CompactTracksTableReferences
+                                    ._userTrackIdTable(db),
+                                referencedColumn: $$CompactTracksTableReferences
+                                    ._userTrackIdTable(db)
                                     .id,
                               )
                               as T;
@@ -6394,19 +5922,19 @@ class $$TrackPointsTableTableManager
       );
 }
 
-typedef $$TrackPointsTableProcessedTableManager =
+typedef $$CompactTracksTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $TrackPointsTable,
-      TrackPointData,
-      $$TrackPointsTableFilterComposer,
-      $$TrackPointsTableOrderingComposer,
-      $$TrackPointsTableAnnotationComposer,
-      $$TrackPointsTableCreateCompanionBuilder,
-      $$TrackPointsTableUpdateCompanionBuilder,
-      (TrackPointData, $$TrackPointsTableReferences),
-      TrackPointData,
-      PrefetchHooks Function({bool trackId})
+      $CompactTracksTable,
+      CompactTrackData,
+      $$CompactTracksTableFilterComposer,
+      $$CompactTracksTableOrderingComposer,
+      $$CompactTracksTableAnnotationComposer,
+      $$CompactTracksTableCreateCompanionBuilder,
+      $$CompactTracksTableUpdateCompanionBuilder,
+      (CompactTrackData, $$CompactTracksTableReferences),
+      CompactTrackData,
+      PrefetchHooks Function({bool userTrackId})
     >;
 typedef $$RoutesTableTableCreateCompanionBuilder =
     RoutesTableCompanion Function({
@@ -7662,8 +7190,8 @@ class $AppDatabaseManager {
       $$UserEntriesTableTableManager(_db, _db.userEntries);
   $$UserTracksTableTableManager get userTracks =>
       $$UserTracksTableTableManager(_db, _db.userTracks);
-  $$TrackPointsTableTableManager get trackPoints =>
-      $$TrackPointsTableTableManager(_db, _db.trackPoints);
+  $$CompactTracksTableTableManager get compactTracks =>
+      $$CompactTracksTableTableManager(_db, _db.compactTracks);
   $$RoutesTableTableTableManager get routesTable =>
       $$RoutesTableTableTableManager(_db, _db.routesTable);
   $$TradingPointsTableTableTableManager get tradingPointsTable =>

@@ -40,3 +40,7 @@ class EntityCreationFailure extends Failure {
 class EntityUpdateFailure extends Failure {
   const EntityUpdateFailure(super.message);
 }
+
+class DatabaseFailure extends Failure {
+  const DatabaseFailure(super.message);
+}

@@ -143,7 +143,7 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
     }
   }
 
-  /// Загружает исторические треки пользователя
+  /// Загружает треки пользователя
   Future<void> _loadHistoricalTracks() async {
     if (_currentUser == null) return;
     
@@ -164,16 +164,13 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
         print('❌ Пользователь ${_currentUser!.firstName} не найден в БД');
         return;
       }
-      
-      // Получаем внутренний userId (предполагаем что это порядковый номер в списке + 1)
-      final userId = allUsers.indexOf(dbUser) + 1;
-      
-      final tracks = await _trackRepository.getTracksByUserId(userId);
+  
+      final tracksResult = await _trackRepository.getUserTracks(dbUser);
       if (mounted) {
+        final tracks = tracksResult.fold((l) => <UserTrack>[], (r) => r);
         setState(() {
           _historicalTracks = tracks;
         });
-        print('📊 Загружено ${tracks.length} треков для пользователя ${_currentUser!.firstName} (userId: $userId)');
       }
     } catch (e) {
       print('❌ Ошибка загрузки треков: $e');
@@ -248,7 +245,7 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
         
         // Фильтруем треки для текущего маршрута, если он выбран
         final filteredTracks = routeToShow != null && routeToShow.id != null
-            ? _historicalTracks.where((track) => track.routeId == routeToShow.id).toList()
+            ? _historicalTracks.where((track) => track.route?.id == routeToShow.id).toList()
             : _historicalTracks;
         
         return MapWidget(

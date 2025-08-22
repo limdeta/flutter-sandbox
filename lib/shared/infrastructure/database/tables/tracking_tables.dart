@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'user_tables.dart'; // Импорт локальных таблиц пользователей
 
-/// Таблица для хранения GPS треков пользователей
+/// Таблица для хранения пользовательских треков (высокоуровневая сущность)
 @DataClassName('UserTrackData')
 class UserTracks extends Table {
   @override
@@ -14,7 +14,7 @@ class UserTracks extends Table {
   IntColumn get userId => integer().references(UserEntries, #id)();
   
   /// ID маршрута, в рамках которого записан трек (может быть null)
-  IntColumn get routeId => integer().nullable()(); // Убираем FK пока что
+  IntColumn get routeId => integer().nullable()();
   
   /// Дата и время начала трека
   DateTimeColumn get startTime => dateTime()();
@@ -22,23 +22,17 @@ class UserTracks extends Table {
   /// Дата и время окончания трека (null если трек активен)
   DateTimeColumn get endTime => dateTime().nullable()();
   
-  /// Общая дистанция в метрах
-  RealColumn get totalDistanceMeters => real().withDefault(const Constant(0.0))();
+  /// Статус трека (active, paused, completed, cancelled)
+  TextColumn get status => text().withDefault(const Constant('active'))();
   
-  /// Время в движении в секундах
-  IntColumn get movingTimeSeconds => integer().withDefault(const Constant(0))();
+  /// Кешированное количество точек в треке
+  IntColumn get totalPoints => integer().withDefault(const Constant(0))();
   
-  /// Общее время трека в секундах
-  IntColumn get totalTimeSeconds => integer().withDefault(const Constant(0))();
+  /// Кешированная общая дистанция в километрах
+  RealColumn get totalDistanceKm => real().withDefault(const Constant(0.0))();
   
-  /// Средняя скорость в км/ч
-  RealColumn get averageSpeedKmh => real().withDefault(const Constant(0.0))();
-  
-  /// Максимальная скорость в км/ч
-  RealColumn get maxSpeedKmh => real().withDefault(const Constant(0.0))();
-  
-  /// Статус трека: active, paused, completed, cancelled
-  TextColumn get status => text().withLength(min: 1, max: 20)();
+  /// Кешированная общая длительность в секундах
+  IntColumn get totalDurationSeconds => integer().withDefault(const Constant(0))();
   
   /// Дополнительные метаданные в формате JSON
   TextColumn get metadata => text().nullable()();
@@ -50,50 +44,35 @@ class UserTracks extends Table {
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
 
-/// Таблица для хранения отдельных GPS точек трека
-@DataClassName('TrackPointData')
-class TrackPoints extends Table {
+/// Таблица для хранения компактных GPS треков (сегментов) в бинарном формате
+@DataClassName('CompactTrackData')
+class CompactTracks extends Table {
   @override
-  String get tableName => 'track_points';
+  String get tableName => 'compact_tracks';
   
-  /// Уникальный ID точки
+  /// Уникальный ID компактного трека
   IntColumn get id => integer().autoIncrement()();
   
-  /// ID трека, к которому относится точка
-  IntColumn get trackId => integer().references(UserTracks, #id)();
+  /// ID пользовательского трека, к которому относится этот сегмент
+  IntColumn get userTrackId => integer().references(UserTracks, #id)();
   
-  /// Широта
-  RealColumn get latitude => real()();
+  /// Координаты в бинарном формате Float64List -> Uint8List
+  BlobColumn get coordinatesBlob => blob()();
   
-  /// Долгота
-  RealColumn get longitude => real()();
+  /// Временные метки в бинарном формате Int64List -> Uint8List
+  BlobColumn get timestampsBlob => blob()();
   
-  /// Временная метка GPS точки
-  DateTimeColumn get timestamp => dateTime()();
+  /// Скорости в бинарном формате Float32List -> Uint8List
+  BlobColumn get speedsBlob => blob()();
   
-  /// Точность GPS в метрах
-  RealColumn get accuracy => real().nullable()();
+  /// Точность GPS в бинарном формате Float32List -> Uint8List
+  BlobColumn get accuraciesBlob => blob()();
   
-  /// Высота над уровнем моря в метрах
-  RealColumn get altitude => real().nullable()();
+  /// Направление движения в бинарном формате Float32List -> Uint8List
+  BlobColumn get bearingsBlob => blob()();
   
-  /// Точность высоты в метрах
-  RealColumn get altitudeAccuracy => real().nullable()();
-  
-  /// Скорость в км/ч
-  RealColumn get speedKmh => real().nullable()();
-  
-  /// Направление движения в градусах (0-360)
-  RealColumn get bearing => real().nullable()();
-  
-  /// Расстояние от предыдущей точки в метрах
-  RealColumn get distanceFromPrevious => real().nullable()();
-  
-  /// Время от предыдущей точки в секундах
-  IntColumn get timeFromPrevious => integer().nullable()();
-  
-  /// Дополнительные метаданные в формате JSON
-  TextColumn get metadata => text().nullable()();
+  /// Порядковый номер сегмента в треке (для правильной сортировки)
+  IntColumn get segmentOrder => integer()();
   
   /// Дата создания записи
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();

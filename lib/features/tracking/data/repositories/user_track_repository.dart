@@ -1,14 +1,18 @@
 import 'dart:convert';
 import 'package:drift/drift.dart';
-import '../../domain/entities/user_track.dart';
-import '../../domain/entities/track_point.dart';
-import '../../domain/repositories/iuser_track_repository.dart';
-import '../../../../shared/infrastructure/database/app_database.dart';
-import '../../../authentication/domain/repositories/iuser_repository.dart';
-import '../../../route/domain/repositories/iroute_repository.dart';
-import '../../../route/domain/entities/route.dart';
 
-/// Реализация репозитория треков пользователей для Drift БД
+import '../../../../shared/infrastructure/database/app_database.dart';
+import '../../../../shared/domain/either.dart';
+import '../../../../shared/domain/failures.dart';
+import '../../../../features/authentication/domain/entities/user.dart';
+import '../../../../features/authentication/domain/repositories/iuser_repository.dart';
+import '../../../../features/route/domain/entities/route.dart' as domain_route;
+import '../../../../features/route/domain/repositories/iroute_repository.dart';
+import '../../domain/entities/user_track.dart';
+import '../../domain/entities/compact_track.dart';
+import '../../domain/repositories/iuser_track_repository.dart';
+import '../../domain/enums/track_status.dart';
+
 class UserTrackRepository implements IUserTrackRepository {
   final AppDatabase _database;
   final IUserRepository _userRepository;
@@ -21,421 +25,450 @@ class UserTrackRepository implements IUserTrackRepository {
   );
 
   @override
-  Future<UserTrack> saveTrack(UserTrack track) async {
-    // Получаем правильный internal ID пользователя из базы данных
-    int? userInternalId = track.user.internalId;
-    
-    // Если у объекта User нет internalId, получаем его из БД по externalId
-    if (userInternalId == null) {
-      userInternalId = await _database.getInternalUserIdByExternalId(track.user.externalId);
-      if (userInternalId == null) {
-        throw StateError('User with externalId ${track.user.externalId} not found in database');
+  Future<Either<Failure, UserTrack>> getUserTrackById(int id) async {
+    try {
+      final userTrackData = await (_database.select(_database.userTracks)
+            ..where((tbl) => tbl.id.equals(id)))
+          .getSingleOrNull();
+
+      if (userTrackData == null) {
+        return const Left(NotFoundFailure('UserTrack not found'));
       }
-    }
-    
-    final companion = UserTracksCompanion.insert(
-      userId: userInternalId,
-      routeId: Value.absentIfNull(track.routeId),
-      startTime: track.startTime,
-      endTime: Value.absentIfNull(track.endTime),
-      totalDistanceMeters: Value(track.totalDistanceMeters),
-      movingTimeSeconds: Value(track.movingTimeSeconds),
-      totalTimeSeconds: Value(track.totalTimeSeconds),
-      averageSpeedKmh: Value(track.averageSpeedKmh),
-      maxSpeedKmh: Value(track.maxSpeedKmh),
-      status: track.status.name,
-      metadata: Value.absentIfNull(track.metadata != null ? jsonEncode(track.metadata) : null),
-    );
 
-    final id = await _database.into(_database.userTracks).insert(companion);
-    
-    // Сохраняем точки трека
-    if (track.points.isNotEmpty) {
-      await _saveTrackPointsInternal(id, track.points);
-    }
-
-    return track.copyWith(id: id);
-  }
-
-  @override
-  Future<UserTrack> updateTrack(UserTrack track) async {
-    // Получаем правильный internal ID пользователя
-    int? userInternalId = track.user.internalId;
-    
-    if (userInternalId == null) {
-      userInternalId = await _database.getInternalUserIdByExternalId(track.user.externalId);
-      if (userInternalId == null) {
-        throw StateError('User with externalId ${track.user.externalId} not found in database');
+      // Получаем User из базы
+      final user = await _getUserById(userTrackData.userId);
+      if (user == null) {
+        return const Left(NotFoundFailure('User not found for UserTrack'));
       }
+
+      // Получаем Route если есть
+      domain_route.Route? route;
+      if (userTrackData.routeId != null) {
+        route = await _getRouteById(userTrackData.routeId!);
+      }
+
+      // Загружаем CompactTrack сегменты
+      final segments = await _loadCompactTrackSegments(id);
+
+      final userTrack = UserTrack(
+        id: userTrackData.id,
+        user: user,
+        route: route,
+        status: _parseStatus(userTrackData.status),
+        startTime: userTrackData.startTime,
+        endTime: userTrackData.endTime,
+        segments: segments,
+        totalPoints: userTrackData.totalPoints,
+        totalDistanceKm: userTrackData.totalDistanceKm,
+        totalDuration: Duration(seconds: userTrackData.totalDurationSeconds),
+        metadata: _parseMetadata(userTrackData.metadata),
+      );
+
+      return Right(userTrack);
+    } catch (e) {
+      return Left(DatabaseFailure('Failed to get UserTrack: $e'));
     }
-    
-    final companion = UserTracksCompanion(
-      id: Value(track.id),
-      userId: Value(userInternalId),
-      routeId: Value.absentIfNull(track.routeId),
-      startTime: Value(track.startTime),
-      endTime: Value.absentIfNull(track.endTime),
-      totalDistanceMeters: Value(track.totalDistanceMeters),
-      movingTimeSeconds: Value(track.movingTimeSeconds),
-      totalTimeSeconds: Value(track.totalTimeSeconds),
-      averageSpeedKmh: Value(track.averageSpeedKmh),
-      maxSpeedKmh: Value(track.maxSpeedKmh),
-      status: Value(track.status.name),
-      metadata: Value.absentIfNull(track.metadata != null ? jsonEncode(track.metadata) : null),
-      updatedAt: Value(DateTime.now()),
-    );
-
-    await _database.update(_database.userTracks).replace(companion);
-    return track;
   }
 
   @override
-  Future<UserTrack?> getTrackById(int id) async {
-    final query = _database.select(_database.userTracks)
-      ..where((t) => t.id.equals(id));
+  Future<Either<Failure, List<UserTrack>>> getUserTracks(User user) async {
+    try {
+      // Находим внутренний ID пользователя
+      final userId = await _getUserInternalId(user);
+      if (userId == null) {
+        return const Left(NotFoundFailure('User not found in database'));
+      }
 
-    final trackData = await query.getSingleOrNull();
-    if (trackData == null) return null;
+      final userTracksData = await (_database.select(_database.userTracks)
+            ..where((tbl) => tbl.userId.equals(userId)))
+          .get();
 
-    final points = await getTrackPoints(id);
-    return await _mapDataToTrack(trackData, points);
-  }
+      final userTracks = <UserTrack>[];
+      for (final data in userTracksData) {
+        // Загружаем сегменты для каждого трека
+        final segments = await _loadCompactTrackSegments(data.id);
+        
+        // Получаем Route если есть
+        domain_route.Route? route;
+        if (data.routeId != null) {
+          route = await _getRouteById(data.routeId!);
+        }
 
-  @override
-  Future<List<UserTrack>> getTracksByUserId(int userId) async {
-    final query = _database.select(_database.userTracks)
-      ..where((t) => t.userId.equals(userId))
-      ..orderBy([(t) => OrderingTerm.desc(t.startTime)]);
+        final userTrack = UserTrack(
+          id: data.id,
+          user: user,
+          route: route,
+          status: _parseStatus(data.status),
+          startTime: data.startTime,
+          endTime: data.endTime,
+          segments: segments,
+          totalPoints: data.totalPoints,
+          totalDistanceKm: data.totalDistanceKm,
+          totalDuration: Duration(seconds: data.totalDurationSeconds),
+          metadata: _parseMetadata(data.metadata),
+        );
+        
+        userTracks.add(userTrack);
+      }
 
-    final tracksData = await query.get();
-    final tracks = <UserTrack>[];
-
-    for (final trackData in tracksData) {
-      final points = await getTrackPoints(trackData.id);
-      tracks.add(await _mapDataToTrack(trackData, points));
+      return Right(userTracks);
+    } catch (e) {
+      return Left(DatabaseFailure('Failed to get UserTracks: $e'));
     }
-
-    return tracks;
   }
 
   @override
-  Future<List<UserTrack>> getTracksByUserIdAndDateRange({
-    required int userId,
-    required DateTime startDate,
-    required DateTime endDate,
-  }) async {
-    final query = _database.select(_database.userTracks)
-      ..where((t) => 
-          t.userId.equals(userId) &
-          t.startTime.isBiggerOrEqualValue(startDate) &
-          t.startTime.isSmallerThanValue(endDate))
-      ..orderBy([(t) => OrderingTerm.desc(t.startTime)]);
+  Future<Either<Failure, List<UserTrack>>> getUserTracksByDateRange(
+    User user,
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    try {
+      final userId = await _getUserInternalId(user);
+      if (userId == null) {
+        return const Left(NotFoundFailure('User not found in database'));
+      }
 
-    final tracksData = await query.get();
-    final tracks = <UserTrack>[];
+      final userTracksData = await (_database.select(_database.userTracks)
+            ..where((tbl) => 
+                tbl.userId.equals(userId) &
+                tbl.startTime.isBiggerOrEqualValue(startDate) &
+                tbl.startTime.isSmallerOrEqualValue(endDate)))
+          .get();
 
-    for (final trackData in tracksData) {
-      final points = await getTrackPoints(trackData.id);
-      tracks.add(await _mapDataToTrack(trackData, points));
+      final userTracks = <UserTrack>[];
+      for (final data in userTracksData) {
+        final segments = await _loadCompactTrackSegments(data.id);
+        
+        domain_route.Route? route;
+        if (data.routeId != null) {
+          route = await _getRouteById(data.routeId!);
+        }
+
+        final userTrack = UserTrack(
+          id: data.id,
+          user: user,
+          route: route,
+          status: _parseStatus(data.status),
+          startTime: data.startTime,
+          endTime: data.endTime,
+          segments: segments,
+          totalPoints: data.totalPoints,
+          totalDistanceKm: data.totalDistanceKm,
+          totalDuration: Duration(seconds: data.totalDurationSeconds),
+          metadata: _parseMetadata(data.metadata),
+        );
+        
+        userTracks.add(userTrack);
+      }
+
+      return Right(userTracks);
+    } catch (e) {
+      return Left(DatabaseFailure('Failed to get UserTracks by date range: $e'));
     }
-
-    return tracks;
   }
 
   @override
-  Future<List<UserTrack>> getTracksByRouteId(int routeId) async {
-    final query = _database.select(_database.userTracks)
-      ..where((t) => t.routeId.equals(routeId))
-      ..orderBy([(t) => OrderingTerm.desc(t.startTime)]);
+  Future<Either<Failure, UserTrack?>> getActiveUserTrack(User user) async {
+    try {
+      final userId = await _getUserInternalId(user);
+      if (userId == null) {
+        return const Left(NotFoundFailure('User not found in database'));
+      }
 
-    final tracksData = await query.get();
-    final tracks = <UserTrack>[];
+      final activeTrackData = await (_database.select(_database.userTracks)
+            ..where((tbl) => 
+                tbl.userId.equals(userId) &
+                tbl.endTime.isNull()))
+          .getSingleOrNull();
 
-    for (final trackData in tracksData) {
-      final points = await getTrackPoints(trackData.id);
-      tracks.add(await _mapDataToTrack(trackData, points));
+      if (activeTrackData == null) {
+        return const Right(null);
+      }
+
+      final segments = await _loadCompactTrackSegments(activeTrackData.id);
+      
+      domain_route.Route? route;
+      if (activeTrackData.routeId != null) {
+        route = await _getRouteById(activeTrackData.routeId!);
+      }
+
+      final userTrack = UserTrack(
+        id: activeTrackData.id,
+        user: user,
+        route: route,
+        status: _parseStatus(activeTrackData.status),
+        startTime: activeTrackData.startTime,
+        endTime: activeTrackData.endTime,
+        segments: segments,
+        totalPoints: activeTrackData.totalPoints,
+        totalDistanceKm: activeTrackData.totalDistanceKm,
+        totalDuration: Duration(seconds: activeTrackData.totalDurationSeconds),
+        metadata: _parseMetadata(activeTrackData.metadata),
+      );
+
+      return Right(userTrack);
+    } catch (e) {
+      return Left(DatabaseFailure('Failed to get active UserTrack: $e'));
     }
-
-    return tracks;
   }
 
   @override
-  Future<UserTrack?> getActiveTrackByUserId(int userId) async {
-    final query = _database.select(_database.userTracks)
-      ..where((t) => 
-          t.userId.equals(userId) &
-          (t.status.equals('active') | t.status.equals('paused')))
-      ..orderBy([(t) => OrderingTerm.desc(t.startTime)])
-      ..limit(1);
+  Future<Either<Failure, UserTrack>> saveUserTrack(UserTrack track) async {
+    try {
+      final userId = await _getUserInternalId(track.user);
+      if (userId == null) {
+        return const Left(NotFoundFailure('User not found in database'));
+      }
 
-    final trackData = await query.getSingleOrNull();
-    if (trackData == null) return null;
+      final routeId = track.route?.id;
 
-    final points = await getTrackPoints(trackData.id);
-    return await _mapDataToTrack(trackData, points);
-  }
+      // Сохраняем основную запись UserTrack
+      final userTrackCompanion = UserTracksCompanion(
+        userId: Value(userId),
+        routeId: routeId != null ? Value(routeId) : const Value.absent(),
+        startTime: Value(track.startTime),
+        endTime: track.endTime != null ? Value(track.endTime!) : const Value.absent(),
+        status: Value(track.status.name),
+        totalPoints: Value(track.totalPoints),
+        totalDistanceKm: Value(track.totalDistanceKm),
+        totalDurationSeconds: Value(track.totalDuration.inSeconds),
+        metadata: track.metadata != null ? Value(_encodeMetadata(track.metadata!)) : const Value.absent(),
+      );
 
-  @override
-  Future<bool> deleteTrack(int id) async {
-    final deletedRows = await (_database.delete(_database.userTracks)
-      ..where((t) => t.id.equals(id))).go();
-    return deletedRows > 0;
-  }
+      final userTrackId = await _database.into(_database.userTracks).insert(userTrackCompanion);
 
-  @override
-  Future<void> saveTrackPoints(int trackId, List<TrackPoint> points) async {
-    await _saveTrackPointsInternal(trackId, points);
-  }
+      // Сохраняем сегменты CompactTrack
+      for (int i = 0; i < track.segments.length; i++) {
+        final segment = track.segments[i];
+        
+        final compactTrackCompanion = CompactTracksCompanion(
+          userTrackId: Value(userTrackId),
+          coordinatesBlob: Value(segment.serializeCoordinates()),
+          timestampsBlob: Value(segment.serializeTimestamps()),
+          speedsBlob: Value(segment.serializeSpeeds()),
+          accuraciesBlob: Value(segment.serializeAccuracies()),
+          bearingsBlob: Value(segment.serializeBearings()),
+          segmentOrder: Value(i),
+        );
 
-  @override
-  Future<List<TrackPoint>> getTrackPoints(int trackId) async {
-    final query = _database.select(_database.trackPoints)
-      ..where((p) => p.trackId.equals(trackId))
-      ..orderBy([(p) => OrderingTerm.asc(p.timestamp)]);
+        await _database.into(_database.compactTracks).insert(compactTrackCompanion);
+      }
 
-    final pointsData = await query.get();
-    return pointsData.map(_mapDataToTrackPoint).toList();
-  }
+      // Возвращаем трек с новым ID
+      final savedTrack = UserTrack(
+        id: userTrackId,
+        user: track.user,
+        route: track.route,
+        status: track.status,
+        startTime: track.startTime,
+        endTime: track.endTime,
+        segments: track.segments,
+        totalPoints: track.totalPoints,
+        totalDistanceKm: track.totalDistanceKm,
+        totalDuration: track.totalDuration,
+        metadata: track.metadata,
+      );
 
-  @override
-  Future<List<TrackPoint>> getTrackPointsByDateRange({
-    required int trackId,
-    required DateTime startTime,
-    required DateTime endTime,
-  }) async {
-    final query = _database.select(_database.trackPoints)
-      ..where((p) => 
-          p.trackId.equals(trackId) &
-          p.timestamp.isBiggerOrEqualValue(startTime) &
-          p.timestamp.isSmallerThanValue(endTime))
-      ..orderBy([(p) => OrderingTerm.asc(p.timestamp)]);
-
-    final pointsData = await query.get();
-    return pointsData.map(_mapDataToTrackPoint).toList();
-  }
-
-  @override
-  Future<UserTrackStatistics> getUserTrackStatistics(int userId) async {
-    final tracksQuery = _database.select(_database.userTracks)
-      ..where((t) => t.userId.equals(userId));
-
-    final tracks = await tracksQuery.get();
-
-    return _calculateStatistics(tracks);
-  }
-
-  @override
-  Future<UserTrackStatistics> getUserTrackStatisticsByDateRange({
-    required int userId,
-    required DateTime startDate,
-    required DateTime endDate,
-  }) async {
-    final tracksQuery = _database.select(_database.userTracks)
-      ..where((t) => 
-          t.userId.equals(userId) &
-          t.startTime.isBiggerOrEqualValue(startDate) &
-          t.startTime.isSmallerThanValue(endDate));
-
-    final tracks = await tracksQuery.get();
-
-    return _calculateStatistics(tracks);
-  }
-
-  @override
-  Future<int> cleanupOldTracks({
-    required Duration olderThan,
-    bool keepCompletedTracks = true,
-  }) async {
-    final cutoffDate = DateTime.now().subtract(olderThan);
-    
-    var query = _database.delete(_database.userTracks)
-      ..where((t) => t.startTime.isSmallerThanValue(cutoffDate));
-
-    if (keepCompletedTracks) {
-      query = query..where((t) => t.status.isNotValue('completed'));
+      return Right(savedTrack);
+    } catch (e) {
+      return Left(DatabaseFailure('Failed to save UserTrack: $e'));
     }
-
-    return await query.go();
   }
 
-  /// Внутренний метод для сохранения точек трека
-  Future<void> _saveTrackPointsInternal(int trackId, List<TrackPoint> points) async {
-    final companions = points.map((point) => TrackPointsCompanion.insert(
-      trackId: trackId,
-      latitude: point.latitude,
-      longitude: point.longitude,
-      timestamp: point.timestamp,
-      accuracy: Value.absentIfNull(point.accuracy),
-      altitude: Value.absentIfNull(point.altitude),
-      altitudeAccuracy: Value.absentIfNull(point.altitudeAccuracy),
-      speedKmh: Value.absentIfNull(point.speedKmh),
-      bearing: Value.absentIfNull(point.bearing),
-      distanceFromPrevious: Value.absentIfNull(point.distanceFromPrevious),
-      timeFromPrevious: Value.absentIfNull(point.timeFromPrevious),
-      metadata: Value.absentIfNull(point.metadata != null ? jsonEncode(point.metadata) : null),
+  @override
+  Future<Either<Failure, UserTrack>> updateUserTrack(UserTrack track) async {
+    try {
+      final userId = await _getUserInternalId(track.user);
+      if (userId == null) {
+        return const Left(NotFoundFailure('User not found in database'));
+      }
+
+      // Обновляем основную запись
+      final userTrackCompanion = UserTracksCompanion(
+        id: Value(track.id),
+        userId: Value(userId),
+        routeId: track.route?.id != null ? Value(track.route!.id!) : const Value.absent(),
+        startTime: Value(track.startTime),
+        endTime: track.endTime != null ? Value(track.endTime!) : const Value.absent(),
+        totalPoints: Value(track.totalPoints),
+        totalDistanceKm: Value(track.totalDistanceKm),
+        totalDurationSeconds: Value(track.totalDuration.inSeconds),
+        metadata: track.metadata != null ? Value(_encodeMetadata(track.metadata!)) : const Value.absent(),
+        updatedAt: Value(DateTime.now()),
+      );
+
+      await (_database.update(_database.userTracks)
+            ..where((tbl) => tbl.id.equals(track.id)))
+          .write(userTrackCompanion);
+
+      // Удаляем старые сегменты и создаем новые
+      await (_database.delete(_database.compactTracks)
+            ..where((tbl) => tbl.userTrackId.equals(track.id)))
+          .go();
+
+      // Сохраняем новые сегменты
+      for (int i = 0; i < track.segments.length; i++) {
+        final segment = track.segments[i];
+        
+        final compactTrackCompanion = CompactTracksCompanion(
+          userTrackId: Value(track.id),
+          coordinatesBlob: Value(segment.serializeCoordinates()),
+          timestampsBlob: Value(segment.serializeTimestamps()),
+          speedsBlob: Value(segment.serializeSpeeds()),
+          accuraciesBlob: Value(segment.serializeAccuracies()),
+          bearingsBlob: Value(segment.serializeBearings()),
+          segmentOrder: Value(i),
+        );
+
+        await _database.into(_database.compactTracks).insert(compactTrackCompanion);
+      }
+
+      return Right(track);
+    } catch (e) {
+      return Left(DatabaseFailure('Failed to update UserTrack: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteUserTrack(UserTrack track) async {
+    try {
+      // Удаляем сегменты
+      await (_database.delete(_database.compactTracks)
+            ..where((tbl) => tbl.userTrackId.equals(track.id)))
+          .go();
+
+      // Удаляем основную запись
+      await (_database.delete(_database.userTracks)
+            ..where((tbl) => tbl.id.equals(track.id)))
+          .go();
+
+      return const Right(null);
+    } catch (e) {
+      return Left(DatabaseFailure('Failed to delete UserTrack: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserTrack>>> getTracksByRoute(domain_route.Route route) async {
+    try {
+      if (route.id == null) {
+        return const Left(ValidationFailure('Route ID is required'));
+      }
+
+      final userTracksData = await (_database.select(_database.userTracks)
+            ..where((tbl) => tbl.routeId.equals(route.id!)))
+          .get();
+
+      final userTracks = <UserTrack>[];
+      for (final data in userTracksData) {
+        final user = await _getUserById(data.userId);
+        if (user == null) continue; // Пропускаем треки с несуществующими пользователями
+
+        final segments = await _loadCompactTrackSegments(data.id);
+
+        final userTrack = UserTrack(
+          id: data.id,
+          user: user,
+          route: route,
+          status: _parseStatus(data.status),
+          startTime: data.startTime,
+          endTime: data.endTime,
+          segments: segments,
+          totalPoints: data.totalPoints,
+          totalDistanceKm: data.totalDistanceKm,
+          totalDuration: Duration(seconds: data.totalDurationSeconds),
+          metadata: _parseMetadata(data.metadata),
+        );
+        
+        userTracks.add(userTrack);
+      }
+
+      return Right(userTracks);
+    } catch (e) {
+      return Left(DatabaseFailure('Failed to get UserTracks by route: $e'));
+    }
+  }
+
+  // =====================================================
+  // HELPER METHODS
+  // =====================================================
+
+  /// Загружает сегменты CompactTrack для UserTrack
+  Future<List<CompactTrack>> _loadCompactTrackSegments(int userTrackId) async {
+    final segmentsData = await (_database.select(_database.compactTracks)
+          ..where((tbl) => tbl.userTrackId.equals(userTrackId))
+          ..orderBy([(tbl) => OrderingTerm.asc(tbl.segmentOrder)]))
+        .get();
+
+    return segmentsData.map((data) => CompactTrack.fromDatabase(
+      coordinatesBlob: data.coordinatesBlob,
+      timestampsBlob: data.timestampsBlob,
+      speedsBlob: data.speedsBlob,
+      accuraciesBlob: data.accuraciesBlob,
+      bearingsBlob: data.bearingsBlob,
     )).toList();
-
-    await _database.batch((batch) {
-      batch.insertAll(_database.trackPoints, companions);
-    });
   }
 
-  /// Преобразует данные БД в доменную модель трека
-  Future<UserTrack> _mapDataToTrack(UserTrackData data, List<TrackPoint> points) async {
-    TrackStatus status;
-    switch (data.status) {
-      case 'active':
-        status = TrackStatus.active;
-        break;
-      case 'paused':
-        status = TrackStatus.paused;
-        break;
-      case 'completed':
-        status = TrackStatus.completed;
-        break;
-      case 'cancelled':
-        status = TrackStatus.cancelled;
-        break;
-      default:
-        status = TrackStatus.completed;
-    }
+  /// Получает внутренний ID пользователя по его externalId
+  Future<int?> _getUserInternalId(User user) async {
+    final userData = await (_database.select(_database.userEntries)
+          ..where((tbl) => tbl.externalId.equals(user.externalId)))
+        .getSingleOrNull();
+    
+    return userData?.id;
+  }
 
-    Map<String, dynamic>? metadata;
-    if (data.metadata != null) {
-      try {
-        metadata = jsonDecode(data.metadata!) as Map<String, dynamic>;
-      } catch (e) {
-        metadata = null;
-      }
-    }
-
-    // Загружаем связанный объект User
-    final userResult = await _userRepository.getUserByInternalId(data.userId);
-    final user = userResult.fold(
-      (failure) => throw Exception('User not found for ID ${data.userId}: $failure'),
+  /// Получает User объект по внутреннему ID через UserRepository
+  Future<User?> _getUserById(int userId) async {
+    final result = await _userRepository.getUserByInternalId(userId);
+    return result.fold(
+      (failure) => null,
       (user) => user,
     );
+  }
 
-    // Загружаем связанный объект Route, если есть
-    Route? route;
-    if (data.routeId != null) {
-      final routeResult = await _routeRepository.getRouteByInternalId(data.routeId!);
-      route = routeResult.fold(
-        (failure) => null, // Если маршрут не найден, продолжаем без него
-        (route) => route,
-      );
-    }
-
-    return UserTrack(
-      id: data.id,
-      user: user,
-      route: route,
-      startTime: data.startTime,
-      endTime: data.endTime,
-      points: points,
-      totalDistanceMeters: data.totalDistanceMeters,
-      movingTimeSeconds: data.movingTimeSeconds,
-      totalTimeSeconds: data.totalTimeSeconds,
-      averageSpeedKmh: data.averageSpeedKmh,
-      maxSpeedKmh: data.maxSpeedKmh,
-      status: status,
-      metadata: metadata,
+  /// Получает Route объект по ID через RouteRepository
+  Future<domain_route.Route?> _getRouteById(int routeId) async {
+    final result = await _routeRepository.getRouteByInternalId(routeId);
+    return result.fold(
+      (failure) => null,
+      (route) => route,
     );
   }
 
-  /// Преобразует данные БД в доменную модель точки трека
-  TrackPoint _mapDataToTrackPoint(TrackPointData data) {
-    Map<String, dynamic>? metadata;
-    if (data.metadata != null) {
-      try {
-        metadata = jsonDecode(data.metadata!) as Map<String, dynamic>;
-      } catch (e) {
-        metadata = null;
-      }
+  /// Парсит метаданные из JSON строки
+  Map<String, dynamic>? _parseMetadata(String? jsonString) {
+    if (jsonString == null || jsonString.isEmpty) return null;
+    
+    try {
+      final decoded = jsonDecode(jsonString);
+      return decoded is Map<String, dynamic> ? decoded : null;
+    } catch (e) {
+      return null;
     }
-
-    return TrackPoint(
-      latitude: data.latitude,
-      longitude: data.longitude,
-      timestamp: data.timestamp,
-      accuracy: data.accuracy,
-      altitude: data.altitude,
-      altitudeAccuracy: data.altitudeAccuracy,
-      speedKmh: data.speedKmh,
-      bearing: data.bearing,
-      distanceFromPrevious: data.distanceFromPrevious,
-      timeFromPrevious: data.timeFromPrevious,
-      metadata: metadata,
-    );
   }
 
-  /// Вычисляет статистику по трекам
-  UserTrackStatistics _calculateStatistics(List<UserTrackData> tracks) {
-    if (tracks.isEmpty) {
-      return const UserTrackStatistics(
-        totalTracks: 0,
-        totalDistanceMeters: 0.0,
-        totalMovingTimeSeconds: 0,
-        totalTimeSeconds: 0,
-        averageSpeedKmh: 0.0,
-        maxSpeedKmh: 0.0,
-        activeTracks: 0,
-        completedTracks: 0,
-      );
+  /// Кодирует метаданные в JSON строку
+  String _encodeMetadata(Map<String, dynamic> metadata) {
+    return jsonEncode(metadata);
+  }
+
+  /// Парсит статус трека из строки
+  TrackStatus _parseStatus(String? statusString) {
+    if (statusString == null) return TrackStatus.active;
+    
+    switch (statusString) {
+      case 'active':
+        return TrackStatus.active;
+      case 'paused':
+        return TrackStatus.paused;
+      case 'completed':
+        return TrackStatus.completed;
+      case 'cancelled':
+        return TrackStatus.cancelled;
+      default:
+        return TrackStatus.active;
     }
-
-    double totalDistance = 0.0;
-    int totalMovingTime = 0;
-    int totalTime = 0;
-    double maxSpeed = 0.0;
-    int activeTracks = 0;
-    int completedTracks = 0;
-
-    DateTime? firstDate;
-    DateTime? lastDate;
-
-    for (final track in tracks) {
-      totalDistance += track.totalDistanceMeters;
-      totalMovingTime += track.movingTimeSeconds;
-      totalTime += track.totalTimeSeconds;
-      
-      if (track.maxSpeedKmh > maxSpeed) {
-        maxSpeed = track.maxSpeedKmh;
-      }
-
-      switch (track.status) {
-        case 'active':
-        case 'paused':
-          activeTracks++;
-          break;
-        case 'completed':
-          completedTracks++;
-          break;
-      }
-
-      if (firstDate == null || track.startTime.isBefore(firstDate)) {
-        firstDate = track.startTime;
-      }
-      if (lastDate == null || track.startTime.isAfter(lastDate)) {
-        lastDate = track.startTime;
-      }
-    }
-
-    final averageSpeed = totalMovingTime > 0 
-        ? (totalDistance / 1000.0) / (totalMovingTime / 3600.0)
-        : 0.0;
-
-    return UserTrackStatistics(
-      totalTracks: tracks.length,
-      totalDistanceMeters: totalDistance,
-      totalMovingTimeSeconds: totalMovingTime,
-      totalTimeSeconds: totalTime,
-      averageSpeedKmh: averageSpeed,
-      maxSpeedKmh: maxSpeed,
-      activeTracks: activeTracks,
-      completedTracks: completedTracks,
-      firstTrackDate: firstDate,
-      lastTrackDate: lastDate,
-    );
   }
 }

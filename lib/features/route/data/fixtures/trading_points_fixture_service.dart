@@ -116,8 +116,7 @@ class TradingPointsFixtureService {
     for (final point in points) {
       await _saveTradingPoint(point);
     }
-    
-    print('✅ Создано ${points.length} базовых торговых точек');
+
     return points;
   }
   

@@ -20,7 +20,7 @@ part 'app_database.g.dart';
   UserEntries, 
   // Tracking tables
   UserTracks, 
-  TrackPoints,
+  CompactTracks,
   // Route tables
   RoutesTable,
   TradingPointsTable, 
@@ -34,7 +34,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(DatabaseConnection super.connection);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -202,7 +202,7 @@ class AppDatabase extends _$AppDatabase {
     
     // Очищаем все таблицы
     await delete(userTracks).go();
-    await delete(trackPoints).go();
+    await delete(compactTracks).go();
     await delete(pointStatusHistoryTable).go();
     await delete(pointsOfInterestTable).go();
     await delete(tradingPointsTable).go();

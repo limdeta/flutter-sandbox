@@ -70,13 +70,11 @@ class WorkDay {
     return end.difference(startTime!);
   }
 
-  double get actualDistanceMeters => actualTrack?.totalDistanceMeters ?? 0.0;
-  
-  int get trackPointsCount => actualTrack?.points.length ?? 0;
+  // double get actualDistanceMeters => actualTrack?.totalDistanceMeters ?? 0.0;
 
   @override
   String toString() {
-    return 'WorkDay(date: $date, status: $status, route: ${plannedRoute?.name}, trackPoints: $trackPointsCount)';
+    return 'WorkDay(date: $date, status: $status, route: ${plannedRoute?.name})';
   }
 
   @override

@@ -9,8 +9,10 @@ import 'package:tauzero/features/authentication/domain/usecases/login_usecase.da
 import 'package:tauzero/features/authentication/domain/usecases/logout_usecase.dart';
 import 'package:tauzero/features/authentication/domain/usecases/get_current_session_usecase.dart';
 import 'package:tauzero/features/route/data/di/route_di.dart';
-import 'package:tauzero/features/tracking/data/di/tracking_di.dart';
+import 'package:tauzero/features/route/domain/repositories/iroute_repository.dart';
 import 'package:tauzero/features/tracking/domain/services/location_tracking_service.dart';
+import 'package:tauzero/features/tracking/domain/repositories/iuser_track_repository.dart';
+import 'package:tauzero/features/tracking/data/repositories/user_track_repository.dart';
 import 'package:tauzero/features/path_predictor/osrm_path_prediction_service.dart';
 import 'package:tauzero/shared/config/app_config.dart';
 import 'package:tauzero/shared/infrastructure/database/app_database.dart';
@@ -82,14 +84,17 @@ Future<void> setupServiceLocator() async {
   // Route dependencies
   RouteDI.registerDependencies();
   
-  // Tracking dependencies
-  TrackingDI.registerDependencies();
+  // Tracking repository - регистрируем вручную здесь
+  getIt.registerLazySingleton<IUserTrackRepository>(
+    () => UserTrackRepository(
+      getIt<AppDatabase>(), 
+      getIt<IUserRepository>(), 
+      getIt<IRouteRepository>(),
+    ),
+  );
   
   // LocationTrackingService нужно регистрировать после RouteDI, так как он зависит от IRouteRepository
-  getIt.registerLazySingleton<LocationTrackingService>(() => LocationTrackingService(
-    getIt<IUserRepository>(),
-    getIt(), // Route repository зарегистрирован в RouteDI
-  ));
+  getIt.registerLazySingleton<LocationTrackingService>(() => LocationTrackingService());
   
   if (AppConfig.enableDetailedLogging) {
     print('Service locator setup completed!');

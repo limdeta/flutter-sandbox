@@ -8,7 +8,6 @@ import '../../data/repositories/osm_map_service.dart';
 import '../../../route/domain/entities/route.dart' as domain;
 import '../../../../shared/services/user_initialization_service.dart';
 import '../../../tracking/domain/services/location_tracking_service.dart';
-import '../../../tracking/presentation/widgets/live_track_map_layer.dart';
 import '../../../tracking/domain/entities/user_track.dart';
 import 'route_polyline.dart';
 
@@ -323,13 +322,14 @@ class _MapWidgetState extends State<MapWidget> {
             if (widget.routePolylinePoints.isNotEmpty)
               RoutePolyline(points: widget.routePolylinePoints),
             
-            // Слой трека пользователя (отображается под маркерами маршрута)
-            if (widget.showUserTrack && widget.trackingService != null)
-              LiveTrackMapLayer(
-                trackingService: widget.trackingService!,
-                mapController: _mapController,
-                showTrackInfo: false, // Информацию показываем отдельно
-              ),
+            // Слой трека пользователя - ВРЕМЕННО ОТКЛЮЧЕН
+            // TODO: Восстановить после реализации LiveTrackMapLayer
+            // if (widget.showUserTrack && widget.trackingService != null)
+            //   LiveTrackMapLayer(
+            //     trackingService: widget.trackingService!,
+            //     mapController: _mapController,
+            //     showTrackInfo: false, // Информацию показываем отдельно
+            //   ),
             
             // Слой маркеров GPS треков (начало/конец) - ВРЕМЕННО ОТКЛЮЧЕНО
             // if (widget.historicalTracks.isNotEmpty)

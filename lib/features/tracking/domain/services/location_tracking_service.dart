@@ -1,396 +1,403 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
-import '../entities/track_point.dart';
+import '../entities/compact_track.dart';
+import '../entities/compact_track_builder.dart';
 import '../entities/user_track.dart';
-import '../../../authentication/domain/repositories/iuser_repository.dart';
-import '../../../route/domain/repositories/iroute_repository.dart';
-import '../../../route/domain/entities/route.dart';
+import '../enums/track_status.dart';
+import '../../../authentication/domain/entities/user.dart';
 
-/// Сервис для энергоэффективного трекинга местоположения пользователя
+/// Высокопроизводительный сервис GPS трекинга с использованием CompactTrack
 /// 
 /// Особенности:
+/// - Использует typed arrays для минимизации создания объектов
 /// - Адаптивная частота обновлений GPS
-/// - Фильтрация GPS шума и дубликатов
-/// - Автоматическая приостановка при остановке
-/// - Оптимизация энергопотребления
-/// - Буферизация точек для batch сохранения
+/// - Фильтрация GPS шума
+/// - Автоматическое создание сегментов трека
+/// - Буферизация точек для batch обработки
 class LocationTrackingService {
   static const String _tag = 'LocationTracking';
   
-  final IUserRepository _userRepository;
-  final IRouteRepository _routeRepository;
-  
   UserTrack? _currentTrack;
+  CompactTrackBuilder? _currentSegmentBuilder;
   
   StreamSubscription<Position>? _positionSubscription;
-  
-  final StreamController<TrackPoint> _trackPointController = 
-      StreamController<TrackPoint>.broadcast();
   
   final StreamController<UserTrack> _trackUpdateController = 
       StreamController<UserTrack>.broadcast();
   
-  final List<TrackPoint> _pointsBuffer = [];
+  final StreamController<Position> _positionController = 
+      StreamController<Position>.broadcast();
   
-  TrackPoint? _lastRecordedPoint;
-  
+  Position? _lastPosition;
   DateTime? _lastUpdateTime;
-  
   int _stationaryCount = 0;
+  bool _isActive = false;
   
-  final bool _autoPauseEnabled = true;
+  // Настройки трекинга
+  final LocationSettings _locationSettings = const LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 3, // минимальное расстояние между точками в метрах
+  );
   
-  LocationTrackingSettings _settings = const LocationTrackingSettings();
+  // Настройки фильтрации
+  static const double _minAccuracy = 20.0; // метры
+  static const double _maxSpeed = 150.0; // км/ч - максимальная разумная скорость
+  static const int _stationaryThreshold = 5; // количество статичных точек для паузы
+  static const double _minDistanceMeters = 5.0; // минимальное расстояние между точками
+  static const int _minTimeSeconds = 2; // минимальное время между точками
 
-  LocationTrackingService(this._userRepository, this._routeRepository);
+  LocationTrackingService();
 
-  Stream<TrackPoint> get trackPointStream => _trackPointController.stream;
-  
+  /// Стримы для подписки на обновления
+  Stream<Position> get positionStream => _positionController.stream;
   Stream<UserTrack> get trackUpdateStream => _trackUpdateController.stream;
   
+  /// Текущий трек
   UserTrack? get currentTrack => _currentTrack;
   
-  bool get isTracking => _currentTrack?.isActive == true;
+  /// Статус трекинга
+  bool get isTracking => _positionSubscription != null;
+  bool get isActive => _isActive;
+  bool get isPaused => isTracking && !_isActive;
   
-  Future<bool> get hasLocationPermissions async {
-    final permission = await Geolocator.checkPermission();
-    return permission == LocationPermission.always ||
-           permission == LocationPermission.whileInUse;
-  }
-
-  Future<bool> requestLocationPermissions() async {
-    // Проверяем включена ли геолокация
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      _log('Сервис геолокации отключен');
+  /// Проверяет разрешения на геолокацию
+  Future<bool> checkPermissions() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      
+      return permission == LocationPermission.whileInUse || 
+             permission == LocationPermission.always;
+    } catch (e) {
+      debugPrint('$_tag: Ошибка проверки разрешений: $e');
       return false;
     }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        _log('Разрешение на геолокацию отклонено');
+  }
+  
+  /// Начинает новый трек
+  Future<bool> startTracking({required User user, String? routeId}) async {
+    try {
+      if (isTracking) {
+        debugPrint('$_tag: Трекинг уже запущен');
         return false;
       }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      _log('Разрешение на геолокацию отклонено навсегда');
-      return false;
-    }
-
-    // Для Android: запрашиваем разрешение на фоновое отслеживание
-    if (Platform.isAndroid && permission == LocationPermission.whileInUse) {
-      _log('Разрешение только при использовании приложения. Рекомендуется "Всегда"');
-    }
-
-    _log('Разрешения на геолокацию получены: $permission');
-    return true;
-  }
-
-  Future<bool> startTracking({
-    required int userId,
-    int? routeId,
-    LocationTrackingSettings? settings,
-    Map<String, dynamic>? metadata,
-  }) async {
-    if (isTracking) {
-      _log('Трекинг уже активен');
-      return false;
-    }
-
-    if (!await requestLocationPermissions()) {
-      return false;
-    }
-
-    try {
-      if (settings != null) {
-        _settings = settings;
+      
+      final hasPermission = await checkPermissions();
+      if (!hasPermission) {
+        debugPrint('$_tag: Нет разрешений на геолокацию');
+        return false;
       }
-
-      // Загружаем объект User по ID
-      final userResult = await _userRepository.getUserByInternalId(userId);
-      final user = userResult.fold(
-        (failure) => throw Exception('User not found for ID $userId: $failure'),
-        (user) => user,
-      );
-
-      // Загружаем объект Route, если указан
-      Route? route;
-      if (routeId != null) {
-        final routeResult = await _routeRepository.getRouteByInternalId(routeId);
-        route = routeResult.fold(
-          (failure) => null, // Если маршрут не найден, продолжаем без него
-          (route) => route,
-        );
-      }
-
-      _currentTrack = UserTrack.create(
+      
+      // Создаём новый трек
+      _currentTrack = UserTrack.empty(
+        id: DateTime.now().millisecondsSinceEpoch,
         user: user,
-        route: route,
-        metadata: metadata,
+        status: TrackStatus.active,
+        metadata: {
+          'route_id': routeId,
+          'created_at': DateTime.now().toIso8601String(),
+        },
       );
-
-      _lastRecordedPoint = null;
+      
+      // Создаём первый сегмент
+      _currentSegmentBuilder = CompactTrackBuilder();
+      _isActive = true;
+      
+      _lastPosition = null;
       _lastUpdateTime = null;
       _stationaryCount = 0;
-      _pointsBuffer.clear();
-
-      await _startLocationTracking();
-
-      _log('Трекинг начат для пользователя $userId');
+      
+      // Запускаем подписку на GPS
+      _positionSubscription = Geolocator.getPositionStream(
+        locationSettings: _locationSettings,
+      ).listen(_onPositionUpdate, onError: _onPositionError);
+      
+      debugPrint('$_tag: Трекинг запущен для пользователя ${user.externalId}');
       return true;
+      
     } catch (e) {
-      _log('Ошибка начала трекинга: $e');
+      debugPrint('$_tag: Ошибка запуска трекинга: $e');
       return false;
     }
   }
-
-  Future<void> pauseTracking() async {
-    if (!isTracking) return;
-
-    _currentTrack = _currentTrack!.pause();
-    await _stopLocationTracking();
-    await _flushPointsBuffer();
-
-    _trackUpdateController.add(_currentTrack!);
-    _log('Трекинг приостановлен');
-  }
-
-  Future<bool> resumeTracking() async {
-    if (_currentTrack == null || !_currentTrack!.isPaused) return false;
-
-    if (!await requestLocationPermissions()) {
+  
+  /// Приостанавливает трекинг
+  Future<bool> pauseTracking() async {
+    if (!isTracking || !_isActive) {
       return false;
     }
-
-    _currentTrack = _currentTrack!.resume();
-    await _startLocationTracking();
-
-    _trackUpdateController.add(_currentTrack!);
-    _log('Трекинг возобновлен');
+    
+    // Финализируем текущий сегмент
+    _finalizeCurrentSegment();
+    
+    _isActive = false;
+    
+    // Обновляем статус трека
+    if (_currentTrack != null) {
+      _currentTrack = _currentTrack!.copyWith(
+        status: TrackStatus.paused,
+      );
+    }
+    
+    debugPrint('$_tag: Трекинг приостановлен');
+    _broadcastTrackUpdate();
     return true;
   }
-
-  Future<UserTrack?> stopTracking() async {
-    if (_currentTrack == null) return null;
-
-    await _flushPointsBuffer();
-
-    final completedTrack = _currentTrack!.complete();
-    _currentTrack = null;
-
-    await _stopLocationTracking();
-
-    _trackUpdateController.add(completedTrack);
-    _log('Трекинг завершен. Расстояние: ${completedTrack.totalDistanceKm.toStringAsFixed(2)} км');
-
-    return completedTrack;
-  }
-
-  Future<void> _startLocationTracking() async {
-    final locationSettings = _getLocationSettings();
-
-    _positionSubscription = Geolocator.getPositionStream(
-      locationSettings: locationSettings,
-    ).listen(
-      _onPositionUpdate,
-      onError: (error) {
-        _log('Ошибка геолокации: $error');
-      },
-    );
-  }
-
-  Future<void> _stopLocationTracking() async {
-    await _positionSubscription?.cancel();
-    _positionSubscription = null;
-  }
-
-  /// Обрабатывает обновление позиции
-  void _onPositionUpdate(Position position) {
-    if (!isTracking) return;
-
-    final now = DateTime.now();
-    final point = TrackPoint.fromGPS(
-      latitude: position.latitude,
-      longitude: position.longitude,
-      timestamp: now,
-      accuracy: position.accuracy,
-      altitude: position.altitude,
-      altitudeAccuracy: position.altitudeAccuracy,
-      speedMps: position.speed,
-      bearing: position.heading,
-      metadata: {
-        'provider': 'gps',
-        'isMocked': position.isMocked,
-      },
-    );
-
-    _processTrackPoint(point);
-  }
-
-  void _processTrackPoint(TrackPoint point) {
-    if (!point.isValid) {
-      _log('Невалидная GPS точка: $point');
-      return;
+  
+  /// Возобновляет трекинг
+  Future<bool> resumeTracking() async {
+    if (!isTracking || _isActive) {
+      return false;
     }
-
-    if (point.accuracy != null && point.accuracy! > _settings.maxAccuracyMeters) {
-      _log('Точка с плохой точностью пропущена: ${point.accuracy}м');
-      return;
+    
+    _isActive = true;
+    
+    // Обновляем статус трека
+    if (_currentTrack != null) {
+      _currentTrack = _currentTrack!.copyWith(
+        status: TrackStatus.active,
+      );
     }
-
-    if (_lastRecordedPoint != null) {
-      if (!point.isSignificantlyDifferentFrom(
-        _lastRecordedPoint!,
-        minDistanceMeters: _settings.minDistanceMeters,
-        minTimeSeconds: _settings.minTimeSeconds,
-      )) {
-        _stationaryCount++;
+    
+    // Создаём новый сегмент для продолжения
+    _currentSegmentBuilder = CompactTrackBuilder();
+    
+    debugPrint('$_tag: Трекинг возобновлён');
+    _broadcastTrackUpdate();
+    return true;
+  }
+  
+  /// Завершает трекинг
+  Future<bool> stopTracking() async {
+    try {
+      await _positionSubscription?.cancel();
+      _positionSubscription = null;
+      
+      if (_currentTrack != null) {
+        // Финализируем текущий сегмент
+        _finalizeCurrentSegment();
         
-        if (_autoPauseEnabled && 
-            _stationaryCount >= _settings.stationaryThreshold) {
-          _log('Автоматическая пауза: длительная остановка');
-          pauseTracking();
-        }
+        _currentTrack = _currentTrack!.copyWith(
+          status: TrackStatus.completed,
+          endTime: DateTime.now(),
+        );
+        
+        _broadcastTrackUpdate();
+        
+        debugPrint('$_tag: Трекинг завершён. Общая дистанция: ${_currentTrack!.totalDistanceKm.toStringAsFixed(2)} км');
+      }
+      
+      _currentTrack = null;
+      _currentSegmentBuilder = null;
+      _lastPosition = null;
+      _lastUpdateTime = null;
+      _stationaryCount = 0;
+      _isActive = false;
+      
+      return true;
+      
+    } catch (e) {
+      debugPrint('$_tag: Ошибка остановки трекинга: $e');
+      return false;
+    }
+  }
+  
+  /// Обработчик новой позиции GPS
+  void _onPositionUpdate(Position position) {
+    try {
+      // Фильтруем некачественные точки
+      if (!_isValidPosition(position)) {
         return;
       }
-    }
-
-    _stationaryCount = 0;
-
-    final processedPoint = point.withPreviousPointData(_lastRecordedPoint);
-
-    _pointsBuffer.add(processedPoint);
-    _lastRecordedPoint = processedPoint;
-    _lastUpdateTime = DateTime.now();
-
-    _trackPointController.add(processedPoint);
-
-    _updateCurrentTrack();
-
-    if (_pointsBuffer.length >= _settings.bufferSize) {
-      _flushPointsBuffer();
-    }
-
-    _log('Записана точка: ${processedPoint.latitude.toStringAsFixed(6)}, '
-         '${processedPoint.longitude.toStringAsFixed(6)}, '
-         'скорость: ${processedPoint.speedKmh?.toStringAsFixed(1) ?? 'unknown'} км/ч');
-  }
-
-  void _updateCurrentTrack() {
-    if (_currentTrack == null || _pointsBuffer.isEmpty) return;
-
-    _currentTrack = _currentTrack!.addPoints(_pointsBuffer);
-    _trackUpdateController.add(_currentTrack!);
-  }
-
-  /// Сохраняет буфер точек (здесь должна быть интеграция с БД)
-  Future<void> _flushPointsBuffer() async {
-    if (_pointsBuffer.isEmpty) return;
-
-    try {
-      // TODO: Интеграция с репозиторием для сохранения точек в БД
-      _log('Сохранение ${_pointsBuffer.length} точек в БД');
       
-      _pointsBuffer.clear();
+      // Проверяем минимальное расстояние и время
+      if (!_shouldRecordPosition(position)) {
+        return;
+      }
+      
+      // Добавляем точку в текущий сегмент только если трекинг активен
+      if (_currentSegmentBuilder != null && _isActive) {
+        _currentSegmentBuilder!.addPoint(
+          latitude: position.latitude,
+          longitude: position.longitude,
+          timestamp: position.timestamp,
+          accuracy: position.accuracy,
+          speedKmh: position.speed * 3.6, // м/с -> км/ч
+          bearing: position.heading >= 0 ? position.heading : null,
+        );
+        
+        // Обновляем трек (каждые 10 точек или каждую минуту)
+        if (_currentSegmentBuilder!.pointCount % 10 == 0 || 
+            _shouldUpdateTrack()) {
+          _updateCurrentTrack();
+        }
+      }
+      
+      _lastPosition = position;
+      _lastUpdateTime = DateTime.now();
+      
+      // Проверяем стационарность
+      _checkStationaryState(position);
+      
+      // Отправляем позицию в стрим
+      _positionController.add(position);
+      
     } catch (e) {
-      _log('Ошибка сохранения точек: $e');
+      debugPrint('$_tag: Ошибка обработки позиции: $e');
     }
   }
-
-  /// Получает настройки местоположения для платформы
-  LocationSettings _getLocationSettings() {
-    if (Platform.isAndroid) {
-      return AndroidSettings(
-        accuracy: _settings.accuracy,
-        distanceFilter: _settings.minDistanceMeters.toInt(),
-        intervalDuration: _settings.updateInterval,
-        foregroundNotificationConfig: const ForegroundNotificationConfig(
-          notificationText: 'Запись маршрута в фоновом режиме',
-          notificationTitle: 'TauZero трекинг',
-          enableWakeLock: true,
-        ),
-      );
-    } else if (Platform.isIOS) {
-      return AppleSettings(
-        accuracy: _settings.accuracy,
-        distanceFilter: _settings.minDistanceMeters.toInt(),
-        activityType: ActivityType.automotiveNavigation,
-        pauseLocationUpdatesAutomatically: _autoPauseEnabled,
-        showBackgroundLocationIndicator: true,
-      );
+  
+  /// Обработчик ошибок GPS
+  void _onPositionError(dynamic error) {
+    debugPrint('$_tag: Ошибка GPS: $error');
+  }
+  
+  /// Проверяет валидность GPS позиции
+  bool _isValidPosition(Position position) {
+    // Проверяем точность
+    if (position.accuracy > _minAccuracy) {
+      return false;
+    }
+    
+    // Проверяем разумность координат
+    if (position.latitude.abs() > 90 || position.longitude.abs() > 180) {
+      return false;
+    }
+    
+    // Проверяем скорость (если доступна)
+    if (position.speed > 0 && position.speed * 3.6 > _maxSpeed) {
+      return false;
+    }
+    
+    return true;
+  }
+  
+  /// Проверяет, нужно ли записывать эту позицию
+  bool _shouldRecordPosition(Position position) {
+    if (_lastPosition == null) return true;
+    
+    final distance = Geolocator.distanceBetween(
+      _lastPosition!.latitude,
+      _lastPosition!.longitude,
+      position.latitude,
+      position.longitude,
+    );
+    
+    final timeDiff = position.timestamp.difference(_lastPosition!.timestamp).inSeconds;
+    
+    return distance >= _minDistanceMeters || timeDiff >= _minTimeSeconds;
+  }
+  
+  /// Проверяет состояние стационарности
+  void _checkStationaryState(Position position) {
+    if (_lastPosition == null) return;
+    
+    final distance = Geolocator.distanceBetween(
+      _lastPosition!.latitude,
+      _lastPosition!.longitude,
+      position.latitude,
+      position.longitude,
+    );
+    
+    if (distance < _minDistanceMeters) {
+      _stationaryCount++;
     } else {
-      return LocationSettings(
-        accuracy: _settings.accuracy,
-        distanceFilter: _settings.minDistanceMeters.toInt(),
+      _stationaryCount = 0;
+    }
+    
+    // Автоматическая пауза при длительной стационарности
+    if (_stationaryCount >= _stationaryThreshold && _isActive) {
+      pauseTracking();
+    }
+  }
+  
+  /// Проверяет, нужно ли обновить трек
+  bool _shouldUpdateTrack() {
+    if (_lastUpdateTime == null) return true;
+    
+    return DateTime.now().difference(_lastUpdateTime!).inMinutes >= 1;
+  }
+  
+  /// Обновляет текущий трек с новыми данными
+  void _updateCurrentTrack() {
+    if (_currentTrack == null || _currentSegmentBuilder == null) return;
+    
+    // Создаём временный сегмент для расчёта метрик
+    final currentSegment = _currentSegmentBuilder!.build();
+    
+    // Пересчитываем метрики с учётом нового сегмента
+    final allSegments = List<CompactTrack>.from(_currentTrack!.segments);
+    
+    // Заменяем последний сегмент на обновлённый или добавляем новый
+    if (allSegments.isNotEmpty && !_currentTrack!.isCompleted) {
+      allSegments.removeLast();
+    }
+    allSegments.add(currentSegment);
+    
+    // Пересчитываем метрики
+    int totalPoints = 0;
+    double totalDistance = 0.0;
+    Duration totalDuration = Duration.zero;
+
+    for (final segment in allSegments) {
+      totalPoints += segment.pointCount;
+      totalDistance += segment.getTotalDistance();
+      totalDuration += segment.getDuration();
+    }
+    
+    _currentTrack = _currentTrack!.copyWith(
+      segments: allSegments,
+      totalPoints: totalPoints,
+      totalDistanceKm: totalDistance / 1000,
+      totalDuration: totalDuration,
+    );
+    
+    _broadcastTrackUpdate();
+  }
+  
+  /// Финализирует текущий сегмент
+  void _finalizeCurrentSegment() {
+    if (_currentSegmentBuilder != null && _currentSegmentBuilder!.pointCount > 0) {
+      final segment = _currentSegmentBuilder!.build();
+      final updatedSegments = List<CompactTrack>.from(_currentTrack!.segments)..add(segment);
+      
+      // Пересчитываем метрики
+      int totalPoints = 0;
+      double totalDistance = 0.0;
+      Duration totalDuration = Duration.zero;
+
+      for (final seg in updatedSegments) {
+        totalPoints += seg.pointCount;
+        totalDistance += seg.getTotalDistance();
+        totalDuration += seg.getDuration();
+      }
+      
+      _currentTrack = _currentTrack!.copyWith(
+        segments: updatedSegments,
+        totalPoints: totalPoints,
+        totalDistanceKm: totalDistance / 1000,
+        totalDuration: totalDuration,
       );
+      
+      _currentSegmentBuilder = null;
     }
   }
-
-  /// Логирование
-  void _log(String message) {
-    if (kDebugMode) {
-      print('$_tag: $message');
+  
+  /// Отправляет обновление трека в стрим
+  void _broadcastTrackUpdate() {
+    if (_currentTrack != null) {
+      _trackUpdateController.add(_currentTrack!);
     }
   }
-
+  
   /// Освобождает ресурсы
   Future<void> dispose() async {
     await stopTracking();
-    await _trackPointController.close();
     await _trackUpdateController.close();
-  }
-}
-
-/// Настройки трекинга местоположения
-class LocationTrackingSettings {
-  final LocationAccuracy accuracy;
-  
-  final double minDistanceMeters;
-  final int minTimeSeconds;
-  final double maxAccuracyMeters;
-  final Duration updateInterval;
-  final int bufferSize;
-  
-  /// Порог неподвижности для автопаузы (количество подряд отфильтрованных точек)
-  final int stationaryThreshold;
-
-  const LocationTrackingSettings({
-    this.accuracy = LocationAccuracy.high,
-    this.minDistanceMeters = 5.0,
-    this.minTimeSeconds = 10,
-    this.maxAccuracyMeters = 50.0,
-    this.updateInterval = const Duration(seconds: 15),
-    this.bufferSize = 10,
-    this.stationaryThreshold = 6, // ~1.5 минуты при 15сек интервале
-  });
-
-  /// Настройки для высокой точности (больше расход батареи)
-  factory LocationTrackingSettings.highAccuracy() {
-    return const LocationTrackingSettings(
-      accuracy: LocationAccuracy.best,
-      minDistanceMeters: 3.0,
-      minTimeSeconds: 5,
-      maxAccuracyMeters: 20.0,
-      updateInterval: Duration(seconds: 10),
-      bufferSize: 15,
-    );
-  }
-
-  /// Настройки для экономии батареи
-  factory LocationTrackingSettings.batteryOptimized() {
-    return const LocationTrackingSettings(
-      accuracy: LocationAccuracy.medium,
-      minDistanceMeters: 10.0,
-      minTimeSeconds: 30,
-      maxAccuracyMeters: 100.0,
-      updateInterval: Duration(seconds: 60),
-      bufferSize: 5,
-    );
+    await _positionController.close();
   }
 }
