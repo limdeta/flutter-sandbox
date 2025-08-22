@@ -173,7 +173,7 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
         setState(() {
           _historicalTracks = tracks;
         });
-        print('📊 Загружено ${tracks.length} исторических треков для пользователя ${_currentUser!.firstName} (userId: $userId)');
+        print('📊 Загружено ${tracks.length} треков для пользователя ${_currentUser!.firstName} (userId: $userId)');
       }
     } catch (e) {
       print('❌ Ошибка загрузки треков: $e');
@@ -183,20 +183,33 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
   domain.Route? _findCurrentRoute(List<domain.Route> routes) {
     // Ищем активный маршрут
     var activeRoute = routes.where((r) => r.status == domain.RouteStatus.active).firstOrNull;
-    if (activeRoute != null) return activeRoute;
+    if (activeRoute != null) {
+      return activeRoute;
+    }
     
     // Ищем сегодняшний маршрут
     final today = DateTime.now();
+    
     var todayRoute = routes.where((r) {
-      return r.startTime != null && 
-             r.startTime!.year == today.year &&
+      if (r.startTime == null) return false;
+      return r.startTime!.year == today.year &&
              r.startTime!.month == today.month &&
              r.startTime!.day == today.day;
     }).firstOrNull;
-    if (todayRoute != null) return todayRoute;
+    
+    if (todayRoute != null) {
+      print('📌 Найден сегодняшний маршрут: ${todayRoute.name}');
+      return todayRoute;
+    }
     
     // Возвращаем первый доступный
-    return routes.isNotEmpty ? routes.first : null;
+    if (routes.isNotEmpty) {
+      print('📌 Используем первый доступный маршрут: ${routes.first.name}');
+      return routes.first;
+    }
+    
+    print('❌ Маршруты не найдены');
+    return null;
   }
 
   @override

@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:latlong2/latlong.dart';
-import 'package:tauzero/features/route/data/database/route_database.dart';
+import 'package:tauzero/shared/infrastructure/database/app_database.dart';
 import 'package:tauzero/features/route/data/repositories/route_repository.dart';
 import 'package:tauzero/features/route/domain/entities/ipoint_of_interest.dart';
 import 'package:tauzero/features/route/domain/entities/regular_point_of_interest.dart';
@@ -13,13 +14,13 @@ import 'package:tauzero/features/authentication/domain/value_objects/phone_numbe
 
 void main() {
   group('Route Data Layer Integration Tests', () {
-    late RouteDatabase database;
+    late AppDatabase database;
     late RouteRepository repository;
     late User testUser;
 
     setUp(() async {
       // Создаем тестовую in-memory базу данных
-      database = RouteDatabase.forTesting(NativeDatabase.memory());
+      database = AppDatabase.forTesting(drift.DatabaseConnection(NativeDatabase.memory()));
       repository = RouteRepository(database);
       
       // Создаем тестового пользователя

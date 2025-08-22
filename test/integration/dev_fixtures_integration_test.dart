@@ -1,9 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:get_it/get_it.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
 import 'package:tauzero/features/authentication/domain/value_objects/phone_number.dart';
-import 'package:tauzero/features/route/data/database/route_database.dart';
+import 'package:tauzero/shared/infrastructure/database/app_database.dart';
 import 'package:tauzero/features/route/data/fixtures/route_fixture_service.dart';
 import 'package:tauzero/features/route/data/repositories/route_repository.dart';
 import 'package:tauzero/features/route/domain/entities/ipoint_of_interest.dart';
@@ -24,7 +25,7 @@ import 'package:tauzero/features/route/domain/repositories/iroute_repository.dar
 void main() {
   group('DevFixtures Integration Tests', () {
 
-    late RouteDatabase database;
+    late AppDatabase database;
     late IRouteRepository repository;
     late RouteFixtureService fixtureService;
 
@@ -36,7 +37,7 @@ void main() {
       await GetIt.instance.reset();
 
       // Создаем чистую in-memory базу для каждого теста
-      database = RouteDatabase.forTesting(NativeDatabase.memory());
+      database = AppDatabase.forTesting(drift.DatabaseConnection(NativeDatabase.memory()));
       repository = RouteRepository(database);
       fixtureService = RouteFixtureService(repository);
 
@@ -57,7 +58,7 @@ void main() {
       );
 
       // Регистрируем в DI для совместимости
-      GetIt.instance.registerSingleton<RouteDatabase>(database);
+      GetIt.instance.registerSingleton<AppDatabase>(database);
       GetIt.instance.registerSingleton<IRouteRepository>(repository);
     });
 

@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
-import 'package:tauzero/features/route/data/database/route_database.dart';
+import 'package:drift/drift.dart' as drift;
+import 'package:get_it/get_it.dart';
+import 'package:tauzero/shared/infrastructure/database/app_database.dart';
 import 'package:tauzero/features/route/data/repositories/route_repository.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
 import 'factories/user_factory.dart';
@@ -10,14 +12,23 @@ import 'factories/user_factory.dart';
 /// Обеспечивает чистую базу данных для каждого теста
 /// и предоставляет готовые зависимости
 class TestDatabaseHelper {
-  late RouteDatabase database;
+  late AppDatabase database;
   late RouteRepository repository;
   late User testUser;
 
   /// Инициализация чистой тестовой среды
   Future<void> setUp() async {
+    // Очищаем GetIt перед каждым тестом
+    if (GetIt.instance.isRegistered<AppDatabase>()) {
+      await GetIt.instance.unregister<AppDatabase>();
+    }
+    
     // Создаем чистую in-memory базу для каждого теста
-    database = RouteDatabase.forTesting(NativeDatabase.memory());
+    database = AppDatabase.forTesting(drift.DatabaseConnection(NativeDatabase.memory()));
+    
+    // Регистрируем базу данных в GetIt для mapper'ов
+    GetIt.instance.registerSingleton<AppDatabase>(database);
+    
     repository = RouteRepository(database);
     
     // Создаем тестового пользователя с предсказуемыми данными
@@ -31,6 +42,11 @@ class TestDatabaseHelper {
   /// Очистка после теста
   Future<void> tearDown() async {
     await database.close();
+    
+    // Очищаем GetIt после теста
+    if (GetIt.instance.isRegistered<AppDatabase>()) {
+      await GetIt.instance.unregister<AppDatabase>();
+    }
   }
 
   /// Создает дополнительного пользователя для тестов с несколькими пользователями

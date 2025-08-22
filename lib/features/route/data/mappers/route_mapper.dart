@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:latlong2/latlong.dart';
 import 'package:drift/drift.dart';
+import 'package:get_it/get_it.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
 
 import '../../domain/entities/route.dart';
@@ -8,7 +9,7 @@ import '../../domain/entities/ipoint_of_interest.dart';
 import '../../domain/entities/trading_point_of_interest.dart';
 import '../../domain/entities/regular_point_of_interest.dart';
 import '../../domain/entities/trading_point.dart';
-import '../database/route_database.dart';
+import '../../../../shared/infrastructure/database/app_database.dart';
 
 /// Mapper для преобразования между Domain и Database моделями
 /// 
@@ -21,9 +22,15 @@ class RouteMapper {
   // =====================================================
   
   /// Domain Route → Database RoutesTableCompanion
-  static RoutesTableCompanion toDatabase(Route route, User user) {
-    // TODO: Изменить схему БД для поддержки String userId
-    final userIdInt = int.tryParse(user.externalId) ?? 0;
+  static Future<RoutesTableCompanion> toDatabase(Route route, User user) async {
+    // Получаем все пользователи из базы для поиска внутреннего ID
+    final database = GetIt.instance<AppDatabase>();
+    final allUsers = await database.getAllUsers();
+    final dbUser = allUsers.where((u) => u.externalId == user.externalId).firstOrNull;
+    
+    final userIdInt = dbUser != null ? allUsers.indexOf(dbUser) + 1 : 0;
+    print('🔗 Создание маршрута для пользователя ${user.firstName} с ID: $userIdInt');
+    
     return RoutesTableCompanion(
       // НЕ устанавливаем id - пусть база данных сама создаст autoincrement
       // Только при обновлении существующего route устанавливаем id
@@ -219,20 +226,21 @@ extension RouteMapperExtensions on RouteMapper {
     }).toList();
   }
   
-  /// Группирует результаты JOIN запроса в удобную структуру
-  static Map<int, List<RouteWithPointsResult>> groupRouteResults(
-    List<RouteWithPointsResult> results,
-  ) {
-    final Map<int, List<RouteWithPointsResult>> grouped = {};
-    
-    for (final result in results) {
-      final routeId = result.route.id;
-      if (!grouped.containsKey(routeId)) {
-        grouped[routeId] = [];
-      }
-      grouped[routeId]!.add(result);
-    }
-    
-    return grouped;
-  }
+  // TODO: Восстановить этот метод когда определим RouteWithPointsResult в AppDatabase
+  // /// Группирует результаты JOIN запроса в удобную структуру
+  // static Map<int, List<RouteWithPointsResult>> groupRouteResults(
+  //   List<RouteWithPointsResult> results,
+  // ) {
+  //   final Map<int, List<RouteWithPointsResult>> grouped = {};
+  //   
+  //   for (final result in results) {
+  //     final routeId = result.route.id;
+  //     if (!grouped.containsKey(routeId)) {
+  //       grouped[routeId] = [];
+  //     }
+  //     grouped[routeId]!.add(result);
+  //   }
+  //   
+  //   return grouped;
+  // }
 }

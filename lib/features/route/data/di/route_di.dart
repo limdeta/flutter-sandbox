@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 
-import '../database/route_database.dart';
+import '../../../../shared/infrastructure/database/app_database.dart';
 import '../repositories/route_repository.dart';
 import '../../domain/repositories/iroute_repository.dart';
 import '../../domain/services/route_service.dart';
@@ -8,8 +8,7 @@ import '../../domain/services/route_service.dart';
 /// Dependency Injection для Route feature
 /// 
 /// Регистрирует все зависимости для работы с маршрутами:
-/// - Database
-/// - Repository
+/// - Repository (использует общую AppDatabase)
 /// - Services
 class RouteDI {
   
@@ -21,18 +20,12 @@ class RouteDI {
     // DATA LAYER - Слой данных
     // =====================================================
     
-    // Database - Singleton, одна база для всего приложения
-    if (!getIt.isRegistered<RouteDatabase>()) {
-      getIt.registerLazySingleton<RouteDatabase>(
-        () => RouteDatabase(),
-        dispose: (database) => database.close(),
-      );
-    }
+    // Repository - использует общую AppDatabase
     
-    // Repository - реализация через Drift
+    // Repository - использует общую AppDatabase
     if (!getIt.isRegistered<IRouteRepository>()) {
       getIt.registerLazySingleton<IRouteRepository>(
-        () => RouteRepository(getIt<RouteDatabase>()),
+        () => RouteRepository(getIt<AppDatabase>()),
       );
     }
 
@@ -59,18 +52,11 @@ class RouteDI {
     if (getIt.isRegistered<IRouteRepository>()) {
       getIt.unregister<IRouteRepository>();
     }
-    
-    if (getIt.isRegistered<RouteDatabase>()) {
-      getIt.unregister<RouteDatabase>();
-    }
   }
 }
 
 /// Extension для удобного доступа к зависимостям
 extension RouteDIExtensions on GetIt {
-  
-  /// Получить Route Database
-  RouteDatabase get routeDatabase => get<RouteDatabase>();
   
   /// Получить Route Repository
   IRouteRepository get routeRepository => get<IRouteRepository>();

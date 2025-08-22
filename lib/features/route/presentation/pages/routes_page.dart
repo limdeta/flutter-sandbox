@@ -103,15 +103,18 @@ class _RoutesPageState extends State<RoutesPage> {
             icon: const Icon(Icons.refresh),
             onPressed: _loadUserAndRoutes,
           ),
+          // Добавляем меню в AppBar вместо FloatingActionButton
+          IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/menu');
+            },
+          ),
         ],
       ),
       body: _buildBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, '/menu');
-        },
-        child: const Icon(Icons.menu),
-      ),
+      // Убираем FloatingActionButton - он мешал нажатиям в нижней части списка
+      // Навигация теперь происходит через AppBar или кнопки в карточках
     );
   }
 
@@ -194,16 +197,17 @@ class _RoutesPageState extends State<RoutesPage> {
       );
     }
 
-    return RefreshIndicator(
-      onRefresh: _loadUserAndRoutes,
-      child: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: _routes.length,
-        itemBuilder: (context, index) {
-          final route = _routes[index];
-          return _buildRouteCard(route);
-        },
-      ),
+    // Используем обычный ListView вместо RefreshIndicator для устранения проблем с касанием
+    return ListView.builder(
+      // Добавляем physics для стабильного поведения скролла
+      physics: const AlwaysScrollableScrollPhysics(),
+      // Добавляем отступ снизу для удобства прокрутки и касаний
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
+      itemCount: _routes.length,
+      itemBuilder: (context, index) {
+        final route = _routes[index];
+        return _buildRouteCard(route);
+      },
     );
   }
 

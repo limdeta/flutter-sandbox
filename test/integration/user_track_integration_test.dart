@@ -8,11 +8,9 @@ import 'package:tauzero/features/tracking/data/repositories/user_track_repositor
 import 'package:tauzero/features/tracking/data/fixtures/user_track_fixtures.dart';
 import 'package:tauzero/features/authentication/data/repositories/user_repository.dart';
 import 'package:tauzero/features/route/data/repositories/route_repository.dart';
-import 'package:tauzero/features/route/data/database/route_database.dart';
 
 void main() {
   late AppDatabase database;
-  late RouteDatabase routeDatabase;
   late UserRepository userRepository;
   late RouteRepository routeRepository;
   late UserTrackRepository repository;
@@ -21,16 +19,14 @@ void main() {
   setUp(() async {
     // Создаем in-memory database для тестов
     database = AppDatabase.forTesting(DatabaseConnection(NativeDatabase.memory()));
-    routeDatabase = RouteDatabase.forTesting(DatabaseConnection(NativeDatabase.memory()));
     userRepository = UserRepository(database: database);
-    routeRepository = RouteRepository(routeDatabase);
+    routeRepository = RouteRepository(database);
     repository = UserTrackRepository(database, userRepository, routeRepository);
     userTrackFixtures = UserTrackFixtures(routeRepository);
   });
 
   tearDown(() async {
     await database.close();
-    await routeDatabase.close();
   });
 
   group('User-Track Relations Integration Tests', () {

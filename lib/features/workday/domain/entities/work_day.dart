@@ -29,7 +29,6 @@ class WorkDay {
     this.metadata,
   });
 
-  /// Создает копию с изменениями
   WorkDay copyWith({
     int? id,
     int? userId,
@@ -90,17 +89,9 @@ class WorkDay {
   int get hashCode => id.hashCode;
 }
 
-/// Статусы рабочего дня
 enum WorkDayStatus {
-  /// Запланирован (есть маршрут, но день еще не начался)
   planned,
-  
-  /// Активен (день начался, идет GPS трекинг)
   active,
-  
-  /// Завершен (день закончен, трек сохранен)
   completed,
-  
-  /// Отменен (день был отменен)
   cancelled,
 }

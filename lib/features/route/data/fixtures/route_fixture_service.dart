@@ -25,27 +25,25 @@ class RouteFixtureService {
   
   /// Создает все dev фикстуры для торгового представителя
   Future<void> createDevFixtures(User user) async {
-    print('🔧 Создаем dev фикстуры для торгового представителя ${user.fullName}');
-    
     // Удаляем старые данные пользователя если есть
     await _clearUserData(user);
     
     // Создаем вчерашний маршрут (завершенный)
     final yesterdayRoute = _createYesterdayRoute(user);
     await _repository.createRoute(yesterdayRoute, user);
-    print('✅ Вчерашний маршрут создан: ${yesterdayRoute.name}');
     
     // Создаем сегодняшний маршрут (в работе)
     final todayRoute = _createTodayRoute(user);
     await _repository.createRoute(todayRoute, user);
-    print('✅ Сегодняшний маршрут создан: ${todayRoute.name}');
     
     // Создаем завтрашний маршрут (запланированный)
     final tomorrowRoute = _createTomorrowRoute(user);
     await _repository.createRoute(tomorrowRoute, user);
-    print('✅ Завтрашний маршрут создан: ${tomorrowRoute.name}');
-    
-    print('🎉 Dev фикстуры для ${user.fullName} готовы!');
+  }
+  
+  /// Очищает все торговые точки (для dev режима)
+  Future<void> clearAllTradingPoints() async {
+    await _repository.clearAllTradingPoints();
   }
   
   /// Создает вчерашний маршрут (почти полностью завершен)
@@ -396,9 +394,8 @@ class RouteFixtureService {
       for (final route in routes) {
         await _repository.deleteRoute(route);
       }
-      print('🧹 Старые данные пользователя очищены');
     } catch (e) {
-      print('ℹ️ Нет старых данных для очистки: $e');
+      // Нет старых данных для очистки
     }
   }
   

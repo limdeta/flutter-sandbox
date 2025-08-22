@@ -42,6 +42,9 @@ abstract class IRouteRepository {
     String? reason,
   });
   
+  /// Очистить все торговые точки (для dev режима)
+  Future<void> clearAllTradingPoints();
+  
   /// Получить историю изменений точки
   // Future<List<PointStatusChange>> getPointStatusHistory(int pointId);
 

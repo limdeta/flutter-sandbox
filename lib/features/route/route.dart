@@ -13,7 +13,6 @@ export 'domain/repositories/iroute_repository.dart';
 
 // Data layer
 export 'data/repositories/route_repository.dart';
-export 'data/database/route_database.dart';
 export 'data/di/route_di.dart';
 
 // Dev fixtures

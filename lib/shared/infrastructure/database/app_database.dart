@@ -9,11 +9,24 @@ import 'package:sqlite3/sqlite3.dart';
 import '../../../features/authentication/domain/entities/user.dart' as domain;
 import 'tables/user_tables.dart';
 import 'tables/tracking_tables.dart';
+import 'tables/route_tables.dart';
 import 'mappers/user_mapper.dart';
+import '../../config/app_config.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [UserEntries, UserTracks, TrackPoints])
+@DriftDatabase(tables: [
+  // User tables
+  UserEntries, 
+  // Tracking tables
+  UserTracks, 
+  TrackPoints,
+  // Route tables
+  RoutesTable,
+  TradingPointsTable, 
+  PointsOfInterestTable,
+  PointStatusHistoryTable,
+])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
   
@@ -21,7 +34,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(DatabaseConnection super.connection);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -33,6 +46,14 @@ class AppDatabase extends _$AppDatabase {
     onUpgrade: (Migrator m, int from, int to) async {
       // Включаем foreign key constraints при обновлении
       await customStatement('PRAGMA foreign_keys = ON');
+      
+      // Миграция с версии 2 до 3: добавляем таблицы маршрутов
+      if (from <= 2 && to >= 3) {
+        await m.createTable($RoutesTableTable(attachedDatabase));
+        await m.createTable($TradingPointsTableTable(attachedDatabase));
+        await m.createTable($PointsOfInterestTableTable(attachedDatabase));
+        await m.createTable($PointStatusHistoryTableTable(attachedDatabase));
+      }
     },
   );
 
@@ -79,12 +100,121 @@ class AppDatabase extends _$AppDatabase {
     final userData = await (select(userEntries)..where((tbl) => tbl.id.equals(internalId))).getSingleOrNull();
     return userData?.externalId;
   }
+
+  // ===========================
+  // МЕТОДЫ ДЛЯ РАБОТЫ С МАРШРУТАМИ
+  // ===========================
+
+  /// Получает маршруты пользователя (reactive stream)
+  Stream<List<RoutesTableData>> watchUserRoutes(int userId) {
+    return (select(routesTable)..where((tbl) => tbl.userId.equals(userId))).watch();
+  }
+
+  /// Получает один маршрут по ID
+  Future<RoutesTableData?> getRouteById(int routeId) {
+    return (select(routesTable)..where((tbl) => tbl.id.equals(routeId))).getSingleOrNull();
+  }
+
+  /// Создает новый маршрут
+  Future<int> createRoute(RoutesTableCompanion route) {
+    return into(routesTable).insert(route);
+  }
+
+  /// Обновляет существующий маршрут
+  Future<bool> updateRoute(RoutesTableCompanion route) {
+    return update(routesTable).replace(route);
+  }
+
+  /// Удаляет маршрут
+  Future<int> deleteRoute(int routeId) async {
+    // Сначала удаляем все точки маршрута
+    await (delete(pointsOfInterestTable)..where((tbl) => tbl.routeId.equals(routeId))).go();
+    
+    // Потом удаляем сам маршрут
+    return await (delete(routesTable)..where((tbl) => tbl.id.equals(routeId))).go();
+  }
+
+  /// Получает точки маршрута (reactive stream)
+  Stream<List<PointsOfInterestTableData>> watchRoutePoints(int routeId) {
+    return (select(pointsOfInterestTable)
+      ..where((tbl) => tbl.routeId.equals(routeId))
+      ..orderBy([(tbl) => OrderingTerm.asc(tbl.orderIndex)])).watch();
+  }
+
+  /// Создает новую точку в маршруте
+  Future<int> createPoint(PointsOfInterestTableCompanion point) {
+    return into(pointsOfInterestTable).insert(point);
+  }
+
+  /// Обновляет точку маршрута
+  Future<bool> updatePoint(PointsOfInterestTableCompanion point) {
+    return update(pointsOfInterestTable).replace(point);
+  }
+
+  /// Обновляет статус точки маршрута
+  Future<void> updatePointStatus({
+    required int pointId,
+    required String fromStatus,
+    required String toStatus,
+    required String changedBy,
+    String? reason,
+    DateTime? arrivalTime,
+    DateTime? departureTime,
+  }) async {
+    await transaction(() async {
+      // Обновляем основную запись точки
+      await (update(pointsOfInterestTable)..where((tbl) => tbl.id.equals(pointId))).write(
+        PointsOfInterestTableCompanion(
+          status: Value(toStatus),
+          actualArrivalTime: arrivalTime != null ? Value(arrivalTime) : const Value.absent(),
+          actualDepartureTime: departureTime != null ? Value(departureTime) : const Value.absent(),
+        ),
+      );
+      
+      // Добавляем запись в историю статусов
+      await into(pointStatusHistoryTable).insert(
+        PointStatusHistoryTableCompanion.insert(
+          pointId: pointId,
+          fromStatus: fromStatus,
+          toStatus: toStatus,
+          changedBy: changedBy,
+          reason: Value(reason),
+        ),
+      );
+    });
+  }
+
+  /// Получает торговую точку по внешнему ID
+  Future<TradingPointsTableData?> getTradingPoint(String externalId) {
+    return (select(tradingPointsTable)..where((tbl) => tbl.externalId.equals(externalId))).getSingleOrNull();
+  }
+
+  /// Создает или обновляет торговую точку
+  Future<void> upsertTradingPoint(TradingPointsTableCompanion tradingPoint) {
+    return into(tradingPointsTable).insertOnConflictUpdate(tradingPoint);
+  }
+  
+  /// Полная очистка базы данных (только для dev окружения!)
+  Future<void> clearAllData() async {
+    if (!AppConfig.isDev) {
+      throw Exception('clearAllData() можно вызывать только в dev окружении!');
+    }
+    
+    // Очищаем все таблицы
+    await delete(userTracks).go();
+    await delete(trackPoints).go();
+    await delete(pointStatusHistoryTable).go();
+    await delete(pointsOfInterestTable).go();
+    await delete(tradingPointsTable).go();
+    await delete(routesTable).go();
+    await delete(userEntries).go();
+  }
 }
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    final file = File(p.join(dbFolder.path, AppConfig.databaseName));
 
     // Make sure sqlite3 is properly initialized on Android
     if (Platform.isAndroid) {

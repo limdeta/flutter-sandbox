@@ -3,9 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 import 'shared/config/app_config.dart';
 import 'shared/di/service_locator.dart';
-import 'shared/fixtures/dev_data_simulator.dart';
+import 'shared/fixtures/isolate_fixture_service.dart';
 import 'shared/providers/selected_route_provider.dart';
 import 'shared/services/app_lifecycle_manager.dart';
+import 'shared/widgets/dev_data_loading_overlay.dart';
 import 'features/app/presentation/pages/splash_page.dart';
 import 'features/authentication/presentation/pages/login_page.dart';
 import 'features/app/presentation/pages/home_page.dart';
@@ -28,9 +29,12 @@ void main() async {
   final lifecycleManager = GetIt.instance<AppLifecycleManager>();
   await lifecycleManager.initialize();
   
-  if (AppConfig.isDevelopment) {
-    print('🔧 Dev режим - инициализируем тестовые данные...');
-    await DevDataSimulator.initializeDevData();
+  if (AppConfig.isDev) {
+    print('🔧 Dev режим - инициализируем тестовые данные в изоляте...');
+    // Запускаем создание dev данных в фоновом потоке (не блокируем UI)
+    IsolateFixtureService.createDevDataInIsolate().catchError((error) {
+      print('❌ Ошибка инициализации dev данных: $error');
+    });
   }
   
   runApp(const TauZeroApp());
@@ -45,26 +49,28 @@ class TauZeroApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => SelectedRouteProvider()),
       ],
-      child: MaterialApp(
-        title: 'TauZero',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
+      child: DevDataLoadingOverlay(
+        child: MaterialApp(
+          title: 'TauZero',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+            useMaterial3: true,
+          ),
+          initialRoute: '/',
+          routes: {
+          '/': (context) => const SplashPage(),
+          '/login': (context) => const LoginPage(),
+          '/home': (context) => const HomePage(),
+          '/sales-home': (context) => const SalesRepHomePage(),
+          '/menu': (context) => const MainMenuPage(),
+          '/admin': (context) => const AdminDashboardPage(),
+          '/routes': (context) => const RoutesPage(),
+          '/products/catalog': (context) => const ProductCatalogPage(),
+          '/products/categories': (context) => const ProductCategoriesPage(),
+          '/products/promotions': (context) => const PromotionsPage(),
+          '/tracking-map': (context) => const TrackingArchitectureDemo(),
+        },
         ),
-        initialRoute: '/',
-        routes: {
-        '/': (context) => const SplashPage(),
-        '/login': (context) => const LoginPage(),
-        '/home': (context) => const HomePage(),
-        '/sales-home': (context) => const SalesRepHomePage(),
-        '/menu': (context) => const MainMenuPage(),
-        '/admin': (context) => const AdminDashboardPage(),
-        '/routes': (context) => const RoutesPage(),
-        '/products/catalog': (context) => const ProductCatalogPage(),
-        '/products/categories': (context) => const ProductCategoriesPage(),
-        '/products/promotions': (context) => const PromotionsPage(),
-        '/tracking-map': (context) => const TrackingArchitectureDemo(),
-      },
       ),
     );
   }

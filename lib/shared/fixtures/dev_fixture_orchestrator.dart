@@ -2,10 +2,12 @@ import 'package:tauzero/features/authentication/domain/entities/user.dart';
 import 'package:tauzero/features/authentication/domain/value_objects/phone_number.dart';
 import 'package:tauzero/features/authentication/data/fixtures/user_fixture_service.dart';
 import 'package:tauzero/features/route/data/fixtures/route_fixture_service.dart';
+import 'package:tauzero/features/route/data/fixtures/trading_points_fixture_service.dart';
 import 'package:tauzero/features/tracking/fixtures/track_fixtures.dart';
 import 'package:get_it/get_it.dart';
 import '../../features/authentication/domain/repositories/iuser_repository.dart';
 import '../../features/route/domain/repositories/iroute_repository.dart';
+import '../infrastructure/database/app_database.dart';
 
 /// Центральный оркестратор для создания всех dev фикстур
 /// 
@@ -18,16 +20,23 @@ import '../../features/route/domain/repositories/iroute_repository.dart';
 class DevFixtureOrchestrator {
   final UserFixtureService _userFixtureService;
   final RouteFixtureService _routeFixtureService;
+  final TradingPointsFixtureService _tradingPointsService;
   
   DevFixtureOrchestrator(
     this._userFixtureService,
     this._routeFixtureService,
+    this._tradingPointsService,
   );
 
   /// Создает полный набор dev данных
   Future<DevFixturesResult> createFullDevDataset() async {    
     try {
       await _clearAllData();
+      
+      // Сначала создаем торговые точки (глобально)
+      print('🏪 Создаем базовые торговые точки...');
+      await _tradingPointsService.createBaseTradingPoints();
+      
       final users = await _createUsers();
       await _createRoutesForSalesReps(users);
       await _createTestTracks();
@@ -73,6 +82,19 @@ class DevFixtureOrchestrator {
   }
 
   Future<void> _clearAllData() async {
+    // В dev режиме полностью очищаем базу данных
+    print('🧹 Начинаем очистку dev базы данных...');
+    
+    try {
+      // Принудительно получаем экземпляр базы данных (создает если не существует)
+      final database = GetIt.instance<AppDatabase>();
+      await database.clearAllData();
+      print('✅ База данных полностью очищена (dev режим)');
+    } catch (e) {
+      print('❌ Ошибка очистки базы данных: $e');
+      rethrow;
+    }
+    
     await _userFixtureService.clearAllUsers();
   }
 
@@ -185,10 +207,12 @@ class DevFixtureOrchestratorFactory {
   static DevFixtureOrchestrator create() {
     final userFixtureService = UserFixtureServiceFactory.create();
     final routeFixtureService = RouteFixtureServiceFactory.create();
+    final tradingPointsService = TradingPointsFixtureServiceFactory.create();
     
     return DevFixtureOrchestrator(
       userFixtureService,
       routeFixtureService,
+      tradingPointsService,
     );
   }
 }

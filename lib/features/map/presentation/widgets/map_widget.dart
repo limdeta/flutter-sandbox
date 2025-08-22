@@ -80,8 +80,6 @@ class _MapWidgetState extends State<MapWidget> {
         centerLng: camera.center.longitude,
         zoom: camera.zoom,
       );
-    } else {
-      print('💾 Не удалось сохранить состояние карты - PreferencesService недоступен');
     }
   }
 
@@ -96,23 +94,17 @@ class _MapWidgetState extends State<MapWidget> {
       final savedState = preferencesService.getMapState();
       if (savedState != null) {
         return LatLng(savedState.centerLat, savedState.centerLng);
-      } else {
-        print('🗺️ Сохраненное состояние карты не найдено');
       }
-    } else {
-      print('🗺️ PreferencesService недоступен для загрузки центра');
     }
 
-    // 3. Если есть маршрут - центрируем по нему
+    // Если есть маршрут - центрируем по нему
     if (widget.route != null && widget.route!.pointsOfInterest.isNotEmpty) {
       final centerPoint = RouteMapAdapter.getRouteCenterPoint(widget.route!);
       if (centerPoint != null) {
-        print('🗺️ Центрируем по маршруту: ${centerPoint.latitude}, ${centerPoint.longitude}');
         return LatLng(centerPoint.latitude, centerPoint.longitude);
       }
     }
 
-    print('🗺️ Используем центр по умолчанию: ${_defaultCenter.latitude}, ${_defaultCenter.longitude}');
     return _defaultCenter;
   }
 
@@ -120,7 +112,6 @@ class _MapWidgetState extends State<MapWidget> {
   double _getMapZoom() {
     // 1. Приоритет: явно переданный зум
     if (widget.initialZoom != null) {
-      print('🔍 Используем переданный зум: ${widget.initialZoom}');
       return widget.initialZoom!;
     }
 
@@ -129,13 +120,8 @@ class _MapWidgetState extends State<MapWidget> {
     if (preferencesService != null) {
       final savedState = preferencesService.getMapState();
       if (savedState != null) {
-        print('🔍 Загружаем сохраненный зум: ${savedState.zoom}');
         return savedState.zoom;
-      } else {
-        print('🔍 Сохраненное состояние зума не найдено');
       }
-    } else {
-      print('🔍 PreferencesService недоступен для загрузки зума');
     }
 
     // 3. Если есть маршрут - рассчитываем оптимальный зум
@@ -148,12 +134,10 @@ class _MapWidgetState extends State<MapWidget> {
         // Получаем оптимальный масштаб, но ограничиваем его
         final optimalZoom = _mapService.getOptimalZoom(bounds, size.width, size.height);
         final clampedZoom = optimalZoom.toDouble().clamp(8.0, 16.0);
-        print('🔍 Рассчитанный зум для маршрута: $clampedZoom');
         return clampedZoom;
       }
     }
 
-    print('🔍 Используем зум по умолчанию: $_defaultZoom');
     return _defaultZoom;
   }
 
@@ -205,7 +189,6 @@ class _MapWidgetState extends State<MapWidget> {
     );
   }
 
-  /// Преобразует название цвета в Flutter Color
   Color _getColorFromName(String colorName) {
     switch (colorName) {
       case 'green':
@@ -223,7 +206,6 @@ class _MapWidgetState extends State<MapWidget> {
     }
   }
 
-  /// Преобразует название иконки в Flutter IconData
   IconData _getIconFromName(String iconName) {
     switch (iconName) {
       case 'warehouse':
@@ -246,12 +228,10 @@ class _MapWidgetState extends State<MapWidget> {
     }
   }
 
-  /// Обработчик нажатия на маркер
   void _onMarkerTap(dynamic poi) {
     _showPOIDetails(poi);
   }
 
-  /// Показывает детали точки интереса
   void _showPOIDetails(dynamic poi) {
     showModalBottomSheet(
       context: context,
@@ -297,14 +277,6 @@ class _MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print('🔄 MapWidget.build() вызван - проверяем доступность PreferencesService');
-    final preferencesService = UserInitializationService.getPreferencesService();
-    if (preferencesService != null) {
-      print('✅ PreferencesService доступен в build()');
-    } else {
-      print('❌ PreferencesService НЕ доступен в build()');
-    }
-    
     return Stack(
       children: [
         // Основная карта
@@ -343,9 +315,9 @@ class _MapWidgetState extends State<MapWidget> {
               maxZoom: _mapService.maxZoom.toDouble(),
             ),
             
-            // Слой GPS треков (polylines)
-            if (widget.historicalTracks.isNotEmpty)
-              PolylineLayer(polylines: _buildTrackPolylines()),
+            // Слой GPS треков (polylines) - ВРЕМЕННО ОТКЛЮЧЕНО
+            // if (widget.historicalTracks.isNotEmpty)
+            //   PolylineLayer(polylines: _buildTrackPolylines()),
             
             // Слой маршрута (построенного через OSRM)
             if (widget.routePolylinePoints.isNotEmpty)
@@ -359,9 +331,9 @@ class _MapWidgetState extends State<MapWidget> {
                 showTrackInfo: false, // Информацию показываем отдельно
               ),
             
-            // Слой маркеров GPS треков (начало/конец)
-            if (widget.historicalTracks.isNotEmpty)
-              MarkerLayer(markers: _buildTrackMarkers()),
+            // Слой маркеров GPS треков (начало/конец) - ВРЕМЕННО ОТКЛЮЧЕНО
+            // if (widget.historicalTracks.isNotEmpty)
+            //   MarkerLayer(markers: _buildTrackMarkers()),
             
             // Слой маркеров маршрута
             if (widget.route != null)
@@ -381,7 +353,8 @@ class _MapWidgetState extends State<MapWidget> {
   Widget _buildMapControls(BuildContext context) {
     return Positioned(
       right: 16,
-      bottom: 16,
+      // Адаптивный отступ снизу: базовый отступ + место для кнопки "Построить маршрут" (если есть)
+      bottom: 88, // 16 базовый + 48 кнопка + 16 padding + 8 доп. отступ = 88
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -539,32 +512,8 @@ class _MapWidgetState extends State<MapWidget> {
     );
   }
 
-  /// Создает polylines для отображения GPS треков
-  List<Polyline> _buildTrackPolylines() {
-    final polylines = <Polyline>[];
-
-    for (final track in widget.historicalTracks) {
-      if (track.points.isEmpty) continue;
-
-      // Создаем polyline для трека
-      final points = track.points.map((p) => LatLng(p.latitude, p.longitude)).toList();
-      
-      polylines.add(
-        Polyline(
-          points: points,
-          strokeWidth: 3.0,
-          color: _getTrackColor(track),
-          pattern: track.status == TrackStatus.completed 
-            ? StrokePattern.solid() 
-            : StrokePattern.dotted(),
-        ),
-      );
-    }
-
-    return polylines;
-  }
-
-  /// Создает маркеры начала/конца GPS треков
+  /// Создает маркеры начала/конца GPS треков - ВРЕМЕННО ОТКЛЮЧЕНО ДЛЯ ОПТИМИЗАЦИИ
+  /*
   List<Marker> _buildTrackMarkers() {
     final markers = <Marker>[];
 
@@ -599,18 +548,6 @@ class _MapWidgetState extends State<MapWidget> {
 
     return markers;
   }
+  */
 
-  /// Определяет цвет трека в зависимости от статуса
-  Color _getTrackColor(UserTrack track) {
-    switch (track.status) {
-      case TrackStatus.active:
-        return Colors.blue;
-      case TrackStatus.paused:
-        return Colors.orange;
-      case TrackStatus.completed:
-        return Colors.grey;
-      case TrackStatus.cancelled:
-        return Colors.red;
-    }
-  }
 }
