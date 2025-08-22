@@ -8,12 +8,10 @@ import '../../../route/domain/entities/route.dart' as domain;
 import '../../../route/domain/entities/ipoint_of_interest.dart';
 import '../../../route/domain/repositories/iroute_repository.dart';
 import '../../../authentication/domain/entities/user.dart';
-import '../../../authentication/domain/repositories/iuser_repository.dart';
 import '../../../authentication/domain/usecases/get_current_session_usecase.dart';
 import '../../../route/presentation/pages/route_detail_page.dart';
 import '../../../map/presentation/widgets/map_widget.dart';
-import '../../../tracking/domain/repositories/iuser_track_repository.dart';
-import '../../../tracking/domain/entities/user_track.dart';
+import '../../../tracking/presentation/providers/user_tracks_provider.dart';
 import '../../../../shared/providers/selected_route_provider.dart';
 
 /// Главный экран с картой и кнопкой меню для торгового представителя
@@ -32,11 +30,9 @@ class SalesRepHomePage extends StatefulWidget {
 class _SalesRepHomePageState extends State<SalesRepHomePage> {
   final IRouteRepository _routeRepository = GetIt.instance<IRouteRepository>();
   final GetCurrentSessionUseCase _getCurrentSessionUseCase = GetIt.instance<GetCurrentSessionUseCase>();
-  final IUserTrackRepository _trackRepository = GetIt.instance<IUserTrackRepository>();
   
   User? _currentUser;
   domain.Route? _currentRoute;
-  List<UserTrack> _historicalTracks = [];
   bool _isLoading = true;
   String? _error;
   bool _showRoutePanel = true;
@@ -78,8 +74,9 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
         return;
       }
 
-      // Загружаем исторические треки пользователя
-      await _loadHistoricalTracks();
+      // Загружаем треки через Provider
+      final tracksProvider = Provider.of<UserTracksProvider>(context, listen: false);
+      await tracksProvider.loadUserTracks(_currentUser!);
 
       // Получаем маршруты пользователя
       _routeRepository.watchUserRoutes(_currentUser!).listen(
@@ -144,40 +141,6 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
     }
   }
 
-  /// Загружает треки пользователя
-  Future<void> _loadHistoricalTracks() async {
-    if (_currentUser == null) return;
-    
-    try {
-      // Получаем репозиторий пользователей для получения внутреннего ID
-      final userRepository = GetIt.instance<IUserRepository>();
-      final usersResult = await userRepository.getAllUsers();
-      
-      if (usersResult.isLeft()) {
-        print('❌ Не удалось получить пользователей из БД: ${usersResult.fold((l) => l, (r) => '')}');
-        return;
-      }
-      
-      final allUsers = usersResult.fold((l) => <User>[], (r) => r);
-      final dbUser = allUsers.where((u) => u.externalId == _currentUser!.externalId).firstOrNull;
-      
-      if (dbUser == null) {
-        print('❌ Пользователь ${_currentUser!.firstName} не найден в БД');
-        return;
-      }
-  
-      final tracksResult = await _trackRepository.getUserTracks(dbUser);
-      if (mounted) {
-        final tracks = tracksResult.fold((l) => <UserTrack>[], (r) => r);
-        setState(() {
-          _historicalTracks = tracks;
-        });
-      }
-    } catch (e) {
-      print('❌ Ошибка загрузки треков: $e');
-    }
-  }
-
   domain.Route? _findCurrentRoute(List<domain.Route> routes) {
     // Ищем активный маршрут
     var activeRoute = routes.where((r) => r.status == domain.RouteStatus.active).firstOrNull;
@@ -239,19 +202,19 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
   }
 
   Widget _buildMapArea() {
-    return Consumer<SelectedRouteProvider>(
-      builder: (context, selectedRouteProvider, child) {
+    return Consumer2<SelectedRouteProvider, UserTracksProvider>(
+      builder: (context, selectedRouteProvider, tracksProvider, child) {
         // Используем выбранный пользователем маршрут, если есть
         final routeToShow = selectedRouteProvider.selectedRoute ?? _currentRoute;
         
-        // Фильтруем треки для текущего маршрута, если он выбран
-        final filteredTracks = routeToShow != null && routeToShow.id != null
-            ? _historicalTracks.where((track) => track.route?.id == routeToShow.id).toList()
-            : _historicalTracks;
+        // Получаем треки для текущего маршрута через TrackDisplayWidget
+        final routeTracks = routeToShow != null && routeToShow.id != null
+            ? tracksProvider.getTracksForRoute(routeToShow.id!)
+            : tracksProvider.userTracks;
         
         return MapWidget(
           route: routeToShow,
-          historicalTracks: filteredTracks, // Передаем треки напрямую в MapWidget
+          historicalTracks: routeTracks,
           onTap: (point) {
             // TODO: Обработка нажатия на карту
             print('Нажатие на карту: ${point.latitude}, ${point.longitude}');
@@ -426,51 +389,6 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
         ),
       ),
     );
-  }
-
-  Future<void> _onBuildRoutePressed() async {
-    if (_currentRoute == null) return;
-    setState(() => _isBuildingRoute = true);
-
-    // Получаем не посещённые точки в порядке order
-    final points = _currentRoute!.pointsOfInterest
-        .where((p) => !p.isVisited)
-        .toList()
-      ..sort((a, b) => (a.order ?? 9999).compareTo(b.order ?? 9999));
-
-    print('🛣️ Найдено ${points.length} не посещённых точек');
-
-    if (points.length < 2) {
-      print('❌ Недостаточно точек для построения маршрута (нужно минимум 2)');
-      setState(() => _isBuildingRoute = false);
-      return;
-    }
-
-    final mapPoints = points
-        .map((p) => MapPoint(latitude: p.coordinates.latitude, longitude: p.coordinates.longitude))
-        .toList();
-
-    print('🌍 Отправляем ${mapPoints.length} точек в OSRM сервис');
-
-    try {
-        final service = OsrmPathPredictionService();
-        final result = await service.predictRouteGeometry(mapPoints);
-        print('✅ Получен маршрут с ${result.routePoints.length} точками');
-        setState(() {
-          _routePolylinePoints = result.routePoints
-              .map((p) => LatLng(p.latitude, p.longitude))
-              .toList();
-          _isBuildingRoute = false;
-        });
-        print('🗺️ Маршрут передан на карту: ${_routePolylinePoints.length} точек');
-      } catch (e) {
-        print('❌ Ошибка построения маршрута: $e');
-        setState(() => _isBuildingRoute = false);
-        // Можно показать ошибку через Snackbar
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ошибка построения маршрута: $e')),
-        );
-      }
   }
 
   Widget _buildLoadingOverlay() {

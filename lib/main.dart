@@ -5,6 +5,7 @@ import 'shared/config/app_config.dart';
 import 'shared/di/service_locator.dart';
 import 'shared/fixtures/dev_fixture_orchestrator.dart';
 import 'shared/providers/selected_route_provider.dart';
+import 'features/tracking/presentation/providers/user_tracks_provider.dart';
 import 'shared/services/app_lifecycle_manager.dart';
 import 'shared/widgets/dev_data_loading_overlay.dart';
 import 'features/app/presentation/pages/splash_page.dart';
@@ -60,6 +61,7 @@ class TauZeroApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SelectedRouteProvider()),
+        ChangeNotifierProvider(create: (context) => GetIt.instance<UserTracksProvider>()),
       ],
       child: DevDataLoadingOverlay(
         child: MaterialApp(

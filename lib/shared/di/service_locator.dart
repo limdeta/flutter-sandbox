@@ -13,6 +13,8 @@ import 'package:tauzero/features/route/domain/repositories/iroute_repository.dar
 import 'package:tauzero/features/tracking/domain/services/location_tracking_service.dart';
 import 'package:tauzero/features/tracking/domain/repositories/iuser_track_repository.dart';
 import 'package:tauzero/features/tracking/data/repositories/user_track_repository.dart';
+import 'package:tauzero/features/tracking/presentation/usecases/get_user_tracks_usecase.dart';
+import 'package:tauzero/features/tracking/presentation/providers/user_tracks_provider.dart';
 import 'package:tauzero/features/path_predictor/osrm_path_prediction_service.dart';
 import 'package:tauzero/shared/config/app_config.dart';
 import 'package:tauzero/shared/infrastructure/database/app_database.dart';
@@ -95,6 +97,15 @@ Future<void> setupServiceLocator() async {
   
   // LocationTrackingService нужно регистрировать после RouteDI, так как он зависит от IRouteRepository
   getIt.registerLazySingleton<LocationTrackingService>(() => LocationTrackingService());
+  
+  // Tracking presentation layer
+  getIt.registerLazySingleton<GetUserTracksUseCase>(
+    () => GetUserTracksUseCase(getIt<IUserTrackRepository>()),
+  );
+  
+  getIt.registerFactory<UserTracksProvider>(
+    () => UserTracksProvider(getIt<GetUserTracksUseCase>()),
+  );
   
   if (AppConfig.enableDetailedLogging) {
     print('Service locator setup completed!');
