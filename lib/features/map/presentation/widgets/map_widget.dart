@@ -314,9 +314,9 @@ class _MapWidgetState extends State<MapWidget> {
               maxZoom: _mapService.maxZoom.toDouble(),
             ),
             
-            // Слой GPS треков (polylines) - ВРЕМЕННО ОТКЛЮЧЕНО
-            // if (widget.historicalTracks.isNotEmpty)
-            //   PolylineLayer(polylines: _buildTrackPolylines()),
+            // Слой GPS треков (polylines) - отображаем треки для выбранного маршрута
+            if (widget.historicalTracks.isNotEmpty)
+              PolylineLayer(polylines: _buildTrackPolylines()),
             
             // Слой маршрута (построенного через OSRM)
             if (widget.routePolylinePoints.isNotEmpty)
@@ -549,5 +549,56 @@ class _MapWidgetState extends State<MapWidget> {
     return markers;
   }
   */
+
+  /// Создает полилинии для отображения GPS треков пользователя
+  List<Polyline> _buildTrackPolylines() {
+    final polylines = <Polyline>[];
+
+    for (final track in widget.historicalTracks) {
+      // Получаем все точки из всех сегментов трека
+      final allPoints = <LatLng>[];
+      
+      for (final segment in track.segments) {
+        for (int i = 0; i < segment.pointCount; i++) {
+          final (lat, lng) = segment.getCoordinates(i);
+          allPoints.add(LatLng(lat, lng));
+        }
+      }
+
+      if (allPoints.isEmpty) continue;
+
+      // Определяем цвет линии в зависимости от статуса трека
+      Color trackColor;
+      double strokeWidth;
+      
+      switch (track.status.name) {
+        case 'active':
+          trackColor = Colors.blue;
+          strokeWidth = 4.0;
+          break;
+        case 'completed':
+          trackColor = Colors.green;
+          strokeWidth = 3.0;
+          break;
+        case 'paused':
+          trackColor = Colors.orange;
+          strokeWidth = 3.0;
+          break;
+        default:
+          trackColor = Colors.grey;
+          strokeWidth = 2.0;
+      }
+
+      polylines.add(
+        Polyline(
+          points: allPoints,
+          strokeWidth: strokeWidth,
+          color: trackColor.withOpacity(0.8),
+        ),
+      );
+    }
+
+    return polylines;
+  }
 
 }

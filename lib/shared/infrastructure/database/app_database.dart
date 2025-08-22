@@ -213,8 +213,19 @@ class AppDatabase extends _$AppDatabase {
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, AppConfig.databaseName));
+    File file;
+    
+    if (AppConfig.isDev) {
+      // В dev режиме создаем базу в application support directory
+      // Это работает на всех платформах, включая Android
+      final appSupportDir = await getApplicationSupportDirectory();
+      file = File(p.join(appSupportDir.path, AppConfig.databaseName));
+      print('🗄️ Dev база данных: ${file.path}');
+    } else {
+      // В prod режиме используем стандартную папку приложения
+      final dbFolder = await getApplicationDocumentsDirectory();
+      file = File(p.join(dbFolder.path, AppConfig.databaseName));
+    }
 
     // Make sure sqlite3 is properly initialized on Android
     if (Platform.isAndroid) {

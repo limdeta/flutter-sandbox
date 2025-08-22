@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tauzero/features/map/domain/entities/map_point.dart';
 import 'package:tauzero/features/path_predictor/osrm_path_prediction_service.dart';
 import '../../../route/domain/entities/route.dart' as domain;
+import '../../../route/domain/entities/ipoint_of_interest.dart';
 import '../../../route/domain/repositories/iroute_repository.dart';
 import '../../../authentication/domain/entities/user.dart';
 import '../../../authentication/domain/repositories/iuser_repository.dart';
@@ -415,7 +416,7 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: ElevatedButton(
-          onPressed: _isBuildingRoute ? null : _onBuildRoutePressed,
+          onPressed: _isBuildingRoute ? null : _buildRoute,
           style: ElevatedButton.styleFrom(
             minimumSize: const Size.fromHeight(48),
           ),
@@ -578,18 +579,28 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
     try {
       final pathPredictionService = GetIt.instance<OsrmPathPredictionService>();
       
-      // Используем ВСЕ точки маршрута для построения полного пути
-      final allPoints = _currentRoute!.pointsOfInterest.toList();
+      // Находим последнюю завершенную точку (индекс начала маршрута)
+      int lastCompletedIndex = -1;
+      for (int i = 0; i < _currentRoute!.pointsOfInterest.length; i++) {
+        if (_currentRoute!.pointsOfInterest[i].status == VisitStatus.completed) {
+          lastCompletedIndex = i;
+        }
+      }
       
-      if (allPoints.length < 2) {
-        print('⚠️ Недостаточно точек для построения маршрута');
+      // Если есть завершенные точки, начинаем с последней завершенной
+      // Иначе начинаем с первой точки
+      final startIndex = lastCompletedIndex >= 0 ? lastCompletedIndex : 0;
+      final routePoints = _currentRoute!.pointsOfInterest.sublist(startIndex);
+      
+      if (routePoints.length < 2) {
+        print('⚠️ Недостаточно точек для построения маршрута (нужно минимум 2, есть ${routePoints.length})');
         return;
       }
 
-      print('🎯 Строим полный маршрут для ${allPoints.length} точек');
+      print('🎯 Строим маршрут от точки ${startIndex + 1} до конца: ${routePoints.length} точек');
 
       // Преобразуем в MapPoint для OSRM сервиса
-      final mapPoints = allPoints.map((poi) => MapPoint(
+      final mapPoints = routePoints.map((poi) => MapPoint(
         latitude: poi.coordinates.latitude,
         longitude: poi.coordinates.longitude,
       )).toList();

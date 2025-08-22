@@ -32,13 +32,12 @@ class RouteFixtureService {
     final yesterdayRoute = _createYesterdayRoute(user);
     await _repository.createRoute(yesterdayRoute, user);
     
-    // Создаем сегодняшний маршрут (в работе)
+    // Создаем сегодняшний маршрут (в работе) - для него будет создан трек
     final todayRoute = _createTodayRoute(user);
     await _repository.createRoute(todayRoute, user);
     
-    // Создаем завтрашний маршрут (запланированный)
-    final tomorrowRoute = _createTomorrowRoute(user);
-    await _repository.createRoute(tomorrowRoute, user);
+    // Примечание: завтрашний маршрут не создается для упрощения dev режима
+    // Трек создается только для текущего (сегодняшнего) маршрута
   }
   
   /// Очищает все торговые точки (для dev режима)
@@ -173,10 +172,11 @@ class RouteFixtureService {
   
   /// Создает сегодняшний маршрут (в процессе выполнения)
   Route _createTodayRoute(User user) {
+    print('🔧 Создаем сегодняшний маршрут для пользователя ${user.fullName}');
     final today = DateTime.now();
     final startOfDay = DateTime(today.year, today.month, today.day, 9, 0);
     
-    return Route(
+    final route = Route(
       name: 'Текущий маршрут ${_formatDate(today)}',
       description: 'Сегодняшний рабочий день - в процессе выполнения',
       createdAt: startOfDay.subtract(const Duration(hours: 12)),
@@ -261,7 +261,7 @@ class RouteFixtureService {
             name: 'ООО "Пятая точка"',
             inn: '2536789105',
           ),
-          coordinates: const LatLng(43.0882, 131.9366),
+          coordinates: const LatLng(43.0945, 131.9433), // Исправленные координаты
           plannedArrivalTime: startOfDay.add(const Duration(hours: 7)),
           plannedDepartureTime: startOfDay.add(const Duration(hours: 7, minutes: 45)),
           status: VisitStatus.planned,
@@ -282,6 +282,13 @@ class RouteFixtureService {
         ),
       ],
     );
+    
+    print('✅ Сегодняшний маршрут создан: ${route.name}');
+    print('   📊 POI точек: ${route.pointsOfInterest.length}');
+    print('   ✅ Завершены: ${route.pointsOfInterest.where((p) => p.status == VisitStatus.completed).length}');
+    print('   📋 Запланированы: ${route.pointsOfInterest.where((p) => p.status == VisitStatus.planned).length}');
+    
+    return route;
   }
   
   /// Создает завтрашний маршрут (запланированный)
