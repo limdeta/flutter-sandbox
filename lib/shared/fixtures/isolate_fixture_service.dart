@@ -8,12 +8,8 @@ class IsolateFixtureService {
   /// Создает полный набор dev данных в изоляте
   /// Возвращает Future, который завершается когда данные готовы
   static Future<void> createDevDataInIsolate() async {
-    // Устанавливаем состояние загрузки
+
     devDataLoadingNotifier.setLoading();
-    
-    if (kDebugMode) {
-      print('🔄 Запуск создания dev данных в изоляте...');
-    }
 
     // Создаем ReceivePort для получения результата от изолята
     final receivePort = ReceivePort();
@@ -25,7 +21,6 @@ class IsolateFixtureService {
         receivePort.sendPort,
       );
 
-      // Ждем завершения работы изолята
       final result = await receivePort.first;
       
       if (result is String && result.startsWith('ERROR:')) {
@@ -33,12 +28,8 @@ class IsolateFixtureService {
         throw Exception('Ошибка в изоляте: $result');
       }
       
-      // Устанавливаем состояние успешной загрузки
       devDataLoadingNotifier.setLoaded();
       
-      if (kDebugMode) {
-        print('✅ Dev данные созданы в изоляте успешно');
-      }
     } catch (e) {
       devDataLoadingNotifier.setError(e.toString());
       
@@ -53,10 +44,6 @@ class IsolateFixtureService {
   /// Выполняется в отдельном потоке, изолированно от UI
   static void _isolateEntryPoint(SendPort sendPort) async {
     try {
-      if (kDebugMode) {
-        print('🧵 Изолят запущен для создания dev данных');
-      }
-
       // В изоляте создаем dev данные напрямую
       // без использования GetIt (временная упрощенная реализация)
       await _createDevDataDirectly();
@@ -65,14 +52,11 @@ class IsolateFixtureService {
         print('✅ Изолят завершил создание dev данных');
       }
       
-      // Отправляем сигнал об успешном завершении
       sendPort.send('SUCCESS');
     } catch (e) {
       if (kDebugMode) {
         print('❌ Ошибка в изоляте: $e');
       }
-      
-      // Отправляем информацию об ошибке
       sendPort.send('ERROR: $e');
     }
   }
@@ -82,9 +66,5 @@ class IsolateFixtureService {
   static Future<void> _createDevDataDirectly() async {
     // Эмулируем создание dev данных
     await Future.delayed(const Duration(seconds: 3));
-    
-    if (kDebugMode) {
-      print('📊 Dev данные созданы в изоляте (временная заглушка)');
-    }
   }
 }

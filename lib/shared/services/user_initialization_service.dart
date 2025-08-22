@@ -11,30 +11,19 @@ import '../services/user_preferences_service.dart';
 class UserInitializationService {
   static bool _isInitialized = false;
   static User? _currentUser;
-  
-  /// Инициализирует пользовательские настройки для пользователя
-  /// 
-  /// Должен вызываться:
-  /// 1. После успешного логина
-  /// 2. После загрузки валидной сессии при старте приложения
+
   static Future<void> initializeUserSettings(User user) async {
     try {
-      print('🔧 Инициализируем настройки для пользователя: ${user.fullName}');
-      
-      // 1. Инициализируем UserPreferencesService если он еще не готов
       UserPreferencesService? preferencesService;
       try {
-        // Проверяем есть ли уже зарегистрированный сервис
         if (GetIt.instance.isRegistered<UserPreferencesService>()) {
           preferencesService = GetIt.instance<UserPreferencesService>();
         } else {
-          // Создаем и регистрируем новый сервис
           preferencesService = UserPreferencesService();
           await preferencesService.initialize();
           GetIt.instance.registerSingleton<UserPreferencesService>(preferencesService);
         }
       } catch (e) {
-        // Если сервис зарегистрирован как async, ждем его
         preferencesService = await GetIt.instance.getAsync<UserPreferencesService>();
       }
       
@@ -42,18 +31,13 @@ class UserInitializationService {
       _currentUser = user;
       _isInitialized = true;
       
-      // 3. Можно загрузить дополнительные пользовательские настройки
       await _loadUserSpecificSettings(user, preferencesService);
-      
-      print('✅ Настройки пользователя инициализированы');
-      
+
     } catch (e) {
       print('❌ Ошибка инициализации настроек пользователя: $e');
-      // Не критично, приложение может работать без настроек
     }
   }
   
-  /// Загружает специфичные настройки пользователя
   static Future<void> _loadUserSpecificSettings(User user, UserPreferencesService preferencesService) async {
     // Здесь можно загрузить настройки специфичные для пользователя
     // Например:
@@ -65,8 +49,7 @@ class UserInitializationService {
     if (preferencesService.getSelectedRouteId() == null) {
       print('📍 Первый запуск - настройки маршрута будут установлены при выборе');
     }
-    
-    // Можно загрузить настройки темы, размера шрифта и т.д.
+
     final isDarkTheme = preferencesService.getDarkTheme();
     final fontSize = preferencesService.getFontSize();
     
