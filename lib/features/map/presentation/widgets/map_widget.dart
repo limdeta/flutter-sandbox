@@ -550,55 +550,90 @@ class _MapWidgetState extends State<MapWidget> {
   }
   */
 
-  /// Создает полилинии для отображения GPS треков пользователя
+  // Кэш для оптимизации полилиний треков
+  static final Map<String, List<Polyline>> _polylineCache = {};
+  
+  /// Создает полилинии для отображения GPS треков пользователя (МАКСИМАЛЬНО оптимизировано для слабых устройств)
   List<Polyline> _buildTrackPolylines() {
     final polylines = <Polyline>[];
 
     for (final track in widget.historicalTracks) {
-      // Получаем все точки из всех сегментов трека
+      // Создаем уникальный ключ для кэширования
+      final cacheKey = '${track.id}_${track.status.name}_${track.segments.length}';
+      
+      // Проверяем кэш
+      if (_polylineCache.containsKey(cacheKey)) {
+        polylines.addAll(_polylineCache[cacheKey]!);
+        continue;
+      }
+
+      // АГРЕССИВНАЯ оптимизация: максимальное прореживание точек для слабых устройств
       final allPoints = <LatLng>[];
+      int totalPoints = 0;
       
       for (final segment in track.segments) {
-        for (int i = 0; i < segment.pointCount; i++) {
+        totalPoints += segment.pointCount;
+      }
+      
+      // Агрессивное прореживание: для слабых устройств оставляем максимум 50-100 точек
+      final maxPoints = 75; // Максимум точек для отображения
+      final skipFactor = totalPoints > maxPoints ? (totalPoints / maxPoints).ceil() : 1;
+      
+      print('🚀 MapWidget: Трек ${track.id} - оптимизация: $totalPoints точек → макс $maxPoints (пропуск каждые $skipFactor)');
+      
+      for (final segment in track.segments) {
+        for (int i = 0; i < segment.pointCount; i += skipFactor) {
           final (lat, lng) = segment.getCoordinates(i);
           allPoints.add(LatLng(lat, lng));
+        }
+        // Всегда добавляем последнюю точку сегмента для целостности маршрута
+        if (segment.pointCount > 0 && skipFactor > 1) {
+          final (lat, lng) = segment.getCoordinates(segment.pointCount - 1);
+          if (allPoints.isEmpty || 
+              allPoints.last.latitude != lat || 
+              allPoints.last.longitude != lng) {
+            allPoints.add(LatLng(lat, lng));
+          }
         }
       }
 
       if (allPoints.isEmpty) continue;
 
-      // Определяем цвет линии в зависимости от статуса трека
-      Color trackColor;
-      double strokeWidth;
-      
-      switch (track.status.name) {
-        case 'active':
-          trackColor = Colors.blue;
-          strokeWidth = 4.0;
-          break;
-        case 'completed':
-          trackColor = Colors.green;
-          strokeWidth = 3.0;
-          break;
-        case 'paused':
-          trackColor = Colors.orange;
-          strokeWidth = 3.0;
-          break;
-        default:
-          trackColor = Colors.grey;
-          strokeWidth = 2.0;
-      }
+      // HOT PINK для всех треков (как было установлено ранее)
+      const trackColor = Color(0xFFFF1493); // HOT PINK
+      const strokeWidth = 4.0;
 
-      polylines.add(
-        Polyline(
-          points: allPoints,
-          strokeWidth: strokeWidth,
-          color: trackColor.withOpacity(0.8),
-        ),
+      final polyline = Polyline(
+        points: allPoints,
+        strokeWidth: strokeWidth,
+        color: trackColor.withOpacity(0.8),
       );
+
+      // Кэшируем результат
+      _polylineCache[cacheKey] = [polyline];
+      polylines.add(polyline);
+      
+      print('⚡ MapWidget: Трек ${track.id} закэширован: ${allPoints.length} точек (оптимизировано для слабых устройств)');
     }
 
     return polylines;
+  }
+  
+  /// Очищает кэш полилиний при изменении треков (оптимизация памяти)
+  void _clearPolylineCache() {
+    if (_polylineCache.isNotEmpty) {
+      _polylineCache.clear();
+      print('🧹 MapWidget: Кэш полилиний очищен для экономии памяти');
+    }
+  }
+
+  @override
+  void didUpdateWidget(MapWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Очищаем кэш при изменении треков
+    if (oldWidget.historicalTracks.length != widget.historicalTracks.length) {
+      _clearPolylineCache();
+    }
   }
 
 }

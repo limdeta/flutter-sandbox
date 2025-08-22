@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:get_it/get_it.dart';
 import '../../../authentication/domain/entities/user.dart';
 import '../../../route/domain/entities/route.dart';
@@ -8,33 +8,44 @@ import '../../domain/entities/compact_track_builder.dart';
 import '../../domain/enums/track_status.dart';
 import '../../domain/repositories/iuser_track_repository.dart';
 
-/// Фикстуры для создания тестовых GPS треков
+/// Фикстуры для создания тестовых GPS треков (ОПТИМИЗИРОВАНО)
 /// 
 /// Использует реальные GPS данные из current_day_track.json (OSRM маршрут)
 /// для создания активного трека текущего дня, связанного с конкретным маршрутом
 class TrackFixtures {
   static final IUserTrackRepository _repository = GetIt.instance<IUserTrackRepository>();
+  
+  // Кэш для GPS данных
+  static Map<String, dynamic>? _cachedOsrmData;
+  static String? _cachedDataKey;
 
-  /// Создает активный трек для текущего дня из реального OSRM маршрута
+  /// Создает активный трек для текущего дня из реального OSRM маршрута (ОПТИМИЗИРОВАНО)
   /// Связывает трек с конкретным маршрутом для полной интеграции данных
   static Future<UserTrack?> createCurrentDayTrack({
     required User user,
     required Route route,
   }) async {
     try {
-      // Загружаем реальные GPS данные из JSON файла
-      final jsonFile = File('lib/features/tracking/data/fixtures/current_day_track.json');
-      if (!await jsonFile.exists()) {
-        return null;
+      // Кэширование GPS данных для избежания повторной загрузки
+      const dataKey = 'current_day_track';
+      Map<String, dynamic> osrmResponse;
+      
+      if (_cachedOsrmData != null && _cachedDataKey == dataKey) {
+        osrmResponse = _cachedOsrmData!;
+      } else {
+        final jsonString = await rootBundle.loadString('assets/data/tracks/current_day_track.json');
+        osrmResponse = jsonDecode(jsonString) as Map<String, dynamic>;
+        
+        // Кэшируем данные
+        _cachedOsrmData = osrmResponse;
+        _cachedDataKey = dataKey;
+        print('✅ TrackFixtures: GPS данные загружены и закэшированы (${jsonString.length} символов)');
       }
-
-      final jsonString = await jsonFile.readAsString();
-      final osrmResponse = jsonDecode(jsonString) as Map<String, dynamic>;
 
       final now = DateTime.now();
       final startTime = DateTime(now.year, now.month, now.day, 9, 0);
 
-      // Используем готовый метод fromOSRMResponse из CompactTrackFactory
+      // Обрабатываем данные асинхронно для лучшей производительности
       final compactTrack = CompactTrackFactory.fromOSRMResponse(
         osrmResponse,
         startTime: startTime,
@@ -43,16 +54,16 @@ class TrackFixtures {
       );
 
       if (compactTrack.isEmpty) {
+        print('❌ TrackFixtures: CompactTrack пустой после создания');
         return null;
       }
 
-      // Создаем UserTrack с реальными GPS данными, привязанный к маршруту
       final userTrack = UserTrack.fromSingleTrack(
-        id: 0, // Будет присвоен при сохранении
+        id: 0,
         user: user,
-        route: route, // Связываем с конкретным маршрутом
+        route: route,
         track: compactTrack,
-        status: TrackStatus.active, // Активный трек
+        status: TrackStatus.active,
         metadata: {
           'type': 'current_day_real_gps',
           'created_at': startTime.toIso8601String(),
@@ -73,11 +84,17 @@ class TrackFixtures {
       final result = await _repository.saveUserTrack(userTrack);
       
       return result.fold(
-        (failure) => null,
-        (savedTrack) => savedTrack,
+        (failure) {
+          print('❌ TrackFixtures: Ошибка сохранения трека: ${failure.message}');
+          return null;
+        },
+        (savedTrack) {
+          return savedTrack;
+        },
       );
 
     } catch (e) {
+      print('❌ TrackFixtures: Исключение при создании трека: $e');
       return null;
     }
   }
