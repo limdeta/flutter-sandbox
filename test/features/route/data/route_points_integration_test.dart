@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:tauzero/features/route/domain/entities/route.dart';
-import 'package:tauzero/features/route/domain/entities/regular_point_of_interest.dart';
-import 'package:tauzero/features/route/domain/entities/trading_point_of_interest.dart';
-import 'package:tauzero/features/route/domain/entities/trading_point.dart';
-import 'package:tauzero/features/route/domain/entities/ipoint_of_interest.dart';
+import 'package:tauzero/features/shop/route/domain/entities/route.dart';
+import 'package:tauzero/features/shop/route/domain/entities/regular_point_of_interest.dart';
+import 'package:tauzero/features/shop/route/domain/entities/trading_point_of_interest.dart';
+import 'package:tauzero/features/shop/route/domain/entities/trading_point.dart';
+import 'package:tauzero/features/shop/route/domain/entities/point_of_interest.dart';
 import '../../../helpers/test_database_helper.dart';
 
 void main() {

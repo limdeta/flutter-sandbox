@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:get_it/get_it.dart';
-import 'package:tauzero/shared/infrastructure/database/app_database.dart';
-import 'package:tauzero/features/route/data/repositories/route_repository.dart';
+import 'package:tauzero/features/app/database/app_database.dart';
+import 'package:tauzero/features/shop/route/data/repositories/route_repository_drift.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
 import 'factories/user_factory.dart';
 

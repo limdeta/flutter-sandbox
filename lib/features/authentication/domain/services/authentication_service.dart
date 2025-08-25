@@ -1,13 +1,13 @@
 import 'package:tauzero/features/authentication/domain/entities/user_session.dart';
-import 'package:tauzero/features/authentication/domain/repositories/iuser_repository.dart';
+import 'package:tauzero/features/authentication/domain/repositories/user_repository.dart';
 import 'package:tauzero/features/authentication/domain/repositories/session_repository.dart';
 import 'package:tauzero/features/authentication/domain/services/password_service.dart';
 import 'package:tauzero/features/authentication/domain/value_objects/phone_number.dart';
-import 'package:tauzero/shared/domain/either.dart';
-import 'package:tauzero/shared/domain/failures.dart';
+import 'package:tauzero/shared/either.dart';
+import 'package:tauzero/shared/failures.dart';
 
 class AuthenticationService {
-  final IUserRepository userRepository;
+  final UserRepository userRepository;
   final SessionRepository sessionRepository;
 
   const AuthenticationService({

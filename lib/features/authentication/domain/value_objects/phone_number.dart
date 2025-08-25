@@ -1,5 +1,5 @@
-import 'package:tauzero/shared/domain/either.dart';
-import 'package:tauzero/shared/domain/failures.dart';
+import 'package:tauzero/shared/failures.dart';
+import 'package:tauzero/shared/either.dart';
 
 class PhoneNumber {
   final String value;

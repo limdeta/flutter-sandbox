@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tauzero/features/route/domain/entities/route.dart';
-import 'package:tauzero/features/route/domain/entities/ipoint_of_interest.dart';
-import 'package:tauzero/features/route/domain/entities/trading_point_of_interest.dart';
-import 'package:tauzero/shared/domain/either.dart';
+import 'package:tauzero/features/shop/route/domain/entities/route.dart';
+import 'package:tauzero/features/shop/route/domain/entities/point_of_interest.dart';
+import 'package:tauzero/features/shop/route/domain/entities/trading_point_of_interest.dart';
+import 'package:tauzero/shared/either.dart';
 
 import '../../../helpers/test_database_helper.dart';
 import '../../../helpers/factories/route_factory.dart';
@@ -101,7 +101,7 @@ void main() {
         for (final point in [...createdRoute1.pointsOfInterest, ...createdRoute2.pointsOfInterest]) {
           expect(point.id, isNotNull);
           expect(allPointIds, isNot(contains(point.id)));
-          allPointIds.add(point.id!);
+          allPointIds.add(point.id);
         }
       });
     });

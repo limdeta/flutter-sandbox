@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
-import 'package:tauzero/features/authentication/domain/repositories/iuser_repository.dart';
+import 'package:tauzero/features/authentication/domain/repositories/user_repository.dart';
 import 'package:tauzero/features/authentication/domain/usecases/login_usecase.dart';
-import 'package:tauzero/shared/di/service_locator.dart';
+import 'package:tauzero/app/service_locator.dart';
 import '../../../helpers/test_factories.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 
-import '../../../../shared/domain/either.dart';
-import '../../../../shared/domain/failures.dart';
+import '../../../../shared/either.dart';
+import '../../../../shared/failures.dart';
 import 'user.dart';
 
 class UserSession {
@@ -78,7 +78,6 @@ class UserSession {
     return permissions.contains(permission);
   }
 
-  String get fullName => user.fullName;
   String get phoneNumber => user.phoneNumber.value;
   String get externalId => user.externalId;
 
@@ -132,7 +131,7 @@ class UserSession {
 
   @override
   String toString() {
-    return 'UserSession(user: ${user.fullName}, loginTime: $loginTime, rememberMe: $rememberMe, permissions: ${permissions.length})';
+    return 'UserSession(user: ${user.id}, loginTime: $loginTime, rememberMe: $rememberMe, permissions: ${permissions.length})';
   }
 
   bool _listEquals<T>(List<T>? a, List<T>? b) {

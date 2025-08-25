@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
-import 'shared/config/app_config.dart';
-import 'shared/di/service_locator.dart';
-import 'shared/fixtures/dev_fixture_orchestrator.dart';
-import 'shared/providers/selected_route_provider.dart';
-import 'features/tracking/presentation/providers/user_tracks_provider.dart';
-import 'shared/services/app_lifecycle_manager.dart';
-import 'shared/widgets/dev_data_loading_overlay.dart';
-import 'features/app/presentation/pages/splash_page.dart';
-import 'features/authentication/presentation/pages/login_page.dart';
+// import 'package:tauzero/app/presentation/pages/admin_page.dart'; // Закомментировано до исправления
+import 'package:tauzero/app/presentation/pages/main_menu_page.dart';
+import 'package:tauzero/app/presentation/pages/sales_rep_home_page.dart';
+import 'package:tauzero/app/presentation/pages/splash_page.dart';
+import 'package:tauzero/app/presentation/pages/login_page.dart';
+import 'package:tauzero/app/presentation/widgets/dev_data_loading_overlay.dart';
+import 'package:tauzero/features/authentication/presentation/pages/home_page.dart';
+import 'app/config/app_config.dart';
+import 'app/service_locator.dart';
+import 'app/fixtures/dev_fixture_orchestrator.dart';
+import 'app/fixtures/app_user_fixture_service.dart';
+import 'app/providers/selected_route_provider.dart';
+import 'features/navigation/tracking/presentation/providers/user_tracks_provider.dart';
+import 'app/services/app_lifecycle_manager.dart';
 import 'features/authentication/data/fixtures/user_fixture_service.dart';
-import 'features/authentication/domain/repositories/iuser_repository.dart';
-import 'features/app/presentation/pages/home_page.dart';
-import 'features/app/presentation/pages/sales_rep_home_page.dart';
-import 'features/app/presentation/pages/main_menu_page.dart';
-import 'features/admin/presentation/pages/admin_dashboard_page.dart';
-import 'features/route/presentation/pages/routes_page.dart';
-import 'features/route/data/fixtures/route_fixture_service.dart';
-import 'features/route/data/fixtures/trading_points_fixture_service.dart';
-import 'features/route/domain/repositories/iroute_repository.dart';
-import 'features/products/presentation/pages/product_catalog_page.dart';
-import 'features/products/presentation/pages/product_categories_page.dart';
-import 'features/products/presentation/pages/promotions_page.dart';
+import 'features/authentication/domain/repositories/user_repository.dart';
+import 'features/shop/route/presentation/pages/routes_page.dart';
+import 'features/shop/route/data/fixtures/route_fixture_service.dart';
+import 'features/shop/route/data/fixtures/trading_points_fixture_service.dart';
+import 'features/shop/route/domain/repositories/route_repository.dart';
+import 'features/shop/employee/domain/employee_repository.dart';
+import 'app/domain/repositories/app_user_repository.dart';
+import 'features/shop/products/presentation/pages/product_catalog_page.dart';
+import 'features/shop/products/presentation/pages/product_categories_page.dart';
+import 'features/shop/products/presentation/pages/promotions_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,12 +42,16 @@ void main() async {
     // Создаем dev данные напрямую в основном потоке для корректной работы с базой
     try {
       final orchestrator = DevFixtureOrchestrator(
-        UserFixtureService(GetIt.instance<IUserRepository>()),
-        RouteFixtureService(GetIt.instance<IRouteRepository>()),
+        UserFixtureService(GetIt.instance<UserRepository>()),
+        AppUserFixtureService(
+          employeeRepository: GetIt.instance<EmployeeRepository>(),
+          appUserRepository: GetIt.instance<AppUserRepository>(),
+        ),
+        RouteFixtureService(GetIt.instance<RouteRepository>()),
         TradingPointsFixtureService(),
       );
       await orchestrator.createFullDevDataset();
-      print('✅ Dev данные созданы успешно');
+      print('✅ Dev данные созданы');
     } catch (error) {
       print('❌ Ошибка создания dev данных: $error');
     }
@@ -74,10 +81,10 @@ class TauZeroApp extends StatelessWidget {
           routes: {
           '/': (context) => const SplashPage(),
           '/login': (context) => const LoginPage(),
-          '/home': (context) => const HomePage(),
+          // '/home': (context) => const HomePage(),
           '/sales-home': (context) => const SalesRepHomePage(),
           '/menu': (context) => const MainMenuPage(),
-          '/admin': (context) => const AdminDashboardPage(),
+          // '/admin': (context) => const AdminDashboardPage(), // Закомментировано до исправления
           '/routes': (context) => const RoutesPage(),
           '/products/catalog': (context) => const ProductCatalogPage(),
           '/products/categories': (context) => const ProductCategoriesPage(),

@@ -1,29 +1,39 @@
 import 'package:get_it/get_it.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
 import 'package:tauzero/features/authentication/domain/value_objects/phone_number.dart';
-import 'package:tauzero/features/authentication/domain/repositories/iuser_repository.dart';
+import 'package:tauzero/features/authentication/domain/repositories/user_repository.dart';
 import 'package:tauzero/features/authentication/domain/services/password_service.dart';
 
 class UserFixtureService {
-  final IUserRepository _repository;
+  final UserRepository _repository;
   
   UserFixtureService(this._repository);
 
   /// Создает администратора
   /// Логин: +7-999-000-0001, Пароль: password123
   Future<User> createAdmin() async {
+    print('🔍 Создание Admin...');
+    
     final phoneResult = PhoneNumber.create('+7-999-000-0001');
     if (phoneResult.isLeft()) {
       throw Exception('Не удалось создать номер телефона для администратора');
     }
     
+    // Проверяем, не существует ли уже такой пользователь
+    final phone = phoneResult.fold((l) => throw Exception(l), (r) => r);
+    final existingResult = await _repository.getUserByPhoneNumber(phone);
+    if (existingResult.isRight()) {
+      final existing = existingResult.fold((l) => null, (r) => r);
+      if (existing != null) {
+        print('⚠️ Admin уже существует, возвращаем существующего');
+        return existing;
+      }
+    }
+    
     final userResult = User.create(
       externalId: 'admin_001',
-      lastName: 'Админов',
-      firstName: 'Александр',
-      middleName: 'Администраторович',
       role: UserRole.admin,
-      phoneNumber: phoneResult.fold((l) => throw Exception(l), (r) => r),
+      phoneNumber: phone,
       hashedPassword: PasswordService.hashPassword('password123'),
     );
     
@@ -38,7 +48,10 @@ class UserFixtureService {
       throw Exception('Не удалось сохранить администратора: ${createResult.fold((l) => l, (r) => '')}');
     }
     
-    return admin;
+    // Возвращаем сохраненного пользователя с ID, а не исходный объект
+    final savedUser = createResult.fold((l) => throw Exception(l), (r) => r);
+    print('✅ Admin создан с ID: ${savedUser.id}');
+    return savedUser;
   }
 
   /// Создает менеджера
@@ -51,9 +64,6 @@ class UserFixtureService {
     
     final userResult = User.create(
       externalId: 'manager_001',
-      lastName: 'Менеджеров',
-      firstName: 'Михаил',
-      middleName: 'Михайлович',
       role: UserRole.manager,
       phoneNumber: phoneResult.fold((l) => throw Exception(l), (r) => r),
       hashedPassword: PasswordService.hashPassword('password123'),
@@ -70,7 +80,8 @@ class UserFixtureService {
       throw Exception('Не удалось сохранить менеджера: ${createResult.fold((l) => l, (r) => '')}');
     }
     
-    return manager;
+    // Возвращаем сохраненного пользователя с ID, а не исходный объект
+    return createResult.fold((l) => throw Exception(l), (r) => r);
   }
 
   /// Создает торгового представителя с заданными параметрами
@@ -80,11 +91,6 @@ class UserFixtureService {
     required String email, // для externalId
     required String phone,
   }) async {
-    final nameParts = name.split(' ');
-    final lastName = nameParts.isNotEmpty ? nameParts[0] : 'Торговый';
-    final firstName = nameParts.length > 1 ? nameParts[1] : 'Представитель';
-    final middleName = nameParts.length > 2 ? nameParts[2] : null;
-    
     final phoneResult = PhoneNumber.create(phone);
     if (phoneResult.isLeft()) {
       throw Exception('Не удалось создать номер телефона $phone: ${phoneResult.fold((l) => l, (r) => '')}');
@@ -92,9 +98,6 @@ class UserFixtureService {
     
     final userResult = User.create(
       externalId: email, // Используем email как externalId
-      lastName: lastName,
-      firstName: firstName,
-      middleName: middleName,
       role: UserRole.user,
       phoneNumber: phoneResult.fold((l) => throw Exception(l), (r) => r),
       hashedPassword: PasswordService.hashPassword('password123'),
@@ -111,7 +114,8 @@ class UserFixtureService {
       throw Exception('Не удалось сохранить торгового представителя $name: ${createResult.fold((l) => l, (r) => '')}');
     }
     
-    return salesRep;
+    // Возвращаем сохраненного пользователя с ID, а не исходный объект
+    return createResult.fold((l) => throw Exception(l), (r) => r);
   }
 
   Future<void> clearAllUsers() async {
@@ -129,7 +133,7 @@ class UserFixtureService {
             if (_isDevUser(user)) {
               final deleteResult = await _repository.deleteUser(user.externalId);
               deleteResult.fold(
-                (failure) => print('⚠️ Не удалось удалить ${user.fullName}: ${failure.message}'),
+                (failure) => print('⚠️ Не удалось удалить ${user.id}: ${failure.message}'),
                 (_) => {}, // Успешно удален
               );
             }
@@ -146,20 +150,13 @@ class UserFixtureService {
   bool _isDevUser(User user) {
     return user.externalId.startsWith('admin_') ||
            user.externalId.startsWith('manager_') ||
-           user.externalId.contains('@tauzero.dev') ||
-           user.lastName == 'Админов' ||
-           user.lastName == 'Менеджеров' ||
-           user.lastName == 'Торговый' ||
-           user.lastName == 'Продажкина' ||
-           user.lastName == 'Курьеров' ||
-           user.lastName == 'Доставкина' ||
-           user.lastName == 'Быстров';
+           user.externalId.contains('@tauzero.dev');
   }
 }
 
 class UserFixtureServiceFactory {
   static UserFixtureService create() {
-    final repository = GetIt.instance<IUserRepository>();
+    final repository = GetIt.instance<UserRepository>();
     return UserFixtureService(repository);
   }
 }

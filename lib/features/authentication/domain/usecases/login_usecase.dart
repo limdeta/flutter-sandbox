@@ -1,8 +1,8 @@
 import 'package:tauzero/features/authentication/domain/entities/user_session.dart';
 import 'package:tauzero/features/authentication/domain/services/authentication_service.dart';
 import 'package:tauzero/features/authentication/domain/value_objects/phone_number.dart';
-import 'package:tauzero/shared/domain/either.dart';
-import 'package:tauzero/shared/domain/failures.dart';
+import 'package:tauzero/shared/failures.dart';
+import 'package:tauzero/shared/either.dart';
 
 class LoginUseCase {
   final AuthenticationService authenticationService;

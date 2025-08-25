@@ -4,11 +4,11 @@ import 'package:drift/native.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:get_it/get_it.dart';
 import 'package:path/path.dart' as path;
-import 'package:tauzero/shared/infrastructure/database/app_database.dart';
-import 'package:tauzero/features/route/data/repositories/route_repository.dart';
-import 'package:tauzero/features/authentication/data/repositories/user_repository.dart';
-import 'package:tauzero/features/tracking/data/repositories/user_track_repository.dart';
-import 'package:tauzero/features/tracking/data/repositories/compact_track_repository.dart';
+import 'package:tauzero/features/app/database/app_database.dart';
+import 'package:tauzero/features/shop/route/data/repositories/route_repository_drift.dart';
+import 'package:tauzero/features/authentication/data/repositories/user_repository_impl.dart';
+import 'package:tauzero/app/infra/database/repositories/user_track_repository_drift.dart';
+import 'package:tauzero/app/infra/database/repositories/compact_track_repository_drift.dart';
 
 /// Помощник для РЕАЛЬНЫХ интеграционных тестов с файловой базой данных
 /// 

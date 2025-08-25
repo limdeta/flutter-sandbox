@@ -4,14 +4,14 @@ import 'package:drift/drift.dart' as drift;
 import 'package:get_it/get_it.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
 import 'package:tauzero/features/authentication/domain/value_objects/phone_number.dart';
-import 'package:tauzero/shared/infrastructure/database/app_database.dart';
-import 'package:tauzero/features/route/data/fixtures/route_fixture_service.dart';
-import 'package:tauzero/features/route/data/repositories/route_repository.dart';
-import 'package:tauzero/features/route/domain/entities/ipoint_of_interest.dart';
-import 'package:tauzero/features/route/domain/entities/regular_point_of_interest.dart';
-import 'package:tauzero/features/route/domain/entities/route.dart';
-import 'package:tauzero/features/route/domain/entities/trading_point_of_interest.dart';
-import 'package:tauzero/features/route/domain/repositories/iroute_repository.dart';
+import 'package:tauzero/features/app/database/app_database.dart';
+import 'package:tauzero/features/shop/route/data/fixtures/route_fixture_service.dart';
+import 'package:tauzero/features/shop/route/data/repositories/route_repository_drift.dart';
+import 'package:tauzero/features/shop/route/domain/entities/point_of_interest.dart';
+import 'package:tauzero/features/shop/route/domain/entities/regular_point_of_interest.dart';
+import 'package:tauzero/features/shop/route/domain/entities/route.dart';
+import 'package:tauzero/features/shop/route/domain/entities/trading_point_of_interest.dart';
+import 'package:tauzero/features/shop/route/domain/repositories/route_repository.dart';
 
 
 /// Интеграционный тест для проверки создания dev фикстур

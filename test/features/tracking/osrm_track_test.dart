@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'package:tauzero/features/tracking/domain/entities/compact_track_builder.dart';
+import 'package:tauzero/features/navigation/tracking/domain/entities/compact_track_builder.dart';
 
 void main() {
   test('CompactTrackFactory.fromOSRMResponse should create track from real JSON', () async {

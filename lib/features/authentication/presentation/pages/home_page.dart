@@ -126,7 +126,6 @@ class _HomePageState extends State<HomePage> {
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       const SizedBox(height: 16),
-                      _buildInfoRow('Имя:', session.fullName),
                       _buildInfoRow('Телефон:', session.phoneNumber),
                       const SizedBox(height: 16),
                       // Кнопка карты

@@ -1,5 +1,6 @@
-import '../../../../shared/domain/either.dart';
-import '../../../../shared/domain/failures.dart';
+import 'package:tauzero/shared/failures.dart';
+
+import '../../../../shared/either.dart';
 import '../entities/user_session.dart';
 import '../repositories/session_repository.dart';
 

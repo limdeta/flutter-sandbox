@@ -2,17 +2,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:get_it/get_it.dart';
-import 'package:tauzero/shared/config/app_config.dart';
-import 'package:tauzero/shared/infrastructure/database/app_database.dart';
-import 'package:tauzero/features/tracking/data/fixtures/track_fixtures.dart';
-import 'package:tauzero/features/route/data/fixtures/route_fixture_service.dart';
-import 'package:tauzero/features/route/data/repositories/route_repository.dart';
-import 'package:tauzero/features/route/domain/repositories/iroute_repository.dart';
+import 'package:tauzero/app/config/app_config.dart';
+import 'package:tauzero/features/app/database/app_database.dart';
+import 'package:tauzero/features/navigation/tracking/data/fixtures/track_fixtures.dart';
+import 'package:tauzero/features/shop/route/data/fixtures/route_fixture_service.dart';
+import 'package:tauzero/features/shop/route/data/repositories/route_repository_drift.dart';
+import 'package:tauzero/features/shop/route/domain/repositories/route_repository.dart';
 import 'package:tauzero/features/authentication/data/fixtures/user_fixture_service.dart';
-import 'package:tauzero/features/authentication/data/repositories/user_repository.dart';
-import 'package:tauzero/features/authentication/domain/repositories/iuser_repository.dart';
-import 'package:tauzero/features/tracking/data/repositories/user_track_repository.dart';
-import 'package:tauzero/features/tracking/domain/repositories/iuser_track_repository.dart';
+import 'package:tauzero/features/authentication/data/repositories/user_repository_impl.dart';
+import 'package:tauzero/features/authentication/domain/repositories/user_repository.dart';
+import 'package:tauzero/app/infra/database/repositories/user_track_repository_drift.dart';
+import 'package:tauzero/features/navigation/tracking/domain/repositories/user_track_repository.dart';
 
 void main() {
   group('Dev Infrastructure Tests', () {

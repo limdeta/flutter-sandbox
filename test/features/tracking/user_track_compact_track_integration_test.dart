@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tauzero/features/tracking/domain/entities/compact_track.dart';
-import 'package:tauzero/features/tracking/domain/entities/compact_track_builder.dart';
-import 'package:tauzero/features/tracking/domain/entities/user_track.dart';
+import 'package:tauzero/features/navigation/tracking/domain/entities/compact_track.dart';
+import 'package:tauzero/features/navigation/tracking/domain/entities/compact_track_builder.dart';
+import 'package:tauzero/features/navigation/tracking/domain/entities/user_track.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart' as domain;
 import 'package:tauzero/features/authentication/domain/value_objects/phone_number.dart';
 import '../../helpers/real_database_test_helper.dart';
