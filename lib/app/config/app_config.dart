@@ -49,6 +49,7 @@ class AppConfig {
   static bool get useMockData => isDev;
   static bool get enableDebugTools => isDev || isTest;
   static bool get enableDetailedLogging => !isProd;
+  static bool get checkForUpdates => isDev; // Включено только для dev пока
   
   // Dev configuration from command line
   static void configureFromArgs() {
@@ -88,6 +89,7 @@ class AppConfig {
     print('Use Mock Data: $useMockData');
     print('Debug Tools: $enableDebugTools');
     print('Detailed Logging: $enableDetailedLogging');
+    print('Check for Updates: $checkForUpdates');
     print('========================');
   }
 }

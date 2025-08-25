@@ -7,6 +7,7 @@ import 'package:tauzero/app/database/repositories/app_user_repository_drift.dart
 import 'package:tauzero/app/database/repositories/user_track_repository_drift.dart';
 import 'package:tauzero/app/services/app_user_login_service.dart';
 import 'package:tauzero/app/services/app_user_logout_service.dart';
+import 'package:tauzero/app/services/simple_update_service.dart';
 import 'package:tauzero/features/authentication/data/fixtures/user_fixture_service.dart';
 import 'package:tauzero/features/authentication/domain/repositories/user_repository.dart';
 import 'package:tauzero/features/authentication/domain/repositories/session_repository.dart';
@@ -104,6 +105,11 @@ Future<void> setupServiceLocator() async {
   // App User Logout Service (wrapper around LogoutUseCase)
   getIt.registerLazySingleton<AppUserLogoutService>(
     () => AppUserLogoutService(),
+  );
+  
+  // Simple Update Service 
+  getIt.registerLazySingleton<SimpleUpdateService>(
+    () => SimpleUpdateService(),
   );
   
   getIt.registerLazySingleton<LogoutUseCase>(

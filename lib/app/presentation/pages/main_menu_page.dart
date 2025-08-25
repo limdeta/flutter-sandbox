@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import '../../services/app_user_logout_service.dart';
+import '../../services/simple_update_service.dart';
 
 /// Элемент меню
 class MenuItem {
@@ -80,6 +81,11 @@ class _MainMenuPageState extends State<MainMenuPage> {
       title: 'Профиль агента',
       icon: Icons.person,
       route: '/profile',
+    ),
+    MenuItem(
+      title: 'Проверить обновления',
+      icon: Icons.system_update,
+      route: '/check-updates',
     ),
     MenuItem(
       title: 'Выйти',
@@ -203,6 +209,8 @@ class _MainMenuPageState extends State<MainMenuPage> {
     if (item.route != null) {
       if (item.route == '/routes') {
         Navigator.pushNamed(context, '/routes');
+      } else if (item.route == '/check-updates') {
+        _handleCheckUpdates();
       } else if (item.route == '/logout') {
         _handleLogout();
       } else {
@@ -275,5 +283,10 @@ class _MainMenuPageState extends State<MainMenuPage> {
         );
       }
     }
+  }
+
+  /// Обработка проверки обновлений
+  void _handleCheckUpdates() {
+    SimpleUpdateService.checkForUpdatesIfEnabled(context);
   }
 }

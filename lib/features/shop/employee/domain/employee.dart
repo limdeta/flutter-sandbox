@@ -1,4 +1,3 @@
-
 import '../../../navigation/tracking/domain/entities/navigation_user.dart';
 
 enum EmployeeRole{

@@ -15,6 +15,7 @@ import 'app/fixtures/app_user_fixture_service.dart';
 import 'app/providers/selected_route_provider.dart';
 import 'features/navigation/tracking/presentation/providers/user_tracks_provider.dart';
 import 'app/services/app_lifecycle_manager.dart';
+import 'app/services/simple_update_service.dart';
 import 'features/authentication/data/fixtures/user_fixture_service.dart';
 import 'features/authentication/domain/repositories/user_repository.dart';
 import 'features/shop/route/presentation/pages/routes_page.dart';
@@ -23,9 +24,9 @@ import 'features/shop/route/data/fixtures/trading_points_fixture_service.dart';
 import 'features/shop/route/domain/repositories/route_repository.dart';
 import 'features/shop/employee/domain/employee_repository.dart';
 import 'app/domain/repositories/app_user_repository.dart';
-import 'features/shop/products/presentation/pages/product_catalog_page.dart';
-import 'features/shop/products/presentation/pages/product_categories_page.dart';
-import 'features/shop/products/presentation/pages/promotions_page.dart';
+import 'features/shop/product/presentation/product/product_catalog_page.dart';
+import 'features/shop/product/presentation/product/product_categories_page.dart';
+import 'features/shop/product/presentation/product/promotions_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,25 +72,27 @@ class TauZeroApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => GetIt.instance<UserTracksProvider>()),
       ],
       child: DevDataLoadingOverlay(
-        child: MaterialApp(
-          title: 'TauZero',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-            useMaterial3: true,
+        child: UpgraderWrapper(
+          child: MaterialApp(
+            title: 'TauZero',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+              useMaterial3: true,
+            ),
+            initialRoute: '/',
+            routes: {
+            '/': (context) => const SplashPage(),
+            '/login': (context) => const LoginPage(),
+            // '/home': (context) => const HomePage(),
+            '/sales-home': (context) => const SalesRepHomePage(),
+            '/menu': (context) => const MainMenuPage(),
+            // '/admin': (context) => const AdminDashboardPage(), // Закомментировано до исправления
+            '/routes': (context) => const RoutesPage(),
+            '/products/catalog': (context) => const ProductCatalogPage(),
+            '/products/categories': (context) => const ProductCategoriesPage(),
+            '/products/promotions': (context) => const PromotionsPage(),
+          },
           ),
-          initialRoute: '/',
-          routes: {
-          '/': (context) => const SplashPage(),
-          '/login': (context) => const LoginPage(),
-          // '/home': (context) => const HomePage(),
-          '/sales-home': (context) => const SalesRepHomePage(),
-          '/menu': (context) => const MainMenuPage(),
-          // '/admin': (context) => const AdminDashboardPage(), // Закомментировано до исправления
-          '/routes': (context) => const RoutesPage(),
-          '/products/catalog': (context) => const ProductCatalogPage(),
-          '/products/categories': (context) => const ProductCategoriesPage(),
-          '/products/promotions': (context) => const PromotionsPage(),
-        },
         ),
       ),
     );

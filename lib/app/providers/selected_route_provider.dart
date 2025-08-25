@@ -14,9 +14,13 @@ class SelectedRouteProvider extends ChangeNotifier {
   domain.Route? _selectedRoute;
   final UserPreferencesService _preferencesService = GetIt.instance<UserPreferencesService>();
   
+  /// Текущий выбранный маршрут
   domain.Route? get selectedRoute => _selectedRoute;
   
+  /// Есть ли выбранный маршрут
   bool get hasSelectedRoute => _selectedRoute != null;
+  
+  /// ID выбранного маршрута (для удобства)
   int? get selectedRouteId => _selectedRoute?.id;
 
   /// Устанавливает выбранный маршрут
@@ -63,6 +67,7 @@ class SelectedRouteProvider extends ChangeNotifier {
       
       return true;
     } catch (e) {
+      // Маршрут с таким ID не найден
       if (kDebugMode) {
         print('⚠️ Сохраненный маршрут с ID $savedRouteId не найден');
       }
