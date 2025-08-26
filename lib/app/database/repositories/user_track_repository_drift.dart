@@ -305,10 +305,6 @@ class UserTrackRepositoryDrift implements UserTrackRepository {
 
   /// Получает внутренний database ID пользователя через EmployeeRepository
   Future<int?> _getUserInternalId(NavigationUser user) async {
-    print('🔍 Поиск внутреннего ID для пользователя: ${user.id} (${user.fullName})');
-    print('🔍 Тип пользователя: ${user.runtimeType}');
-    
-    // Если это AppUser - извлекаем из него Employee
     if (user.runtimeType.toString().contains('AppUser')) {
       try {
         // Используем duck typing - если у объекта есть поле employee, извлекаем его
@@ -341,7 +337,6 @@ class UserTrackRepositoryDrift implements UserTrackRepository {
       return null;
     }
     
-    print('✅ Пользователь является Employee с ID: ${user.id}');
     
     final result = await _employeeRepository.getInternalIdForNavigationUser(user);
     return result.fold(
@@ -350,13 +345,11 @@ class UserTrackRepositoryDrift implements UserTrackRepository {
         return null;
       },
       (id) {
-        print('✅ Получен внутренний ID: $id');
         return id;
       },
     );
   }
 
-  /// Получает NavigationUser по ID через EmployeeRepository
   Future<NavigationUser?> _getNavigationUserById(int id) async {
     final result = await _employeeRepository.getNavigationUserById(id);
     return result.fold(

@@ -14,7 +14,6 @@ class MapBounds {
     required this.west,
   });
 
-  /// Создает границы из списка точек
   factory MapBounds.fromPoints(List<MapPoint> points) {
     if (points.isEmpty) {
       return const MapBounds(north: 0, south: 0, east: 0, west: 0);

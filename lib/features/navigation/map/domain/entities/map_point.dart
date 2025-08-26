@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:tauzero/shared/geopoint.dart';
 
-/// Географическая точка на карте
 class MapPoint implements GeoPoint {
   @override
   final double latitude;
@@ -19,14 +18,12 @@ class MapPoint implements GeoPoint {
     this.metadata,
   });
 
-  /// Создает точку из координат
   factory MapPoint.fromCoordinates(double lat, double lon) {
     return MapPoint(latitude: lat, longitude: lon);
   }
 
   /// Создает точку из POI маршрута
   factory MapPoint.fromRoutePoint(dynamic routePoint) {
-    // TODO: Интеграция с RoutePoint из domain
     return MapPoint(
       latitude: routePoint.latitude ?? 0.0,
       longitude: routePoint.longitude ?? 0.0,
@@ -38,7 +35,6 @@ class MapPoint implements GeoPoint {
     );
   }
 
-  /// Вычисляет расстояние до другой точки (в метрах)
   double distanceTo(MapPoint other) {
     const double earthRadius = 6371000; // радиус Земли в метрах
     

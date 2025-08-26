@@ -3,7 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../../domain/entities/map_point.dart';
 import '../../domain/repositories/map_service.dart';
-import '../../domain/adapters/route_map_adapter.dart';
+import '../../../../../app/domain/adapters/route_map_adapter.dart';
 import '../../data/repositories/osm_map_service.dart';
 import '../../../../shop/route/domain/entities/route.dart' as domain;
 import '../../../../../app/services/user_initialization_service.dart';

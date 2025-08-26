@@ -1,10 +1,9 @@
-import '../entities/map_point.dart';
-import '../entities/map_bounds.dart';
-import '../../../../shop/route/domain/entities/route.dart' as domain;
-import '../../../../shop/route/domain/entities/point_of_interest.dart';
+import '../../../features/navigation/map/domain/entities/map_point.dart';
+import '../../../features/navigation/map/domain/entities/map_bounds.dart';
+import '../../../features/shop/route/domain/entities/route.dart' as domain;
+import '../../../features/shop/route/domain/entities/point_of_interest.dart';
 
 /// Адаптер для преобразования данных между модулями Route и Map
-/// Обеспечивает разделение ответственности и low coupling
 class RouteMapAdapter {
   /// Преобразует маршрут в список точек для карты
   static List<MapPoint> routeToMapPoints(domain.Route route) {
@@ -13,7 +12,6 @@ class RouteMapAdapter {
         .toList();
   }
 
-  /// Преобразует точку интереса в точку карты
   static MapPoint _poiToMapPoint(PointOfInterest poi) {
     return MapPoint(
       latitude: poi.coordinates.latitude,
