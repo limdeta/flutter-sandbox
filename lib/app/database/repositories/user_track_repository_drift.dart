@@ -7,7 +7,7 @@ import '../../../../features/navigation/tracking/domain/entities/navigation_user
 import '../../../../features/navigation/tracking/domain/entities/user_track.dart';
 import '../../../../features/navigation/tracking/domain/entities/compact_track.dart';
 import '../../../../features/navigation/tracking/domain/repositories/user_track_repository.dart';
-import '../../../../features/shop/employee/domain/employee.dart' as domain;
+import '../../../features/shop/domain/entities/employee.dart' as domain;
 import '../mappers/user_track_mapper.dart';
 
 class UserTrackRepositoryDrift implements UserTrackRepository {

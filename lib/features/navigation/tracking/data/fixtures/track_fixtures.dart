@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get_it/get_it.dart';
 import 'package:tauzero/features/navigation/tracking/domain/entities/navigation_user.dart';
-import '../../../../shop/route/domain/entities/route.dart';
+import '../../../../shop/domain/entities/route.dart';
 import '../../domain/entities/user_track.dart';
 import '../../domain/entities/compact_track_builder.dart';
 import '../../domain/enums/track_status.dart';

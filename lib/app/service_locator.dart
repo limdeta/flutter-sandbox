@@ -15,9 +15,9 @@ import 'package:tauzero/features/authentication/domain/services/authentication_s
 import 'package:tauzero/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:tauzero/features/authentication/domain/usecases/logout_usecase.dart';
 import 'package:tauzero/features/authentication/domain/usecases/get_current_session_usecase.dart';
-import 'package:tauzero/features/shop/employee/domain/employee_repository.dart';
+import 'package:tauzero/features/shop/domain/repositories/employee_repository.dart';
 import 'package:tauzero/app/domain/repositories/app_user_repository.dart';
-import 'package:tauzero/features/shop/route/data/di/route_di.dart';
+import 'package:tauzero/features/shop/data/di/route_di.dart';
 import 'package:tauzero/features/navigation/tracking/domain/services/location_tracking_service.dart';
 import 'package:tauzero/features/navigation/tracking/domain/repositories/user_track_repository.dart';
 import 'package:tauzero/features/navigation/tracking/presentation/usecases/get_user_tracks_usecase.dart';

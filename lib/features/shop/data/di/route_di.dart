@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 
-import '../../../../../app/database/app_database.dart';
-import '../../../../../app/database/repositories/route_repository_drift.dart';
+import '../../../../app/database/app_database.dart';
+import '../../../../app/database/repositories/route_repository_drift.dart';
 import '../../domain/repositories/route_repository.dart';
 import '../../domain/services/route_service.dart';
 

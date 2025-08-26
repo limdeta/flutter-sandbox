@@ -1,9 +1,9 @@
+import 'package:tauzero/features/shop/domain/entities/employee.dart';
 import 'package:tauzero/shared/failures.dart';
 
-import '../../../../features/shop/route/domain/entities/route.dart' as domain;
-import '../../../../features/shop/route/domain/entities/point_of_interest.dart' as domain;
-import '../../../../features/shop/route/domain/repositories/route_repository.dart';
-import '../../../../features/shop/employee/domain/employee.dart';
+import '../../../../features/shop/domain/entities/route.dart' as domain;
+import '../../../features/shop/domain/entities/point_of_interest.dart' as domain;
+import '../../../features/shop/domain/repositories/route_repository.dart';
 import '../../../../shared/either.dart';
 import 'package:latlong2/latlong.dart';
 import '../app_database.dart' as db;

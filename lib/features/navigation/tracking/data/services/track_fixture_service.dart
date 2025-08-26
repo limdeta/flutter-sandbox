@@ -5,7 +5,7 @@ import 'package:tauzero/features/navigation/tracking/domain/entities/navigation_
 import '../../domain/entities/compact_track.dart';
 import '../../domain/entities/compact_track_builder.dart';
 import '../../domain/entities/user_track.dart';
-import '../../../../shop/route/domain/entities/route.dart';
+import '../../../../shop/domain/entities/route.dart';
 
 /// Сервис для создания GPS треков из различных форматов данных
 /// 

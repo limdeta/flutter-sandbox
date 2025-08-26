@@ -3,7 +3,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../features/navigation/map/presentation/widgets/map_widget.dart';
 import '../../../features/navigation/tracking/domain/entities/user_track.dart';
 import '../../../features/navigation/tracking/domain/services/location_tracking_service.dart';
-import '../../../features/shop/route/domain/entities/route.dart' as shop;
+import '../../../features/shop/domain/entities/route.dart' as shop;
 import '../utils/coordinate_converter.dart';
 
 /// Комбинированный виджет карты для app-слоя

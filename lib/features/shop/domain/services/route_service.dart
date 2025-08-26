@@ -1,6 +1,6 @@
 import 'package:latlong2/latlong.dart';
+import 'package:tauzero/features/shop/domain/entities/route.dart';
 import '../entities/point_of_interest.dart';
-import '../entities/route.dart';
 
 /// Сервис для работы с маршрутами
 /// 

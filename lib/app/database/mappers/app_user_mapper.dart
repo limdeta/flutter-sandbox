@@ -1,6 +1,6 @@
 import 'package:tauzero/app/domain/app_user.dart';
 import 'package:tauzero/app/database/app_database.dart' as db;
-import 'package:tauzero/features/shop/employee/domain/employee.dart';
+import 'package:tauzero/features/shop/domain/entities/employee.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
 import 'package:drift/drift.dart';
 

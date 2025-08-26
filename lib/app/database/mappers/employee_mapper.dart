@@ -1,4 +1,4 @@
-import '../../../../features/shop/employee/domain/employee.dart' as domain;
+import '../../../features/shop/domain/entities/employee.dart' as domain;
 import 'package:drift/drift.dart';
 import '../app_database.dart' as db;
 

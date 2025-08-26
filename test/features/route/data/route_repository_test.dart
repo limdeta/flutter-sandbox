@@ -4,7 +4,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:latlong2/latlong.dart';
 import 'package:tauzero/features/app/database/app_database.dart';
 import 'package:tauzero/features/shop/route/data/repositories/route_repository_drift.dart';
-import 'package:tauzero/features/shop/route/domain/entities/point_of_interest.dart';
+import 'package:tauzero/features/shop/domain/entities/point_of_interest.dart';
 import 'package:tauzero/features/shop/route/domain/entities/regular_point_of_interest.dart';
 import 'package:tauzero/features/shop/route/domain/entities/route.dart';
 import 'package:tauzero/features/shop/route/domain/entities/trading_point.dart';

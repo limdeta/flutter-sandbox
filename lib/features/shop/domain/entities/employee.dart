@@ -1,4 +1,5 @@
-import '../../../navigation/tracking/domain/entities/navigation_user.dart';
+
+import 'package:tauzero/features/navigation/tracking/domain/entities/navigation_user.dart';
 
 enum EmployeeRole{
   sales,

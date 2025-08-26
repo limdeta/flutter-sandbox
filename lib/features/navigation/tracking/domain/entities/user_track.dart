@@ -1,7 +1,7 @@
 import 'package:tauzero/features/navigation/tracking/domain/entities/navigation_user.dart';
 
 import 'compact_track.dart';
-import '../../../../shop/route/domain/entities/route.dart';
+import '../../../../shop/domain/entities/route.dart';
 import '../enums/track_status.dart';
 
 /// Трек (путь) пользователя за определенный период времени с сегментацией

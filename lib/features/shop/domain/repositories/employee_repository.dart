@@ -1,5 +1,4 @@
-
-import 'package:tauzero/features/shop/employee/domain/employee.dart';
+import 'package:tauzero/features/shop/domain/entities/employee.dart';
 import 'package:tauzero/shared/either.dart';
 import 'package:tauzero/shared/failures.dart';
 

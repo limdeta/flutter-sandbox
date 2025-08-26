@@ -1,5 +1,5 @@
 import 'package:latlong2/latlong.dart';
-import 'point_of_interest.dart';
+import 'package:tauzero/features/shop/domain/entities/point_of_interest.dart';
 
 enum RouteStatus {
   planned,    

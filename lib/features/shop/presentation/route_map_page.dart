@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tauzero/app/presentation/pages/sales_rep_home_page.dart';
-import '../../domain/entities/route.dart' as domain;
+import '../domain/entities/route.dart' as domain;
 
 /// Страница отображения маршрута на карте
 class RouteMapPage extends StatelessWidget {

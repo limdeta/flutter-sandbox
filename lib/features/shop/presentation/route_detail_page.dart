@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/route.dart' as domain;
-import '../../domain/entities/point_of_interest.dart';
-import '../../domain/entities/trading_point_of_interest.dart';
-import '../../domain/entities/regular_point_of_interest.dart';
+import '../domain/entities/route.dart' as domain;
+import '../domain/entities/point_of_interest.dart';
+import '../domain/entities/trading_point_of_interest.dart';
+import '../domain/entities/regular_point_of_interest.dart';
 
 /// Детальная страница маршрута со списком всех точек
 class RouteDetailPage extends StatelessWidget {

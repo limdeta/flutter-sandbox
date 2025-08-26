@@ -1,8 +1,8 @@
 import 'package:latlong2/latlong.dart';
 import 'package:get_it/get_it.dart';
-import 'package:tauzero/features/shop/employee/domain/employee.dart';
+import 'package:tauzero/features/shop/domain/entities/employee.dart';
+import 'package:tauzero/features/shop/domain/entities/route.dart';
 
-import '../../domain/entities/route.dart';
 import '../../domain/entities/regular_point_of_interest.dart';
 import '../../domain/entities/trading_point_of_interest.dart';
 import '../../domain/entities/trading_point.dart';

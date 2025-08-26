@@ -1,6 +1,6 @@
 import 'package:latlong2/latlong.dart';
 import 'package:tauzero/features/shop/route/domain/entities/route.dart';
-import 'package:tauzero/features/shop/route/domain/entities/point_of_interest.dart';
+import 'package:tauzero/features/shop/domain/entities/point_of_interest.dart';
 import 'package:tauzero/features/shop/route/domain/entities/regular_point_of_interest.dart';
 import 'package:tauzero/features/shop/route/domain/entities/trading_point_of_interest.dart';
 import 'package:tauzero/features/shop/route/domain/entities/trading_point.dart';

@@ -1,13 +1,13 @@
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
 import 'package:tauzero/features/authentication/data/fixtures/user_fixture_service.dart';
-import 'package:tauzero/features/shop/route/data/fixtures/route_fixture_service.dart';
-import 'package:tauzero/features/shop/route/data/fixtures/trading_points_fixture_service.dart';
+import 'package:tauzero/features/shop/data/fixtures/route_fixture_service.dart';
+import 'package:tauzero/features/shop/data/fixtures/trading_points_fixture_service.dart';
 import 'package:tauzero/features/navigation/tracking/data/fixtures/track_fixtures.dart';
 import 'package:tauzero/app/database/app_database.dart';
 import 'package:tauzero/app/domain/app_user.dart';
 import 'package:tauzero/app/fixtures/app_user_fixture_service.dart';
 import 'package:get_it/get_it.dart';
-import 'package:tauzero/features/shop/route/domain/repositories/route_repository.dart';
+import 'package:tauzero/features/shop/domain/repositories/route_repository.dart';
 
 /// Контейнер для хранения созданных AppUser-ов по ролям
 class DevAppUsers {

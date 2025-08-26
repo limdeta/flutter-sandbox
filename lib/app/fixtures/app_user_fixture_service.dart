@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
-import 'package:tauzero/features/shop/employee/domain/employee.dart';
-import 'package:tauzero/features/shop/employee/domain/employee_repository.dart';
+import 'package:tauzero/features/shop/domain/entities/employee.dart';
+import 'package:tauzero/features/shop/domain/repositories/employee_repository.dart';
 import 'package:tauzero/app/domain/app_user.dart';
 import 'package:tauzero/app/domain/repositories/app_user_repository.dart';
 

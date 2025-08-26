@@ -5,7 +5,7 @@ import '../../domain/entities/map_point.dart';
 import '../../domain/repositories/map_service.dart';
 import '../../../../../app/domain/adapters/route_map_adapter.dart';
 import '../../data/repositories/osm_map_service.dart';
-import '../../../../shop/route/domain/entities/route.dart' as domain;
+import '../../../../shop/domain/entities/route.dart' as domain;
 import '../../../../../app/services/user_initialization_service.dart';
 import '../../../tracking/domain/services/location_tracking_service.dart';
 import '../../../tracking/domain/entities/user_track.dart';
@@ -321,19 +321,6 @@ class _MapWidgetState extends State<MapWidget> {
             // Слой маршрута (построенного через OSRM)
             if (widget.routePolylinePoints.isNotEmpty)
               RoutePolyline(points: widget.routePolylinePoints),
-            
-            // Слой трека пользователя - ВРЕМЕННО ОТКЛЮЧЕН
-            // TODO: Восстановить после реализации LiveTrackMapLayer
-            // if (widget.showUserTrack && widget.trackingService != null)
-            //   LiveTrackMapLayer(
-            //     trackingService: widget.trackingService!,
-            //     mapController: _mapController,
-            //     showTrackInfo: false, // Информацию показываем отдельно
-            //   ),
-            
-            // Слой маркеров GPS треков (начало/конец) - ВРЕМЕННО ОТКЛЮЧЕНО
-            // if (widget.historicalTracks.isNotEmpty)
-            //   MarkerLayer(markers: _buildTrackMarkers()),
             
             // Слой маркеров маршрута
             if (widget.route != null)

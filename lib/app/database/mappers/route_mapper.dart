@@ -1,7 +1,7 @@
-import '../../../../features/shop/route/domain/entities/route.dart' as domain;
-import '../../../../features/shop/route/domain/entities/point_of_interest.dart' as domain;
-import '../../../../features/shop/route/domain/entities/trading_point_of_interest.dart' as domain;
-import '../../../../features/shop/route/domain/entities/trading_point.dart' as domain;
+import '../../../../features/shop/domain/entities/route.dart' as domain;
+import '../../../features/shop/domain/entities/point_of_interest.dart' as domain;
+import '../../../features/shop/domain/entities/trading_point_of_interest.dart' as domain;
+import '../../../features/shop/domain/entities/trading_point.dart' as domain;
 import 'package:drift/drift.dart';
 import '../app_database.dart' as db;
 

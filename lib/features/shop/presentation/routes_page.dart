@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:tauzero/app/services/app_session_service.dart';
-import '../../domain/entities/route.dart' as domain;
-import '../../domain/repositories/route_repository.dart';
+import '../domain/entities/route.dart' as domain;
+import '../domain/repositories/route_repository.dart';
 import 'route_detail_page.dart';
 import 'route_map_page.dart';
 
@@ -58,7 +58,7 @@ class _RoutesPageState extends State<RoutesPage> {
         (routes) {
           if (mounted) {
             setState(() {
-              _routes = routes;
+              _routes = routes.cast<domain.Route>();
               _isLoading = false;
             });
           }

@@ -1,5 +1,5 @@
 import 'package:tauzero/features/navigation/tracking/domain/entities/navigation_user.dart';
-import 'package:tauzero/features/shop/employee/domain/employee.dart';
+import 'package:tauzero/features/shop/domain/entities/employee.dart';
 import 'package:tauzero/features/authentication/domain/entities/user.dart';
 
 /// Агрегат пользователя приложения

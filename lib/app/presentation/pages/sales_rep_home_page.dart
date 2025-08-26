@@ -8,10 +8,10 @@ import 'package:tauzero/app/presentation/widgets/combined_map_widget.dart';
 import 'package:tauzero/features/navigation/map/domain/entities/map_point.dart';
 import 'package:tauzero/features/navigation/path_predictor/osrm_path_prediction_service.dart';
 import 'package:tauzero/features/navigation/tracking/presentation/providers/user_tracks_provider.dart';
-import 'package:tauzero/features/shop/route/domain/entities/point_of_interest.dart';
-import 'package:tauzero/features/shop/route/domain/repositories/route_repository.dart';
-import 'package:tauzero/features/shop/route/domain/entities/route.dart' as shop;
-import 'package:tauzero/features/shop/route/presentation/pages/route_detail_page.dart';
+import 'package:tauzero/features/shop/domain/entities/point_of_interest.dart';
+import 'package:tauzero/features/shop/domain/repositories/route_repository.dart';
+import 'package:tauzero/features/shop/domain/entities/route.dart' as shop;
+import 'package:tauzero/features/shop/presentation/route_detail_page.dart';
 
 
 /// Главный экран с картой и кнопкой меню для торгового представителя

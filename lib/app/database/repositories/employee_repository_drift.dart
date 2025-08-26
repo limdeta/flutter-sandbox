@@ -1,5 +1,5 @@
-import '../../../../features/shop/employee/domain/employee.dart' as domain;
-import '../../../../features/shop/employee/domain/employee_repository.dart';
+import '../../../features/shop/domain/entities/employee.dart' as domain;
+import '../../../features/shop/domain/repositories/employee_repository.dart';
 import '../../../../shared/either.dart';
 import '../../../../shared/failures.dart';
 import '../app_database.dart' as db;

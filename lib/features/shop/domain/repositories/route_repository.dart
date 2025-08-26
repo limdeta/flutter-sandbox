@@ -1,20 +1,20 @@
-import 'package:tauzero/features/shop/employee/domain/employee.dart';
+import 'package:tauzero/features/shop/domain/entities/employee.dart';
+import 'package:tauzero/features/shop/domain/entities/route.dart' as domain;
 import 'package:tauzero/shared/either.dart';
 import 'package:tauzero/shared/failures.dart';
 
-import '../entities/route.dart';
 
 /// Интерфейс репозитория для маршрутов
 /// 
 /// Определяет контракт для работы с данными маршрутов.
 /// Будет реализован в data слое через Drift database.
 abstract class RouteRepository {
-  Stream<List<Route>> watchEmployeeRoutes(Employee employee);
-  Future<List<Route>> getAllRoutes();
-  Future<Either<NotFoundFailure, Route>> getRouteById(int routeId);
-  Future<Either<EntityCreationFailure, Route>> saveRoute(Route route, Employee? employee);
-  Future<Either<EntityUpdateFailure, Route>> updateRoute(Route route, Employee? employee);
-  Future<void> deleteRoute(Route route);
+  Stream<List<domain.Route>> watchEmployeeRoutes(Employee employee);
+  Future<List<domain.Route>> getAllRoutes();
+  Future<Either<NotFoundFailure, domain.Route>> getRouteById(int routeId);
+  Future<Either<EntityCreationFailure, domain.Route>> saveRoute(domain.Route route, Employee? employee);
+  Future<Either<EntityUpdateFailure, domain.Route>> updateRoute(domain.Route route, Employee? employee);
+  Future<void> deleteRoute(domain.Route route);
 
   /// (для dev режима)
   Future<void> clearAllTradingPoints();

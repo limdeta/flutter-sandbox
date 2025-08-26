@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:tauzero/app/database/database.dart';
-import 'package:tauzero/features/shop/route/domain/entities/trading_point.dart';
+import 'package:tauzero/features/shop/domain/entities/trading_point.dart';
 
 class TradingPointsFixtureService {
   Future<List<TradingPoint>> createBaseTradingPoints() async {
