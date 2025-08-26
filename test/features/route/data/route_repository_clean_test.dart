@@ -1,20 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tauzero/features/shop/route/domain/entities/route.dart';
+import 'package:tauzero/features/shop/domain/entities/route.dart';
 import 'package:tauzero/features/shop/domain/entities/point_of_interest.dart';
-import 'package:tauzero/features/shop/route/domain/entities/trading_point_of_interest.dart';
+import 'package:tauzero/features/shop/domain/entities/trading_point_of_interest.dart';
 import 'package:tauzero/shared/either.dart';
 
 import '../../../helpers/test_database_helper.dart';
 import '../../../helpers/factories/route_factory.dart';
 
-/// Интеграционные тесты репозитория маршрутов
-/// 
-/// Использует лучшие практики Flutter/Dart тестирования:
-/// - Каждый тест изолирован с чистой базой данных
-/// - Фабрики для создания тестовых данных
-/// - Группировка по функциональности
-/// - Понятные имена тестов в стиле BDD
-/// - Подготовка к переходу на полноценный BDD
+
 void main() {
   group('RouteRepository Integration Tests', () {
     final dbHelper = TestDatabaseHelper();

@@ -28,9 +28,6 @@ void main() {
       final phoneNumber = PhoneNumber.create('+79123456789').getOrElse(() => throw Exception());
       final user = domain.User.create(
         externalId: 'driver_001',
-        lastName: 'Водителев',
-        firstName: 'Иван',
-        middleName: 'Сергеевич',
         role: domain.UserRole.user,
         phoneNumber: phoneNumber,
         hashedPassword: 'secure_driver_password',
@@ -70,9 +67,8 @@ void main() {
       final compactTrack = builder.build();
 
       final userTrack = UserTrack.fromSingleTrack(
-        id: 0, // Временный ID, будет назначен при сохранении
+        id: 0,
         user: createdUser,
-        route: null, // Маршрут опционален
         track: compactTrack,
         metadata: {
           'trip_type': 'airport_transfer',
@@ -90,7 +86,6 @@ void main() {
       final savedUserTrack = saveResult.getOrElse(() => throw Exception());
 
       // === ПРОВЕРКА ДАННЫХ В БД ===
-      
       await dbHelper.showTableStats();
       
       final userTracksInDb = await dbHelper.database.select(dbHelper.database.userTracks).get();
@@ -105,8 +100,6 @@ void main() {
 
       expect(savedCompactTrackData.userTrackId, equals(savedUserTrackData.id));
 
-      // === ВОССТАНОВЛЕНИЕ ИЗ БД ===
-      
       // Восстанавливаем UserTrack
       final retrievedUserTrackResult = await dbHelper.userTrackRepository.getUserTrackById(savedUserTrackData.id);
       expect(retrievedUserTrackResult.isRight(), isTrue);
@@ -156,9 +149,6 @@ void main() {
         final phoneNumber = PhoneNumber.create(driverData.$3).getOrElse(() => throw Exception());
         final user = domain.User.create(
           externalId: 'driver_${driverIndex + 1}',
-          lastName: driverData.$1,
-          firstName: driverData.$2,
-          middleName: null,
           role: domain.UserRole.user,
           phoneNumber: phoneNumber,
           hashedPassword: 'driver_password_${driverIndex + 1}',

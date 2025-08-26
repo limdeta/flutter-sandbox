@@ -8,11 +8,11 @@ import '../../../helpers/test_factories.dart';
 void main() {
   group('LoginUseCase Integration Tests with Test Factories', () {
     late LoginUseCase loginUseCase;
-    late IUserRepository userRepository;
+    late UserRepository userRepository;
 
     setUpAll(() async {
       setupServiceLocator();
-      userRepository = getIt<IUserRepository>();
+      userRepository = getIt<UserRepository>();
       loginUseCase = getIt<LoginUseCase>();
     });
 
@@ -48,8 +48,6 @@ void main() {
           expect(session.user.externalId, testAdmin.externalId);
           expect(session.user.phoneNumber.value, testAdmin.phoneNumber.value);
           expect(session.user.role, UserRole.admin);
-          expect(session.user.firstName, 'Test');
-          expect(session.user.lastName, 'Admin');
           expect(session.loginTime, isNotNull);
         },
       );
@@ -82,8 +80,6 @@ void main() {
           expect(session.user.externalId, testManager.externalId);
           expect(session.user.phoneNumber.value, testManager.phoneNumber.value);
           expect(session.user.role, UserRole.manager);
-          expect(session.user.firstName, 'Test');
-          expect(session.user.lastName, 'Manager');
         },
       );
     });
@@ -161,8 +157,6 @@ void main() {
         (session) {
           expect(session.user.externalId, firstAdmin.externalId);
           expect(session.user.role, UserRole.admin);
-          expect(session.user.firstName, 'Admin');
-          expect(session.user.lastName, 'User');
         },
       );
     });
@@ -192,8 +186,6 @@ void main() {
       result.fold(
         (failure) => fail('Expected success but got failure: ${failure.message}'),
         (session) {
-          expect(session.user.firstName, 'Custom');
-          expect(session.user.lastName, 'Manager');
           expect(session.user.role, UserRole.manager);
         },
       );
