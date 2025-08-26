@@ -138,7 +138,7 @@ class AppUserRepositoryDrift implements AppUserRepository {
           return null;
         },
         (user) {
-          print('✅ [AppUserRepo] User найден: ${user?.externalId} (ID: ${user?.id})');
+          print('✅ [AppUserRepo] User найден: ${user.externalId} (ID: ${user.id})');
           return user;
         },
       );

@@ -78,7 +78,7 @@ class SimpleUpdateService {
       }
     } catch (e) {
       // Перебрасываем ошибку для обработки в UI
-      throw e;
+      rethrow;
     }
   }
   

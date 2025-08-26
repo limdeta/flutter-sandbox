@@ -46,6 +46,4 @@ class TradingPoint {
     return other is TradingPoint && other.externalId == externalId;
   }
 
-  @override
-  int get hashCode => externalId.hashCode;
 }

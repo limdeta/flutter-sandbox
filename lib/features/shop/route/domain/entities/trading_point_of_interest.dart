@@ -42,8 +42,7 @@ class TradingPointOfInterest implements PointOfInterest {
   
   @override
   final String? notes;
-  
-  /// Связанная торговая точка из учетной системы
+
   final TradingPoint tradingPoint;
 
   TradingPointOfInterest({
@@ -69,9 +68,6 @@ class TradingPointOfInterest implements PointOfInterest {
 
   @override
   String get displayName => tradingPoint.name;
-
-  @override
-  String? get additionalInfo => tradingPoint.inn;
 
   @override
   TradingPointOfInterest copyWith({

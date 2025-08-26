@@ -78,7 +78,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
       route: '/data-sync',
     ),
     MenuItem(
-      title: 'Профиль агента',
+      title: 'Профиль',
       icon: Icons.person,
       route: '/profile',
     ),

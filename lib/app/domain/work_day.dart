@@ -1,5 +1,5 @@
-import '../../../route/domain/entities/route.dart';
-import '../../../../navigation/tracking/domain/entities/user_track.dart';
+import '../../features/shop/route/domain/entities/route.dart';
+import '../../features/navigation/tracking/domain/entities/user_track.dart';
 
 /// Рабочий день - объединяет маршрут (план) и GPS трек (факт)
 /// 

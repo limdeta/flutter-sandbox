@@ -7,7 +7,6 @@ import 'package:tauzero/app/presentation/pages/sales_rep_home_page.dart';
 import 'package:tauzero/app/presentation/pages/splash_page.dart';
 import 'package:tauzero/app/presentation/pages/login_page.dart';
 import 'package:tauzero/app/presentation/widgets/dev_data_loading_overlay.dart';
-import 'package:tauzero/features/authentication/presentation/pages/home_page.dart';
 import 'app/config/app_config.dart';
 import 'app/service_locator.dart';
 import 'app/fixtures/dev_fixture_orchestrator.dart';
