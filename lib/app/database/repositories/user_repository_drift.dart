@@ -88,29 +88,65 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Either<Failure, User>> saveUser(User user) async {
     try {
-      final userData = await _getUserByExternalId(user.externalId);
-      if (userData == null) {
-        return Left(NotFoundFailure('Пользователь с ID ${user.externalId} не найден'));
+      if (user.externalId.isEmpty || user.phoneNumber.value.isEmpty) {
+        return Left(EntityUpdateFailure(
+          'Некорректные данные пользователя',
+          details: {'externalId': user.externalId, 'phoneNumber': user.phoneNumber.value},
+        ));
       }
-      final updated = await _updateUser(
-        userData.copyWith(
-          role: UserMapper.userRoleToString(user.role),
+
+      final existingUserData = await _getUserByExternalId(user.externalId);
+      
+      if (existingUserData == null) {
+        // Создаем нового пользователя
+        final userDbData = UsersCompanion.insert(
+          externalId: user.externalId,
           phoneNumber: user.phoneNumber.value,
           hashedPassword: user.hashedPassword,
-        ),
-      );
-      if (!updated) {
-        return Left(EntityUpdateFailure('Не удалось обновить пользователя'));
+          role: UserMapper.userRoleToString(user.role),
+        );
+        
+        final insertedId = await _insertUser(userDbData);
+        if (insertedId <= 0) {
+          return Left(EntityUpdateFailure(
+            'Не удалось создать пользователя',
+            details: {'user': user.toString(), 'insertedId': insertedId.toString()},
+          ));
+        }
+      } else {
+        // Обновляем существующего пользователя
+        final updated = await _updateUser(
+          existingUserData.copyWith(
+            role: UserMapper.userRoleToString(user.role),
+            phoneNumber: user.phoneNumber.value,
+            hashedPassword: user.hashedPassword,
+          ),
+        );
+        if (!updated) {
+          return Left(EntityUpdateFailure(
+            'Не удалось обновить пользователя',
+            details: {'user': user.toString()},
+          ));
+        }
       }
-      final updatedUserData = await _getUserByExternalId(user.externalId);
-      if (updatedUserData == null) {
-        return Left(EntityUpdateFailure('Не удалось получить обновленного пользователя'));
+
+      // Получаем сохраненного пользователя из базы
+      final savedUserData = await _getUserByExternalId(user.externalId);
+      if (savedUserData == null) {
+        return Left(EntityUpdateFailure(
+          'Не удалось получить сохраненного пользователя',
+          details: {'externalId': user.externalId},
+        ));
       }
-      final updatedUser = UserMapper.fromDb(updatedUserData);
-      _cache[updatedUser.externalId] = updatedUser;
-      return Right(updatedUser);
-    } catch (e) {
-      return Left(EntityUpdateFailure('Не удалось сохранить пользователя: $e'));
+
+      final savedUser = UserMapper.fromDb(savedUserData);
+      _cache[savedUser.externalId] = savedUser;
+      return Right(savedUser);
+    } catch (e, stackTrace) {
+      return Left(EntityUpdateFailure(
+        'Ошибка при сохранении пользователя',
+        details: {'exception': e.toString(), 'stackTrace': stackTrace.toString()},
+      ));
     }
   }
 

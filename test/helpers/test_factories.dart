@@ -22,8 +22,6 @@ class TestFactories {
     
     return User(
       externalId: externalId ?? 'test_admin_${DateTime.now().millisecondsSinceEpoch}',
-      firstName: firstName,
-      lastName: lastName,
       phoneNumber: phone,
       hashedPassword: hashedPassword,
       role: UserRole.admin,
@@ -46,8 +44,6 @@ class TestFactories {
     
     return User(
       externalId: externalId ?? 'test_manager_${DateTime.now().millisecondsSinceEpoch}',
-      firstName: firstName,
-      lastName: lastName,
       phoneNumber: phone,
       hashedPassword: hashedPassword,
       role: UserRole.manager,
@@ -70,8 +66,6 @@ class TestFactories {
     
     return User(
       externalId: externalId ?? 'test_sales_${DateTime.now().millisecondsSinceEpoch}',
-      firstName: firstName,
-      lastName: lastName,
       phoneNumber: phone,
       hashedPassword: hashedPassword,
       role: UserRole.user, // Assuming 'user' is the sales rep role
@@ -121,20 +115,4 @@ class TestPhones {
   static String get manager => '+7999${DateTime.now().millisecondsSinceEpoch.toString().substring(7, 10)}0002';
   static String get salesRep => '+7999${DateTime.now().millisecondsSinceEpoch.toString().substring(7, 10)}0003';
   static String get nonExistent => '+7999${DateTime.now().millisecondsSinceEpoch.toString().substring(7, 10)}9999';
-}
-
-/// Helper for setting up clean test environment
-class TestSetup {
-  /// Creates a clean test environment and returns repository instance
-  static Future<void> cleanTestEnvironment() async {
-    // Clear any existing data if needed
-    // This will be implemented based on your repository needs
-  }
-  
-  /// Seeds database with specific users for test scenario
-  static Future<List<User>> seedUsersForTest(List<User> users) async {
-    // This will save users to repository
-    // Implementation depends on your repository
-    return users;
-  }
 }
