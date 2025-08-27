@@ -2,6 +2,7 @@ import 'package:tauzero/features/authentication/domain/entities/user.dart';
 import 'package:tauzero/features/authentication/data/fixtures/user_fixture_service.dart';
 import 'package:tauzero/features/shop/data/fixtures/route_fixture_service.dart';
 import 'package:tauzero/features/shop/data/fixtures/trading_points_fixture_service.dart';
+import 'package:tauzero/features/shop/domain/repositories/trading_point_repository.dart';
 import 'package:tauzero/features/navigation/tracking/data/fixtures/track_fixtures.dart';
 import 'package:tauzero/app/database/app_database.dart';
 import 'package:tauzero/app/domain/app_user.dart';
@@ -99,17 +100,23 @@ class DevFixtureOrchestrator {
     
     try {
       // Принудительно получаем экземпляр базы данных (создает если не существует)
-      GetIt.instance<AppDatabase>();
+      final database = GetIt.instance<AppDatabase>();
       
-      // Очищаем через каскадные методы
-      // TODO: Реализовать clearAllData или альтернативный метод очистки
+      // Очищаем все таблицы
+      await database.transaction(() async {
+        for (final table in database.allTables) {
+          await database.delete(table).go();
+        }
+      });
+      
       print('✅ База данных полностью очищена (dev режим)');
     } catch (e) {
       print('❌ Ошибка очистки базы данных: $e');
       rethrow;
     }
     
-    await _userFixtureService.clearAllUsers();
+    // Удаляем избыточный вызов clearAllUsers() - база уже очищена выше
+    print('🧹 Dev пользователи очищены');
   }
 
   Future<DevAppUsers> _createAppUsers() async {
@@ -170,6 +177,37 @@ class DevFixtureOrchestrator {
   Future<void> _createRoutesForSalesReps(DevAppUsers appUsers) async {
     for (final salesRepAppUser in appUsers.salesReps) {
       await _routeFixtureService.createDevFixtures(salesRepAppUser.employee);
+      
+      // Привязываем торговые точки к этому конкретному сотруднику
+      await _assignTradingPointsToEmployee(salesRepAppUser.employee);
+    }
+  }
+  
+  /// Привязывает торговые точки к конкретному сотруднику
+  Future<void> _assignTradingPointsToEmployee(employee) async {
+    try {
+      final tradingPointsService = TradingPointsFixtureService();
+      
+      // Создаем торговые точки если их нет
+      final tradingPoints = await tradingPointsService.createBaseTradingPoints();
+      
+      // Получаем репозиторий торговых точек
+      final tradingPointRepository = GetIt.instance<TradingPointRepository>();
+      
+      // Привязываем все торговые точки к сотруднику
+      int successCount = 0;
+      for (final tradingPoint in tradingPoints) {
+        final result = await tradingPointRepository.assignTradingPointToEmployee(tradingPoint, employee);
+        result.fold(
+          (failure) => print('⚠️ Не удалось привязать ${tradingPoint.name}: ${failure.message}'),
+          (_) => successCount++,
+        );
+      }
+      
+      print('✅ Привязано $successCount из ${tradingPoints.length} торговых точек к сотруднику ${employee.fullName}');
+      
+    } catch (e) {
+      print('❌ Ошибка при привязке торговых точек: $e');
     }
   }
 

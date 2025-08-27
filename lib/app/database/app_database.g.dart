@@ -3139,6 +3139,311 @@ class TradingPointEntitiesCompanion
   }
 }
 
+class $EmployeeTradingPointAssignmentsTable
+    extends EmployeeTradingPointAssignments
+    with
+        TableInfo<
+          $EmployeeTradingPointAssignmentsTable,
+          EmployeeTradingPointAssignment
+        > {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $EmployeeTradingPointAssignmentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _employeeIdMeta = const VerificationMeta(
+    'employeeId',
+  );
+  @override
+  late final GeneratedColumn<int> employeeId = GeneratedColumn<int>(
+    'employee_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES employees (id)',
+    ),
+  );
+  static const VerificationMeta _tradingPointExternalIdMeta =
+      const VerificationMeta('tradingPointExternalId');
+  @override
+  late final GeneratedColumn<String> tradingPointExternalId =
+      GeneratedColumn<String>(
+        'trading_point_external_id',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _assignedAtMeta = const VerificationMeta(
+    'assignedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> assignedAt = GeneratedColumn<DateTime>(
+    'assigned_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    employeeId,
+    tradingPointExternalId,
+    assignedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'employee_trading_point_assignments';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<EmployeeTradingPointAssignment> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('employee_id')) {
+      context.handle(
+        _employeeIdMeta,
+        employeeId.isAcceptableOrUnknown(data['employee_id']!, _employeeIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_employeeIdMeta);
+    }
+    if (data.containsKey('trading_point_external_id')) {
+      context.handle(
+        _tradingPointExternalIdMeta,
+        tradingPointExternalId.isAcceptableOrUnknown(
+          data['trading_point_external_id']!,
+          _tradingPointExternalIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_tradingPointExternalIdMeta);
+    }
+    if (data.containsKey('assigned_at')) {
+      context.handle(
+        _assignedAtMeta,
+        assignedAt.isAcceptableOrUnknown(data['assigned_at']!, _assignedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {employeeId, tradingPointExternalId};
+  @override
+  EmployeeTradingPointAssignment map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return EmployeeTradingPointAssignment(
+      employeeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}employee_id'],
+      )!,
+      tradingPointExternalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}trading_point_external_id'],
+      )!,
+      assignedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}assigned_at'],
+      )!,
+    );
+  }
+
+  @override
+  $EmployeeTradingPointAssignmentsTable createAlias(String alias) {
+    return $EmployeeTradingPointAssignmentsTable(attachedDatabase, alias);
+  }
+}
+
+class EmployeeTradingPointAssignment extends DataClass
+    implements Insertable<EmployeeTradingPointAssignment> {
+  final int employeeId;
+  final String tradingPointExternalId;
+  final DateTime assignedAt;
+  const EmployeeTradingPointAssignment({
+    required this.employeeId,
+    required this.tradingPointExternalId,
+    required this.assignedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['employee_id'] = Variable<int>(employeeId);
+    map['trading_point_external_id'] = Variable<String>(tradingPointExternalId);
+    map['assigned_at'] = Variable<DateTime>(assignedAt);
+    return map;
+  }
+
+  EmployeeTradingPointAssignmentsCompanion toCompanion(bool nullToAbsent) {
+    return EmployeeTradingPointAssignmentsCompanion(
+      employeeId: Value(employeeId),
+      tradingPointExternalId: Value(tradingPointExternalId),
+      assignedAt: Value(assignedAt),
+    );
+  }
+
+  factory EmployeeTradingPointAssignment.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return EmployeeTradingPointAssignment(
+      employeeId: serializer.fromJson<int>(json['employeeId']),
+      tradingPointExternalId: serializer.fromJson<String>(
+        json['tradingPointExternalId'],
+      ),
+      assignedAt: serializer.fromJson<DateTime>(json['assignedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'employeeId': serializer.toJson<int>(employeeId),
+      'tradingPointExternalId': serializer.toJson<String>(
+        tradingPointExternalId,
+      ),
+      'assignedAt': serializer.toJson<DateTime>(assignedAt),
+    };
+  }
+
+  EmployeeTradingPointAssignment copyWith({
+    int? employeeId,
+    String? tradingPointExternalId,
+    DateTime? assignedAt,
+  }) => EmployeeTradingPointAssignment(
+    employeeId: employeeId ?? this.employeeId,
+    tradingPointExternalId:
+        tradingPointExternalId ?? this.tradingPointExternalId,
+    assignedAt: assignedAt ?? this.assignedAt,
+  );
+  EmployeeTradingPointAssignment copyWithCompanion(
+    EmployeeTradingPointAssignmentsCompanion data,
+  ) {
+    return EmployeeTradingPointAssignment(
+      employeeId: data.employeeId.present
+          ? data.employeeId.value
+          : this.employeeId,
+      tradingPointExternalId: data.tradingPointExternalId.present
+          ? data.tradingPointExternalId.value
+          : this.tradingPointExternalId,
+      assignedAt: data.assignedAt.present
+          ? data.assignedAt.value
+          : this.assignedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EmployeeTradingPointAssignment(')
+          ..write('employeeId: $employeeId, ')
+          ..write('tradingPointExternalId: $tradingPointExternalId, ')
+          ..write('assignedAt: $assignedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(employeeId, tradingPointExternalId, assignedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is EmployeeTradingPointAssignment &&
+          other.employeeId == this.employeeId &&
+          other.tradingPointExternalId == this.tradingPointExternalId &&
+          other.assignedAt == this.assignedAt);
+}
+
+class EmployeeTradingPointAssignmentsCompanion
+    extends UpdateCompanion<EmployeeTradingPointAssignment> {
+  final Value<int> employeeId;
+  final Value<String> tradingPointExternalId;
+  final Value<DateTime> assignedAt;
+  final Value<int> rowid;
+  const EmployeeTradingPointAssignmentsCompanion({
+    this.employeeId = const Value.absent(),
+    this.tradingPointExternalId = const Value.absent(),
+    this.assignedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  EmployeeTradingPointAssignmentsCompanion.insert({
+    required int employeeId,
+    required String tradingPointExternalId,
+    this.assignedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : employeeId = Value(employeeId),
+       tradingPointExternalId = Value(tradingPointExternalId);
+  static Insertable<EmployeeTradingPointAssignment> custom({
+    Expression<int>? employeeId,
+    Expression<String>? tradingPointExternalId,
+    Expression<DateTime>? assignedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (employeeId != null) 'employee_id': employeeId,
+      if (tradingPointExternalId != null)
+        'trading_point_external_id': tradingPointExternalId,
+      if (assignedAt != null) 'assigned_at': assignedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  EmployeeTradingPointAssignmentsCompanion copyWith({
+    Value<int>? employeeId,
+    Value<String>? tradingPointExternalId,
+    Value<DateTime>? assignedAt,
+    Value<int>? rowid,
+  }) {
+    return EmployeeTradingPointAssignmentsCompanion(
+      employeeId: employeeId ?? this.employeeId,
+      tradingPointExternalId:
+          tradingPointExternalId ?? this.tradingPointExternalId,
+      assignedAt: assignedAt ?? this.assignedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (employeeId.present) {
+      map['employee_id'] = Variable<int>(employeeId.value);
+    }
+    if (tradingPointExternalId.present) {
+      map['trading_point_external_id'] = Variable<String>(
+        tradingPointExternalId.value,
+      );
+    }
+    if (assignedAt.present) {
+      map['assigned_at'] = Variable<DateTime>(assignedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EmployeeTradingPointAssignmentsCompanion(')
+          ..write('employeeId: $employeeId, ')
+          ..write('tradingPointExternalId: $tradingPointExternalId, ')
+          ..write('assignedAt: $assignedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $UserTracksTable extends UserTracks
     with TableInfo<$UserTracksTable, UserTrackData> {
   @override
@@ -4798,6 +5103,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $TradingPointsTable tradingPoints = $TradingPointsTable(this);
   late final $TradingPointEntitiesTable tradingPointEntities =
       $TradingPointEntitiesTable(this);
+  late final $EmployeeTradingPointAssignmentsTable
+  employeeTradingPointAssignments = $EmployeeTradingPointAssignmentsTable(this);
   late final $UserTracksTable userTracks = $UserTracksTable(this);
   late final $CompactTracksTable compactTracks = $CompactTracksTable(this);
   late final $AppUsersTable appUsers = $AppUsersTable(this);
@@ -4812,6 +5119,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     pointsOfInterest,
     tradingPoints,
     tradingPointEntities,
+    employeeTradingPointAssignments,
     userTracks,
     compactTracks,
     appUsers,
@@ -5303,6 +5611,34 @@ final class $$EmployeesTableReferences
     );
   }
 
+  static MultiTypedResultKey<
+    $EmployeeTradingPointAssignmentsTable,
+    List<EmployeeTradingPointAssignment>
+  >
+  _employeeTradingPointAssignmentsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.employeeTradingPointAssignments,
+        aliasName: $_aliasNameGenerator(
+          db.employees.id,
+          db.employeeTradingPointAssignments.employeeId,
+        ),
+      );
+
+  $$EmployeeTradingPointAssignmentsTableProcessedTableManager
+  get employeeTradingPointAssignmentsRefs {
+    final manager = $$EmployeeTradingPointAssignmentsTableTableManager(
+      $_db,
+      $_db.employeeTradingPointAssignments,
+    ).filter((f) => f.employeeId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _employeeTradingPointAssignmentsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
   static MultiTypedResultKey<$AppUsersTable, List<AppUserData>>
   _appUsersRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.appUsers,
@@ -5388,6 +5724,35 @@ class $$EmployeesTableFilterComposer
                 $removeJoinBuilderFromRootComposer,
           ),
     );
+    return f(composer);
+  }
+
+  Expression<bool> employeeTradingPointAssignmentsRefs(
+    Expression<bool> Function(
+      $$EmployeeTradingPointAssignmentsTableFilterComposer f,
+    )
+    f,
+  ) {
+    final $$EmployeeTradingPointAssignmentsTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.employeeTradingPointAssignments,
+          getReferencedColumn: (t) => t.employeeId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$EmployeeTradingPointAssignmentsTableFilterComposer(
+                $db: $db,
+                $table: $db.employeeTradingPointAssignments,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
     return f(composer);
   }
 
@@ -5519,6 +5884,35 @@ class $$EmployeesTableAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> employeeTradingPointAssignmentsRefs<T extends Object>(
+    Expression<T> Function(
+      $$EmployeeTradingPointAssignmentsTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$EmployeeTradingPointAssignmentsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.employeeTradingPointAssignments,
+          getReferencedColumn: (t) => t.employeeId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$EmployeeTradingPointAssignmentsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.employeeTradingPointAssignments,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
   Expression<T> appUsersRefs<T extends Object>(
     Expression<T> Function($$AppUsersTableAnnotationComposer a) f,
   ) {
@@ -5558,7 +5952,11 @@ class $$EmployeesTableTableManager
           $$EmployeesTableUpdateCompanionBuilder,
           (EmployeeData, $$EmployeesTableReferences),
           EmployeeData,
-          PrefetchHooks Function({bool routesRefs, bool appUsersRefs})
+          PrefetchHooks Function({
+            bool routesRefs,
+            bool employeeTradingPointAssignmentsRefs,
+            bool appUsersRefs,
+          })
         > {
   $$EmployeesTableTableManager(_$AppDatabase db, $EmployeesTable table)
     : super(
@@ -5615,54 +6013,90 @@ class $$EmployeesTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({routesRefs = false, appUsersRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (routesRefs) db.routes,
-                if (appUsersRefs) db.appUsers,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (routesRefs)
-                    await $_getPrefetchedData<
-                      EmployeeData,
-                      $EmployeesTable,
-                      RouteData
-                    >(
-                      currentTable: table,
-                      referencedTable: $$EmployeesTableReferences
-                          ._routesRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$EmployeesTableReferences(db, table, p0).routesRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.employeeId == item.id),
-                      typedResults: items,
-                    ),
-                  if (appUsersRefs)
-                    await $_getPrefetchedData<
-                      EmployeeData,
-                      $EmployeesTable,
-                      AppUserData
-                    >(
-                      currentTable: table,
-                      referencedTable: $$EmployeesTableReferences
-                          ._appUsersRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$EmployeesTableReferences(
-                            db,
-                            table,
-                            p0,
-                          ).appUsersRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.employeeId == item.id),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({
+                routesRefs = false,
+                employeeTradingPointAssignmentsRefs = false,
+                appUsersRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (routesRefs) db.routes,
+                    if (employeeTradingPointAssignmentsRefs)
+                      db.employeeTradingPointAssignments,
+                    if (appUsersRefs) db.appUsers,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (routesRefs)
+                        await $_getPrefetchedData<
+                          EmployeeData,
+                          $EmployeesTable,
+                          RouteData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$EmployeesTableReferences
+                              ._routesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$EmployeesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).routesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.employeeId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (employeeTradingPointAssignmentsRefs)
+                        await $_getPrefetchedData<
+                          EmployeeData,
+                          $EmployeesTable,
+                          EmployeeTradingPointAssignment
+                        >(
+                          currentTable: table,
+                          referencedTable: $$EmployeesTableReferences
+                              ._employeeTradingPointAssignmentsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$EmployeesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).employeeTradingPointAssignmentsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.employeeId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (appUsersRefs)
+                        await $_getPrefetchedData<
+                          EmployeeData,
+                          $EmployeesTable,
+                          AppUserData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$EmployeesTableReferences
+                              ._appUsersRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$EmployeesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).appUsersRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.employeeId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -5679,7 +6113,11 @@ typedef $$EmployeesTableProcessedTableManager =
       $$EmployeesTableUpdateCompanionBuilder,
       (EmployeeData, $$EmployeesTableReferences),
       EmployeeData,
-      PrefetchHooks Function({bool routesRefs, bool appUsersRefs})
+      PrefetchHooks Function({
+        bool routesRefs,
+        bool employeeTradingPointAssignmentsRefs,
+        bool appUsersRefs,
+      })
     >;
 typedef $$RoutesTableCreateCompanionBuilder =
     RoutesCompanion Function({
@@ -7453,6 +7891,326 @@ typedef $$TradingPointEntitiesTableProcessedTableManager =
       TradingPointEntity,
       PrefetchHooks Function()
     >;
+typedef $$EmployeeTradingPointAssignmentsTableCreateCompanionBuilder =
+    EmployeeTradingPointAssignmentsCompanion Function({
+      required int employeeId,
+      required String tradingPointExternalId,
+      Value<DateTime> assignedAt,
+      Value<int> rowid,
+    });
+typedef $$EmployeeTradingPointAssignmentsTableUpdateCompanionBuilder =
+    EmployeeTradingPointAssignmentsCompanion Function({
+      Value<int> employeeId,
+      Value<String> tradingPointExternalId,
+      Value<DateTime> assignedAt,
+      Value<int> rowid,
+    });
+
+final class $$EmployeeTradingPointAssignmentsTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $EmployeeTradingPointAssignmentsTable,
+          EmployeeTradingPointAssignment
+        > {
+  $$EmployeeTradingPointAssignmentsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $EmployeesTable _employeeIdTable(_$AppDatabase db) =>
+      db.employees.createAlias(
+        $_aliasNameGenerator(
+          db.employeeTradingPointAssignments.employeeId,
+          db.employees.id,
+        ),
+      );
+
+  $$EmployeesTableProcessedTableManager get employeeId {
+    final $_column = $_itemColumn<int>('employee_id')!;
+
+    final manager = $$EmployeesTableTableManager(
+      $_db,
+      $_db.employees,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_employeeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$EmployeeTradingPointAssignmentsTableFilterComposer
+    extends Composer<_$AppDatabase, $EmployeeTradingPointAssignmentsTable> {
+  $$EmployeeTradingPointAssignmentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get tradingPointExternalId => $composableBuilder(
+    column: $table.tradingPointExternalId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get assignedAt => $composableBuilder(
+    column: $table.assignedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$EmployeesTableFilterComposer get employeeId {
+    final $$EmployeesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.employeeId,
+      referencedTable: $db.employees,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$EmployeesTableFilterComposer(
+            $db: $db,
+            $table: $db.employees,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$EmployeeTradingPointAssignmentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $EmployeeTradingPointAssignmentsTable> {
+  $$EmployeeTradingPointAssignmentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get tradingPointExternalId => $composableBuilder(
+    column: $table.tradingPointExternalId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get assignedAt => $composableBuilder(
+    column: $table.assignedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$EmployeesTableOrderingComposer get employeeId {
+    final $$EmployeesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.employeeId,
+      referencedTable: $db.employees,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$EmployeesTableOrderingComposer(
+            $db: $db,
+            $table: $db.employees,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$EmployeeTradingPointAssignmentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EmployeeTradingPointAssignmentsTable> {
+  $$EmployeeTradingPointAssignmentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get tradingPointExternalId => $composableBuilder(
+    column: $table.tradingPointExternalId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get assignedAt => $composableBuilder(
+    column: $table.assignedAt,
+    builder: (column) => column,
+  );
+
+  $$EmployeesTableAnnotationComposer get employeeId {
+    final $$EmployeesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.employeeId,
+      referencedTable: $db.employees,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$EmployeesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.employees,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$EmployeeTradingPointAssignmentsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $EmployeeTradingPointAssignmentsTable,
+          EmployeeTradingPointAssignment,
+          $$EmployeeTradingPointAssignmentsTableFilterComposer,
+          $$EmployeeTradingPointAssignmentsTableOrderingComposer,
+          $$EmployeeTradingPointAssignmentsTableAnnotationComposer,
+          $$EmployeeTradingPointAssignmentsTableCreateCompanionBuilder,
+          $$EmployeeTradingPointAssignmentsTableUpdateCompanionBuilder,
+          (
+            EmployeeTradingPointAssignment,
+            $$EmployeeTradingPointAssignmentsTableReferences,
+          ),
+          EmployeeTradingPointAssignment,
+          PrefetchHooks Function({bool employeeId})
+        > {
+  $$EmployeeTradingPointAssignmentsTableTableManager(
+    _$AppDatabase db,
+    $EmployeeTradingPointAssignmentsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$EmployeeTradingPointAssignmentsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$EmployeeTradingPointAssignmentsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$EmployeeTradingPointAssignmentsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> employeeId = const Value.absent(),
+                Value<String> tradingPointExternalId = const Value.absent(),
+                Value<DateTime> assignedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => EmployeeTradingPointAssignmentsCompanion(
+                employeeId: employeeId,
+                tradingPointExternalId: tradingPointExternalId,
+                assignedAt: assignedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required int employeeId,
+                required String tradingPointExternalId,
+                Value<DateTime> assignedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => EmployeeTradingPointAssignmentsCompanion.insert(
+                employeeId: employeeId,
+                tradingPointExternalId: tradingPointExternalId,
+                assignedAt: assignedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$EmployeeTradingPointAssignmentsTableReferences(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({employeeId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (employeeId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.employeeId,
+                                referencedTable:
+                                    $$EmployeeTradingPointAssignmentsTableReferences
+                                        ._employeeIdTable(db),
+                                referencedColumn:
+                                    $$EmployeeTradingPointAssignmentsTableReferences
+                                        ._employeeIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$EmployeeTradingPointAssignmentsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $EmployeeTradingPointAssignmentsTable,
+      EmployeeTradingPointAssignment,
+      $$EmployeeTradingPointAssignmentsTableFilterComposer,
+      $$EmployeeTradingPointAssignmentsTableOrderingComposer,
+      $$EmployeeTradingPointAssignmentsTableAnnotationComposer,
+      $$EmployeeTradingPointAssignmentsTableCreateCompanionBuilder,
+      $$EmployeeTradingPointAssignmentsTableUpdateCompanionBuilder,
+      (
+        EmployeeTradingPointAssignment,
+        $$EmployeeTradingPointAssignmentsTableReferences,
+      ),
+      EmployeeTradingPointAssignment,
+      PrefetchHooks Function({bool employeeId})
+    >;
 typedef $$UserTracksTableCreateCompanionBuilder =
     UserTracksCompanion Function({
       Value<int> id,
@@ -8900,6 +9658,12 @@ class $AppDatabaseManager {
       $$TradingPointsTableTableManager(_db, _db.tradingPoints);
   $$TradingPointEntitiesTableTableManager get tradingPointEntities =>
       $$TradingPointEntitiesTableTableManager(_db, _db.tradingPointEntities);
+  $$EmployeeTradingPointAssignmentsTableTableManager
+  get employeeTradingPointAssignments =>
+      $$EmployeeTradingPointAssignmentsTableTableManager(
+        _db,
+        _db.employeeTradingPointAssignments,
+      );
   $$UserTracksTableTableManager get userTracks =>
       $$UserTracksTableTableManager(_db, _db.userTracks);
   $$CompactTracksTableTableManager get compactTracks =>

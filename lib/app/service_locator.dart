@@ -16,6 +16,9 @@ import 'package:tauzero/features/authentication/domain/usecases/login_usecase.da
 import 'package:tauzero/features/authentication/domain/usecases/logout_usecase.dart';
 import 'package:tauzero/features/authentication/domain/usecases/get_current_session_usecase.dart';
 import 'package:tauzero/features/shop/domain/repositories/employee_repository.dart';
+import 'package:tauzero/features/shop/domain/repositories/trading_point_repository.dart';
+import 'package:tauzero/features/shop/domain/usecases/get_employee_trading_points_usecase.dart';
+import 'package:tauzero/features/shop/data/repositories/drift_trading_point_repository.dart';
 import 'package:tauzero/app/domain/repositories/app_user_repository.dart';
 import 'package:tauzero/features/shop/data/di/route_di.dart';
 import 'package:tauzero/features/navigation/tracking/domain/services/location_tracking_service.dart';
@@ -70,6 +73,11 @@ Future<void> setupServiceLocator() async {
     () => getIt<EmployeeRepositoryDrift>(),
   );
 
+  // Trading Point Repository
+  getIt.registerLazySingleton<TradingPointRepository>(
+    () => DriftTradingPointRepository(),
+  );
+
   // App User Repository  
   getIt.registerLazySingleton<AppUserRepository>(
     () => AppUserRepositoryDrift(
@@ -95,6 +103,10 @@ Future<void> setupServiceLocator() async {
   // Use cases
   getIt.registerLazySingleton<LoginUseCase>(
     () => LoginUseCase(getIt()),
+  );
+
+  getIt.registerLazySingleton<GetEmployeeTradingPointsUseCase>(
+    () => GetEmployeeTradingPointsUseCase(getIt<TradingPointRepository>()),
   );
   
   // App User Login Service (wrapper around LoginUseCase)

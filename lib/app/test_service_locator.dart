@@ -26,6 +26,9 @@ import 'package:tauzero/app/services/app_user_login_service.dart';
 import 'package:tauzero/app/services/app_user_logout_service.dart';
 import 'package:tauzero/app/services/simple_update_service.dart';
 import 'package:tauzero/features/authentication/domain/repositories/session_repository.dart';
+import 'package:tauzero/features/shop/domain/repositories/trading_point_repository.dart';
+import 'package:tauzero/features/shop/data/repositories/drift_trading_point_repository.dart';
+import 'package:tauzero/features/shop/domain/usecases/get_employee_trading_points_usecase.dart';
 
 /// Тестовый Service Locator для настройки зависимостей в тестах
 class TestServiceLocator {
@@ -135,6 +138,9 @@ class TestServiceLocator {
       sessionRepository: _getIt(),
     ));
 
+    // Trading Point Repository и Use Case
+    _getIt.registerLazySingleton<TradingPointRepository>(() => DriftTradingPointRepository());
+    _getIt.registerLazySingleton<GetEmployeeTradingPointsUseCase>(() => GetEmployeeTradingPointsUseCase(_getIt<TradingPointRepository>()));
 
     _getIt.registerLazySingleton<LoginUseCase>(() => LoginUseCase(_getIt<AuthenticationService>()));
   }

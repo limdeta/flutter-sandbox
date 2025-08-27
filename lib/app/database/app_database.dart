@@ -12,6 +12,7 @@ import 'tables/route_table.dart';
 import 'tables/point_of_interest_table.dart';
 import 'tables/trading_point_table.dart';
 import 'tables/trading_point_entity_table.dart';
+import 'tables/employee_trading_point_assignment_table.dart';
 import 'tables/user_track_table.dart';
 import 'tables/compact_track_table.dart';
 import 'tables/app_user_table.dart';
@@ -25,6 +26,7 @@ part 'app_database.g.dart';
   PointsOfInterest,
   TradingPoints,
   TradingPointEntities,
+  EmployeeTradingPointAssignments,
   UserTracks,
   CompactTracks,
   AppUsers,
@@ -36,7 +38,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(DatabaseConnection super.connection);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   // Методы для работы с торговыми точками
   Future<void> upsertTradingPoint(TradingPointEntitiesCompanion companion) async {
@@ -75,6 +77,11 @@ class AppDatabase extends _$AppDatabase {
     onUpgrade: (Migrator m, int from, int to) async {
       // Включаем foreign key constraints при обновлении
       await customStatement('PRAGMA foreign_keys = ON');
+      
+      if (from < 2) {
+        // Добавляем таблицу связей сотрудников и торговых точек
+        await m.createTable(employeeTradingPointAssignments);
+      }
     },
   );
 }

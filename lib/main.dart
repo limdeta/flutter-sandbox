@@ -26,6 +26,7 @@ import 'app/domain/repositories/app_user_repository.dart';
 import 'features/shop/presentation/product_catalog_page.dart';
 import 'features/shop/presentation/product_categories_page.dart';
 import 'features/shop/presentation/promotions_page.dart';
+import 'features/shop/presentation/trading_points_list_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,6 +88,7 @@ class TauZeroApp extends StatelessWidget {
             '/menu': (context) => const MainMenuPage(),
             // '/admin': (context) => const AdminDashboardPage(), // Закомментировано до исправления
             '/routes': (context) => const RoutesPage(),
+            '/outlets': (context) => const TradingPointsListPage(),
             '/products/catalog': (context) => const ProductCatalogPage(),
             '/products/categories': (context) => const ProductCategoriesPage(),
             '/products/promotions': (context) => const PromotionsPage(),

@@ -1,6 +1,10 @@
 import 'package:get_it/get_it.dart';
-import 'package:tauzero/app/database/database.dart';
+import 'package:drift/drift.dart';
+import 'package:tauzero/app/database/app_database.dart';
 import 'package:tauzero/features/shop/domain/entities/trading_point.dart';
+import 'package:tauzero/features/shop/domain/entities/employee.dart';
+import 'package:tauzero/features/shop/domain/repositories/trading_point_repository.dart';
+import 'package:tauzero/features/shop/domain/repositories/employee_repository.dart';
 
 class TradingPointsFixtureService {
   Future<List<TradingPoint>> createBaseTradingPoints() async {
@@ -113,6 +117,53 @@ class TradingPointsFixtureService {
     return points;
   }
   
+  /// Привязывает все торговые точки из маршрутов к первому найденному сотруднику
+  Future<void> assignTradingPointsToFirstEmployee() async {
+    try {
+      // Получаем первого сотрудника из базы
+      final employeeRepository = GetIt.instance<EmployeeRepository>();
+      final employeesResult = await employeeRepository.getAllEmployees();
+      
+      if (employeesResult.isLeft()) {
+        print('⚠️ Не удалось получить сотрудников для привязки торговых точек');
+        return;
+      }
+      
+      final employees = employeesResult.fold(
+        (failure) => <Employee>[],
+        (employees) => employees,
+      );
+      
+      if (employees.isEmpty) {
+        print('⚠️ В базе нет сотрудников для привязки торговых точек');
+        return;
+      }
+      
+      final employee = employees.first;
+      
+      // Создаем торговые точки если их нет
+      final tradingPoints = await createBaseTradingPoints();
+      
+      // Получаем репозиторий торговых точек
+      final tradingPointRepository = GetIt.instance<TradingPointRepository>();
+      
+      // Привязываем все торговые точки к сотруднику
+      int successCount = 0;
+      for (final tradingPoint in tradingPoints) {
+        final result = await tradingPointRepository.assignTradingPointToEmployee(tradingPoint, employee);
+        result.fold(
+          (failure) => print('⚠️ Не удалось привязать ${tradingPoint.name}: ${failure.message}'),
+          (_) => successCount++,
+        );
+      }
+      
+      print('✅ Привязано $successCount из ${tradingPoints.length} торговых точек к сотруднику ${employee.fullName}');
+      
+    } catch (e) {
+      print('❌ Ошибка при привязке торговых точек: $e');
+    }
+  }
+
   /// Получает торговую точку по external_id
   TradingPoint getTradingPointById(String externalId, List<TradingPoint> points) {
     final point = points.where((p) => p.externalId == externalId).firstOrNull;
@@ -125,7 +176,12 @@ class TradingPointsFixtureService {
   /// Приватный метод для сохранения торговой точки
   Future<void> _saveTradingPoint(TradingPoint point) async {
     final database = GetIt.instance<AppDatabase>();
-    final companion = RouteMapper.tradingPointToCompanion(point);
+    final companion = TradingPointEntitiesCompanion.insert(
+      externalId: point.externalId,
+      name: point.name,
+      inn: point.inn != null ? Value(point.inn!) : const Value.absent(),
+      updatedAt: Value(DateTime.now()),
+    );
     await database.upsertTradingPoint(companion);
   }
 }
