@@ -23,6 +23,15 @@ class SelectedRouteProvider extends ChangeNotifier {
   /// ID выбранного маршрута (для удобства)
   int? get selectedRouteId => _selectedRoute?.id;
 
+  /// Получает дату выбранного маршрута для синхронизации треков
+  DateTime? get selectedRouteDate {
+    if (_selectedRoute?.startTime != null) {
+      return _selectedRoute!.startTime!;
+    }
+    // Fallback на сегодня если время начала не установлено
+    return DateTime.now();
+  }
+
   /// Устанавливает выбранный маршрут
   /// 
   /// [route] - маршрут для выбора (может быть null для очистки)

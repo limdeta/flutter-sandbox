@@ -75,6 +75,44 @@ class UserTracksProvider extends ChangeNotifier {
     });
   }
   
+  /// Загружает треки пользователя для конкретного дня
+  Future<void> loadUserTracksForDate(NavigationUser user, DateTime date) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    
+    final result = await _getUserTracksUseCase.call(user);
+    
+    result.fold(
+      (failure) {
+        _error = 'Ошибка загрузки треков: $failure';
+        _isLoading = false;
+        print('❌ UserTracksProvider: Ошибка загрузки треков для даты: $failure');
+        notifyListeners();
+      },
+      (allTracks) {
+        // Фильтруем треки по дню
+        final targetDate = DateTime(date.year, date.month, date.day);
+        final filteredTracks = allTracks.where((track) {
+          final trackDate = DateTime(
+            track.startTime.year, 
+            track.startTime.month, 
+            track.startTime.day
+          );
+          return trackDate.isAtSameMomentAs(targetDate);
+        }).toList();
+        
+        _userTracks = filteredTracks;
+        _activeTrack = filteredTracks.where((track) => track.status.isActive).firstOrNull;
+        _completedTracks = filteredTracks.where((track) => track.status.name == 'completed').toList();
+        _isLoading = false;
+        
+        print('✅ UserTracksProvider: Загружено ${filteredTracks.length} треков для ${date.day}.${date.month}.${date.year}');
+        notifyListeners();
+      },
+    );
+  }
+
   /// Очищает треки (при выходе пользователя)
   void clearTracks() {
     _debounceTimer?.cancel(); // Отменяем таймер для экономии ресурсов

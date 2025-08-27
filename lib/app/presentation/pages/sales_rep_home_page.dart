@@ -42,6 +42,46 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
   void initState() {
     super.initState();
     _loadUserAndRoutes();
+    
+    // Слушаем изменения выбранного маршрута для синхронизации треков
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final selectedRouteProvider = Provider.of<SelectedRouteProvider>(context, listen: false);
+      selectedRouteProvider.addListener(_onRouteSelectionChanged);
+    });
+  }
+
+  @override
+  void dispose() {
+    final selectedRouteProvider = Provider.of<SelectedRouteProvider>(context, listen: false);
+    selectedRouteProvider.removeListener(_onRouteSelectionChanged);
+    super.dispose();
+  }
+
+  /// Обработчик изменения выбранного маршрута
+  void _onRouteSelectionChanged() async {
+    final selectedRouteProvider = Provider.of<SelectedRouteProvider>(context, listen: false);
+    final tracksProvider = Provider.of<UserTracksProvider>(context, listen: false);
+    
+    if (selectedRouteProvider.selectedRoute != null && 
+        selectedRouteProvider.selectedRouteDate != null) {
+      
+      // Получаем текущую сессию для пользователя
+      final sessionResult = await AppSessionService.getCurrentAppSession();
+      if (sessionResult.isRight()) {
+        final session = sessionResult.fold((l) => null, (r) => r);
+        if (session != null) {
+          print('🔄 Синхронизация треков для маршрута: ${selectedRouteProvider.selectedRoute!.name}');
+          
+          // Загружаем треки для даты выбранного маршрута
+          await tracksProvider.loadUserTracksForDate(
+            session.appUser, 
+            selectedRouteProvider.selectedRouteDate!
+          );
+          
+          print('✅ Треки синхронизированы с маршрутом');
+        }
+      }
+    }
   }
 
   Future<void> _loadUserAndRoutes() async {
@@ -70,15 +110,24 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
         return;
       }
 
-      // Загружаем треки через Provider  
+      // Загружаем треки через Provider для даты выбранного маршрута
       final tracksProvider = Provider.of<UserTracksProvider>(context, listen: false);
-      await tracksProvider.loadUserTracks(session.appUser);
+      
+      // Если есть предварительно выбранный маршрут, загружаем треки для его даты
+      if (widget.selectedRoute != null) {
+        final routeDate = widget.selectedRoute!.startTime ?? DateTime.now();
+        await tracksProvider.loadUserTracksForDate(session.appUser, routeDate);
+      } else {
+        // Иначе загружаем все треки (как было раньше)
+        await tracksProvider.loadUserTracks(session.appUser);
+      }
 
       // Получаем маршруты пользователя через Employee
       _routeRepository.watchEmployeeRoutes(session.appUser.employee).listen(
         (routes) async {
           if (mounted) {
             final selectedRouteProvider = Provider.of<SelectedRouteProvider>(context, listen: false);
+            final currentTracksProvider = Provider.of<UserTracksProvider>(context, listen: false);
             
             shop.Route? routeToDisplay;
             
@@ -98,12 +147,20 @@ class _SalesRepHomePageState extends State<SalesRepHomePage> {
                   // Используем сохраненный выбор пользователя
                   routeToDisplay = selectedRouteProvider.selectedRoute!;
                   print('📍 Восстановлен сохраненный маршрут: ${routeToDisplay.name}');
+                  
+                  // Синхронизируем треки для восстановленного маршрута
+                  final routeDate = routeToDisplay.startTime ?? DateTime.now();
+                  await currentTracksProvider.loadUserTracksForDate(session.appUser, routeDate);
                 } else {
                   // 3. Fallback: автоматический выбор активного или сегодняшнего маршрута
                   routeToDisplay = _findCurrentRoute(routes);
                   if (routeToDisplay != null) {
                     await selectedRouteProvider.setSelectedRoute(routeToDisplay);
                     print('📍 Автоматически выбран маршрут: ${routeToDisplay.name}');
+                    
+                    // Синхронизируем треки для автоматически выбранного маршрута
+                    final routeDate = routeToDisplay.startTime ?? DateTime.now();
+                    await currentTracksProvider.loadUserTracksForDate(session.appUser, routeDate);
                   }
                 }
               }
