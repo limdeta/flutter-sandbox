@@ -4,7 +4,6 @@ import '../entities/trading_point.dart';
 import '../entities/employee.dart';
 import '../repositories/trading_point_repository.dart';
 
-/// Юзкейс для получения торговых точек закрепленных за сотрудником
 class GetEmployeeTradingPointsUseCase {
   final TradingPointRepository _repository;
 
