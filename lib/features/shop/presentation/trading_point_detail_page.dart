@@ -67,7 +67,35 @@ class TradingPointDetailPage extends StatelessWidget {
             ),
             
             const SizedBox(height: 16),
-            
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.shopping_cart,
+                          color: Colors.blue.shade700,
+                          size: 24,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Заказы',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    _buildInfoRow('Заказ1', 'заказ'),
+                  ],
+                ),
+              )
+            ),
             // Заглушка под карту
             Card(
               child: Padding(

@@ -10,10 +10,6 @@ class GetEmployeeTradingPointsUseCase {
 
   GetEmployeeTradingPointsUseCase(this._repository);
 
-  /// Получает торговые точки для конкретного сотрудника
-  /// 
-  /// [employee] - сотрудник для которого нужны торговые точки
-  /// Возвращает список торговых точек или ошибку
   Future<Either<Failure, List<TradingPoint>>> call(Employee employee) async {
     try {
       return await _repository.getEmployeeTradingPoints(employee);
@@ -22,10 +18,6 @@ class GetEmployeeTradingPointsUseCase {
     }
   }
 
-  /// Получает торговые точки с дополнительной фильтрацией
-  /// 
-  /// [employee] - сотрудник
-  /// [nameFilter] - фильтр по названию (опционально)
   Future<Either<Failure, List<TradingPoint>>> callWithFilter(
     Employee employee, {
     String? nameFilter,

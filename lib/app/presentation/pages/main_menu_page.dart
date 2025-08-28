@@ -67,11 +67,11 @@ class _MainMenuPageState extends State<MainMenuPage> {
       icon: Icons.assignment,
       route: '/agent-orders',
     ),
-    MenuItem(
-      title: 'Заказы пользователя',
-      icon: Icons.shopping_cart,
-      route: '/user-orders',
-    ),
+    // MenuItem(
+    //   title: 'Заказы Торговой точки',
+    //   icon: Icons.shopping_cart,
+    //   route: '/outlet-orders',
+    // ),
     MenuItem(
       title: 'Отправка Данных',
       icon: Icons.cloud_upload,

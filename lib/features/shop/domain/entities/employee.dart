@@ -4,8 +4,8 @@ import 'package:tauzero/features/shop/domain/entities/trading_point.dart';
 
 enum EmployeeRole{
   sales,
+  supervisor,
   manager,
-  cashier,
 }
 
 class Employee implements NavigationUser {

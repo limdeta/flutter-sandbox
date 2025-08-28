@@ -76,7 +76,8 @@ class _TradingPointsListPageState extends State<TradingPointsListPage> {
         return;
       }
 
-      // Получаем торговые точки сотрудника
+      // Получаем торговые точки сотрудника 
+      // TODO переписать .session.appUser.employee
       final result = await _getTradingPointsUseCase.call(session.appUser.employee);
       
       result.fold(
