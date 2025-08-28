@@ -3,9 +3,9 @@ import 'package:drift/drift.dart';
 import 'package:tauzero/shared/either.dart';
 import 'package:tauzero/shared/failures.dart';
 import 'package:tauzero/app/database/app_database.dart';
-import '../../domain/entities/trading_point.dart';
-import '../../domain/entities/employee.dart';
-import '../../domain/repositories/trading_point_repository.dart';
+import '../../../features/shop/domain/entities/trading_point.dart';
+import '../../../features/shop/domain/entities/employee.dart';
+import '../../../features/shop/domain/repositories/trading_point_repository.dart';
 
 /// Drift реализация репозитория торговых точек
 class DriftTradingPointRepository implements TradingPointRepository {

@@ -27,7 +27,7 @@ import 'package:tauzero/app/services/app_user_logout_service.dart';
 import 'package:tauzero/app/services/simple_update_service.dart';
 import 'package:tauzero/features/authentication/domain/repositories/session_repository.dart';
 import 'package:tauzero/features/shop/domain/repositories/trading_point_repository.dart';
-import 'package:tauzero/features/shop/data/repositories/drift_trading_point_repository.dart';
+import 'package:tauzero/app/database/repositories/drift_trading_point_repository.dart';
 import 'package:tauzero/features/shop/domain/usecases/get_employee_trading_points_usecase.dart';
 
 /// Тестовый Service Locator для настройки зависимостей в тестах
