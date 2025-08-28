@@ -150,7 +150,7 @@ class TradingPointsFixtureService {
       // Привязываем все торговые точки к сотруднику
       int successCount = 0;
       for (final tradingPoint in tradingPoints) {
-        final result = await tradingPointRepository.assignTradingPointToEmployee(tradingPoint, employee);
+        final result = await tradingPointRepository.assignToEmployee(tradingPoint, employee);
         result.fold(
           (failure) => print('⚠️ Не удалось привязать ${tradingPoint.name}: ${failure.message}'),
           (_) => successCount++,

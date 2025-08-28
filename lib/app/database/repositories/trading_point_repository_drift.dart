@@ -12,7 +12,7 @@ class DriftTradingPointRepository implements TradingPointRepository {
   final AppDatabase _database = GetIt.instance<AppDatabase>();
 
   @override
-  Future<Either<Failure, List<TradingPoint>>> getEmployeeTradingPoints(Employee employee) async {
+  Future<Either<Failure, List<TradingPoint>>> getEmployeePoints(Employee employee) async {
     try {
       // Получаем ID торговых точек закрепленных за сотрудником
       final assignments = await (_database.select(_database.employeeTradingPointAssignments)
@@ -46,7 +46,7 @@ class DriftTradingPointRepository implements TradingPointRepository {
   }
 
   @override
-  Future<Either<Failure, TradingPoint?>> getTradingPointByExternalId(String externalId) async {
+  Future<Either<Failure, TradingPoint?>> getByExternalId(String externalId) async {
     try {
       final entity = await (_database.select(_database.tradingPointEntities)
         ..where((tbl) => tbl.externalId.equals(externalId))
@@ -72,7 +72,7 @@ class DriftTradingPointRepository implements TradingPointRepository {
   }
 
   @override
-  Future<Either<Failure, TradingPoint>> saveTradingPoint(TradingPoint tradingPoint) async {
+  Future<Either<Failure, TradingPoint>> save(TradingPoint tradingPoint) async {
     try {
       final companion = TradingPointEntitiesCompanion.insert(
         externalId: tradingPoint.externalId,
@@ -84,7 +84,7 @@ class DriftTradingPointRepository implements TradingPointRepository {
       await _database.upsertTradingPoint(companion);
 
       // Получаем обновленную торговую точку
-      final result = await getTradingPointByExternalId(tradingPoint.externalId);
+      final result = await getByExternalId(tradingPoint.externalId);
       return result.fold(
         (failure) => Left(failure),
         (tp) => tp != null 
@@ -97,13 +97,13 @@ class DriftTradingPointRepository implements TradingPointRepository {
   }
 
   @override
-  Future<Either<Failure, void>> assignTradingPointToEmployee(
+  Future<Either<Failure, void>> assignToEmployee(
     TradingPoint tradingPoint, 
     Employee employee
   ) async {
     try {
       // Сначала сохраняем торговую точку если её нет
-      await saveTradingPoint(tradingPoint);
+      await save(tradingPoint);
 
       // Затем создаем привязку
       await _database.into(_database.employeeTradingPointAssignments).insertOnConflictUpdate(
@@ -120,7 +120,7 @@ class DriftTradingPointRepository implements TradingPointRepository {
   }
 
   @override
-  Future<Either<Failure, void>> unassignTradingPointFromEmployee(
+  Future<Either<Failure, void>> unassignFromEmployee(
     TradingPoint tradingPoint, 
     Employee employee
   ) async {
@@ -139,7 +139,7 @@ class DriftTradingPointRepository implements TradingPointRepository {
   }
 
   @override
-  Future<Either<Failure, List<TradingPoint>>> getAllTradingPoints() async {
+  Future<Either<Failure, List<TradingPoint>>> getAll() async {
     try {
       final entities = await _database.select(_database.tradingPointEntities).get();
 
@@ -159,7 +159,7 @@ class DriftTradingPointRepository implements TradingPointRepository {
   }
 
   @override
-  Future<Either<Failure, List<TradingPoint>>> searchTradingPointsByName(String query) async {
+  Future<Either<Failure, List<TradingPoint>>> searchByName(String query) async {
     try {
       final entities = await (_database.select(_database.tradingPointEntities)
         ..where((tbl) => tbl.name.like('%$query%'))

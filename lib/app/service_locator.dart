@@ -18,7 +18,7 @@ import 'package:tauzero/features/authentication/domain/usecases/get_current_sess
 import 'package:tauzero/features/shop/domain/repositories/employee_repository.dart';
 import 'package:tauzero/features/shop/domain/repositories/trading_point_repository.dart';
 import 'package:tauzero/features/shop/domain/usecases/get_employee_trading_points_usecase.dart';
-import 'package:tauzero/app/database/repositories/drift_trading_point_repository.dart';
+import 'package:tauzero/app/database/repositories/trading_point_repository_drift.dart';
 import 'package:tauzero/app/domain/repositories/app_user_repository.dart';
 import 'package:tauzero/features/shop/data/di/route_di.dart';
 import 'package:tauzero/features/navigation/tracking/domain/services/location_tracking_service.dart';

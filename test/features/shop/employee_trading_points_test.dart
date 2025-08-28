@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:tauzero/features/shop/domain/entities/employee.dart';
 import 'package:tauzero/features/shop/domain/usecases/get_employee_trading_points_usecase.dart';
 import 'package:tauzero/features/shop/domain/repositories/trading_point_repository.dart';
 import 'package:tauzero/features/shop/domain/repositories/employee_repository.dart';
@@ -41,7 +42,7 @@ void main() {
 
       // Затем привязываем торговые точки к сотруднику
       for (final tradingPoint in tradingPoints) {
-        final assignResult = await tradingPointRepository.assignTradingPointToEmployee(tradingPoint, savedEmployee);
+        final assignResult = await tradingPointRepository.assignToEmployee(tradingPoint, savedEmployee);
         assignResult.fold(
           (failure) => fail('Error assigning ${tradingPoint.name}: ${failure.message}'),
           (_) {}, // Успешно привязано
@@ -79,7 +80,7 @@ void main() {
       );
 
       for (final tradingPoint in tradingPoints) {
-        final assignResult = await tradingPointRepository.assignTradingPointToEmployee(tradingPoint, savedEmployee);
+        final assignResult = await tradingPointRepository.assignToEmployee(tradingPoint, savedEmployee);
         assignResult.fold(
           (failure) => fail('Error assigning ${tradingPoint.name}: ${failure.message}'),
           (_) {}, // Успешно привязано
@@ -108,7 +109,7 @@ void main() {
 
       // Сохраняем сотрудника в базу
       final createResult = await employeeRepository.createEmployee(employee);
-      late final savedEmployee;
+      late final Employee savedEmployee;
       createResult.fold(
         (failure) => fail('Failed to create employee: ${failure.message}'),
         (emp) => savedEmployee = emp,

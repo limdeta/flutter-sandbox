@@ -12,7 +12,7 @@ class GetEmployeeTradingPointsUseCase {
 
   Future<Either<Failure, List<TradingPoint>>> call(Employee employee) async {
     try {
-      return await _repository.getEmployeeTradingPoints(employee);
+      return await _repository.getEmployeePoints(employee);
     } catch (e) {
       return Left(DatabaseFailure('Ошибка получения торговых точек: $e'));
     }
